@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部品在庫管理システム</title>
+    
+    <!-- PWA設定 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="部品在庫管理">
+    
+    <!-- アイコン設定 -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background-color: #f9fafb; 
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+        
+        .sidebar {
+            width: 256px;
+            background-color: white;
+            border-right: 1px solid #d1d5db;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+        
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        
+        .mobile-header {
+            display: none;
+            background-color: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .content-area {
+            flex: 1;
+            padding: 1.5rem;
+            background-color: #f9fafb;
+            min-height: calc(100vh - 80px);
+        }
+        
+        /* PWA インストールプロンプト */
+        .install-prompt {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            display: none;
+            position: sticky;
+            top: 0;
+            z-index: 60;
+        }
+        
+        .install-prompt button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+        }
+        
+        .install-prompt button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .offline-indicator {
+            background-color: #ef4444;
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+            display: none;
+        }
+        
+        @media (max-width: 1023px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 40;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .mobile-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .content-area {
+                padding: 1rem;
+            }
+            
+            /* タッチ最適化 */
+            .btn {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .nav-button {
+                min-height: 44px;
+            }
+            
+            .form-input {
+                font-size: 16px; /* iOSズーム防止 */
+            }
+        }
+        
+        /* 基本スタイル */
+        .bg-white { background-color: white; }
+        .bg-gray-50 { background-color: #f9fafb; }
+        .bg-blue-50 { background-color: #eff6ff; }
+        .bg-blue-100 { background-color: #dbeafe; }
+        .bg-gray-100 { background-color: #f3f4f6; }
+        .bg-red-50 { background-color: #fef2f2; }
+        .bg-yellow-50 { background-color: #fefce8; }
+        .bg-green-50 { background-color: #f0fdf4; }
+        .bg-green-100 { background-color: #dcfce7; }
+        .bg-orange-100 { background-color: #fed7aa; }
+        .bg-orange-50 { background-color: #fff7ed; }
+        .bg-purple-50 { background-color: #faf5ff; }
+        .bg-indigo-50 { background-color: #eef2ff; }
+        .text-gray-900 { color: #111827; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-500 { color: #6b7280; }
+        .text-blue-700 { color: #1d4ed8; }
+        .text-blue-600 { color: #2563eb; }
+        .text-blue-200 { color: #bfdbfe; }
+        .text-red-600 { color: #dc2626; }
+        .text-red-700 { color: #b91c1c; }
+        .text-yellow-600 { color: #d97706; }
+        .text-yellow-700 { color: #a16207; }
+        .text-green-600 { color: #16a34a; }
+        .text-green-700 { color: #15803d; }
+        .text-orange-600 { color: #ea580c; }
+        .text-orange-700 { color: #c2410c; }
+        .text-purple-600 { color: #9333ea; }
+        .text-purple-700 { color: #7c3aed; }
+        .text-indigo-600 { color: #4f46e5; }
+        .text-indigo-700 { color: #4338ca; }
+        .border-blue-200 { border-color: #bfdbfe; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-full { border-radius: 9999px; }
+        .rounded { border-radius: 0.25rem; }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+        .border { border: 1px solid #d1d5db; }
+        .border-b { border-bottom: 1px solid #d1d5db; }
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-end { justify-content: flex-end; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .w-full { width: 100%; }
+        .w-8 { width: 2rem; }
+        .w-max { width: max-content; }
+        .max-h-40 { max-height: 10rem; }
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        .font-medium { font-weight: 500; }
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .cursor-pointer { cursor: pointer; }
+        .transition-colors { transition: background-color 0.15s, color 0.15s; }
+        .transition-all { transition: all 0.15s; }
+        .hover\:bg-gray-100:hover { background-color: #f3f4f6; }
+        .hover\:bg-red-100:hover { background-color: #fee2e2; }
+        .hover\:bg-blue-100:hover { background-color: #dbeafe; }
+        .hover\:shadow-md:hover { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        .grid { display: grid; }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+        .col-span-2 { grid-column: span 2 / span 2; }
+        .whitespace-nowrap { white-space: nowrap; }
+        .overflow-x-auto { overflow-x: auto; }
+        .overflow-y-auto { overflow-y: auto; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .block { display: block; }
+        .hidden { display: none; }
+        .fixed { position: fixed; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .z-50 { z-index: 50; }
+        .resize-none { resize: none; }
+        .min-w-full { min-width: 100%; }
+        .divide-y > * + * { border-top: 1px solid #e5e7eb; }
+        .uppercase { text-transform: uppercase; }
+        .tracking-wider { letter-spacing: 0.05em; }
+        
+        /* ナビゲーションボタン */
+        .nav-button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.15s;
+            border: none;
+            background: none;
+            color: #374151;
+            text-align: left;
+            cursor: pointer;
+            min-height: 44px;
+        }
+        
+        .nav-button:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .nav-button.active {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+        
+        .nav-button.danger {
+            color: #b91c1c;
+        }
+        
+        .nav-button.danger:hover {
+            background-color: #fee2e2;
+        }
+        
+        /* テーブルスタイル */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* 行選択スタイル */
+        .parts-row {
+            cursor: pointer;
+            transition: background-color 0.15s;
+            user-select: none;
+        }
+        
+        .parts-row:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .parts-row.selected {
+            background-color: #dbeafe !important;
+        }
+        
+        /* モーダルスタイル */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 50;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            max-width: 28rem;
+            width: 100%;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* ボタンスタイル */
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.15s;
+            border: none;
+            min-height: 44px;
+        }
+        
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .btn-success {
+            background-color: #16a34a;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #15803d;
+        }
+        
+        .btn-danger {
+            background-color: #dc2626;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+
+        /* フォームスタイル */
+        .form-input {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 16px; /* iOSズーム防止 */
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* スマート選択ボタン */
+        .smart-selection-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .smart-btn {
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            min-height: 44px;
+        }
+        
+        .smart-btn:hover {
+            background-color: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .smart-btn.primary {
+            background-color: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        
+        .smart-btn.primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* 統計カードボタンスタイル */
+        .stats-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: left;
+            width: 100%;
+            min-height: 80px;
+        }
+        
+        .stats-card:hover {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            background-color: #f8fafc;
+        }
+        
+        .stats-card:active {
+            transform: translateY(1px);
+        }
+
+        /* フィルター状態表示 */
+        .filter-indicator {
+            background-color: #dbeafe;
+            border: 1px solid #93c5fd;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .filter-indicator .filter-text {
+            color: #1e40af;
+            font-weight: 500;
+        }
+        
+        .filter-indicator .clear-filter {
+            background: none;
+            border: none;
+            color: #1e40af;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.875rem;
+        }
+
+        /* 履歴検索・フィルター用スタイル */
+        .history-filters {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+        
+        .sort-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .sort-button {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            min-height: 36px;
+        }
+        
+        .sort-button.active {
+            background-color: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        
+        .sort-button:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .sort-button.active:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* レスポンシブ調整 */
+        @media (min-width: 768px) {
+            .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        
+        @media (min-width: 1024px) {
+            .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+            .content-area { padding: 1.5rem; }
+        }
+        
+        /* モバイル用の追加最適化 */
+        @media (max-width: 480px) {
+            .smart-selection-buttons {
+                flex-direction: column;
+            }
+            
+            .smart-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PWA インストールプロンプト -->
+    <div class="install-prompt" id="installPrompt">
+        📱 このアプリをホーム画面に追加してオフラインでも使用できます
+        <button onclick="installPWA()">インストール</button>
+        <button onclick="hideInstallPrompt()">✕</button>
+    </div>
+    
+    <!-- オフライン警告 -->
+    <div class="offline-indicator" id="offlineIndicator">
+        📡 オフラインモードです。データの同期ができません。
+    </div>
+
+    <div class="app-container">
+        <!-- サイドバー -->
+        <div class="sidebar" id="sidebar">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold text-gray-900">📦 部品在庫管理</h1>
+            </div>
+            <nav class="p-4 space-y-2">
+                <button id="tab-dashboard" class="nav-button active">📊 ダッシュボード</button>
+                <button id="tab-list" class="nav-button">📋 部品一覧</button>
+                <button id="tab-history" class="nav-button">📈 入出庫履歴</button>
+                <button id="tab-form" class="nav-button">➕ 新規追加</button>
+                <hr style="margin: 1rem 0; border: none; border-top: 1px solid #e5e7eb;" />
+                <button id="export-csv" class="nav-button">💾 CSVエクスポート</button>
+                <label for="file-import" class="nav-button" style="margin: 0;">
+                    📁 ファイルインポート
+                    <input type="file" id="file-import" accept=".csv" style="display: none;" />
+                </label>
+                <button id="reset-data" class="nav-button danger">🔄 データリセット</button>
+            </nav>
+        </div>
+
+        <!-- メインエリア -->
+        <div class="main-area">
+            <!-- モバイルヘッダー -->
+            <div class="mobile-header">
+                <button id="mobile-menu" class="p-2 hover:bg-gray-100 rounded-lg">☰</button>
+                <h1 class="text-xl font-bold text-gray-900">部品在庫管理</h1>
+                <div class="w-8"></div>
+            </div>
+
+            <!-- コンテンツエリア -->
+            <div class="content-area" id="main-content">
+                <div class="text-center p-6">
+                    <p class="text-gray-500">読み込み中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- オーバーレイ -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 入出庫モーダル -->
+    <div id="transaction-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modal-title" class="text-lg font-semibold text-gray-900">入出庫処理</h3>
+                    <button id="close-modal" class="p-2 hover:bg-gray-100 rounded-lg">✕</button>
+                </div>
+                
+                <form id="transaction-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">種別</label>
+                        <select id="transaction-type" class="form-input">
+                            <option value="入庫">入庫</option>
+                            <option value="出庫">出庫</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">数量 *</label>
+                        <input type="number" id="transaction-quantity" required min="1" class="form-input" placeholder="数量を入力">
+                        <p id="current-stock" class="text-sm text-gray-500 mt-1"></p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">理由 *</label>
+                        <input type="text" id="transaction-reason" required class="form-input" placeholder="例: 定期補充、生産ライン使用">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">担当者 *</label>
+                        <input type="text" id="transaction-person" required class="form-input" placeholder="例: 田中">
+                    </div>
+                    
+                    <div class="flex justify-end gap-3 mt-6">
+                        <button type="button" id="cancel-transaction" class="btn btn-secondary">キャンセル</button>
+                        <button type="submit" id="submit-transaction" class="btn btn-primary">実行</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // PWA関連の変数
+            let deferredPrompt;
+            let isOnline = navigator.onLine;
+
+            // デバッグログ関数
+            window.debugLog = function(message) {
+                console.log('部品管理:', message);
+            };
+
+            // グローバル変数
+            window.appState = {
+                currentTab: 'dashboard',
+                parts: [],
+                transactions: [],
+                selectedPartIds: new Set(),
+                currentDisplayedParts: [],
+                selectedPart: null,
+                editingPart: null,
+                sidebarOpen: false,
+                currentFilter: {
+                    type: null,
+                    value: null
+                }
+            };
+
+            // 履歴フィルタリング・ソート用の変数
+            window.historyFilters = {
+                search: '',
+                dateFrom: '',
+                dateTo: '',
+                partNumber: '',
+                type: '',
+                reason: '',
+                person: ''
+            };
+            window.historySortBy = 'date';
+            window.historySortOrder = 'desc';
+
+            // PWA関連機能
+            window.setupPWA = function() {
+                // Service Worker登録
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', () => {
+                        navigator.serviceWorker.register('sw.js')
+                            .then((registration) => {
+                                console.log('SW registered: ', registration);
+                            })
+                            .catch((registrationError) => {
+                                console.log('SW registration failed: ', registrationError);
+                            });
+                    });
+                }
+
+                // インストールプロンプト処理
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    document.getElementById('installPrompt').style.display = 'block';
+                });
+
+                // オンライン/オフライン状態監視
+                window.addEventListener('online', () => {
+                    isOnline = true;
+                    document.getElementById('offlineIndicator').style.display = 'none';
+                });
+
+                window.addEventListener('offline', () => {
+                    isOnline = false;
+                    document.getElementById('offlineIndicator').style.display = 'block';
+                });
+
+                // 初期状態でオフラインかチェック
+                if (!isOnline) {
+                    document.getElementById('offlineIndicator').style.display = 'block';
+                }
+            };
+
+            window.installPWA = function() {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('PWAがインストールされました');
+                            hideInstallPrompt();
+                        }
+                        deferredPrompt = null;
+                    });
+                }
+            };
+
+            window.hideInstallPrompt = function() {
+                document.getElementById('installPrompt').style.display = 'none';
+            };
+
+            // データ永続化関数
+            window.saveDataToStorage = function() {
+                try {
+                    const dataToSave = {
+                        parts: window.appState.parts,
+                        transactions: window.appState.transactions,
+                        timestamp: new Date().toISOString(),
+                        version: '2.2'
+                    };
+                    localStorage.setItem('parts_inventory_data', JSON.stringify(dataToSave));
+                    window.debugLog(`データを保存しました (部品: ${window.appState.parts.length}件, 履歴: ${window.appState.transactions.length}件)`);
+                    return true;
+                } catch (error) {
+                    console.error('データ保存エラー:', error);
+                    window.debugLog('データ保存エラー: ' + error.message);
+                    return false;
+                }
+            };
+
+            window.loadDataFromStorage = function() {
+                try {
+                    const savedData = localStorage.getItem('parts_inventory_data');
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        window.appState.parts = data.parts || [];
+                        window.appState.transactions = data.transactions || [];
+                        window.debugLog(`保存されたデータを読み込みました (${data.timestamp}) - 部品: ${window.appState.parts.length}件, 履歴: ${window.appState.transactions.length}件`);
+                        return true;
+                    } else {
+                        window.debugLog('保存されたデータが見つかりません');
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('データ読み込みエラー:', error);
+                    window.debugLog('データ読み込みエラー: ' + error.message);
+                    return false;
+                }
+            };
+
+            // デフォルトデータ初期化
+            window.initializeDefaultData = function() {
+                window.appState.parts = [
+                    { 
+                        id: 1, 
+                        partNumber: "P001", 
+                        name: "ボルト M8x20", 
+                        category: "P", 
+                        stock: 150, 
+                        minStock: 50, 
+                        location: "WH59", 
+                        supplier: "ABC商事", 
+                        unitPrice: 25, 
+                        notes: "ステンレス製、高耐食性" 
+                    },
+                    { 
+                        id: 2, 
+                        partNumber: "EP001", 
+                        name: "ベアリング 6001", 
+                        category: "EP", 
+                        stock: 25, 
+                        minStock: 10, 
+                        location: "WH59", 
+                        supplier: "XYZ工業", 
+                        unitPrice: 850, 
+                        notes: "高温環境用、年次交換推奨" 
+                    },
+                    { 
+                        id: 3, 
+                        partNumber: "P003", 
+                        name: "Oリング 20x3", 
+                        category: "P", 
+                        stock: 80, 
+                        minStock: 30, 
+                        location: "WH59", 
+                        supplier: "DEF部品", 
+                        unitPrice: 120, 
+                        notes: "NBR材質、-20℃～+80℃対応" 
+                    },
+                    { 
+                        id: 4, 
+                        partNumber: "HL001", 
+                        name: "ガスケット 100A", 
+                        category: "HL", 
+                        stock: 5, 
+                        minStock: 20, 
+                        location: "WH60", 
+                        supplier: "DEF部品", 
+                        unitPrice: 450, 
+                        notes: "フランジ用、定期交換部品" 
+                    },
+                    { 
+                        id: 5, 
+                        partNumber: "EP002", 
+                        name: "モーター 1.5kW", 
+                        category: "EP", 
+                        stock: 3, 
+                        minStock: 2, 
+                        location: "WH60", 
+                        supplier: "XYZ工業", 
+                        unitPrice: 12500, 
+                        notes: "予備機、年1回点検" 
+                    },
+                    { 
+                        id: 6, 
+                        partNumber: "HL002", 
+                        name: "油圧ホース 10m", 
+                        category: "HL", 
+                        stock: 8, 
+                        minStock: 5, 
+                        location: "WH61", 
+                        supplier: "GHI機械", 
+                        unitPrice: 2800, 
+                        notes: "高圧対応、定期点検必要" 
+                    }
+                ];
+                
+                window.appState.transactions = [
+                    { id: 1, partId: 1, partNumber: "P001", type: "入庫", quantity: 100, date: "2024-01-15", reason: "定期補充", person: "田中" },
+                    { id: 2, partId: 1, partNumber: "P001", type: "出庫", quantity: 20, date: "2024-01-20", reason: "生産ライン使用", person: "佐藤" },
+                    { id: 3, partId: 2, partNumber: "EP001", type: "入庫", quantity: 50, date: "2024-01-10", reason: "新規調達", person: "鈴木" },
+                    { id: 4, partId: 4, partNumber: "HL001", type: "出庫", quantity: 2, date: "2024-01-25", reason: "メンテナンス", person: "高橋" },
+                    { id: 5, partId: 3, partNumber: "P003", type: "入庫", quantity: 30, date: "2024-02-01", reason: "緊急補充", person: "田中" }
+                ];
+                
+                window.debugLog('デフォルトデータ初期化完了');
+            };
+
+            // 統計計算
+            window.calculateStats = function() {
+                const categoryStats = {};
+                window.appState.parts.forEach(part => {
+                    if (!categoryStats[part.category]) {
+                        categoryStats[part.category] = { count: 0, warning: 0, good: 0 };
+                    }
+                    categoryStats[part.category].count++;
+                    if (part.stock <= part.minStock) {
+                        categoryStats[part.category].warning++;
+                    } else {
+                        categoryStats[part.category].good++;
+                    }
+                });
+
+                return {
+                    total: window.appState.parts.length,
+                    warning: window.appState.parts.filter(p => p.stock <= p.minStock).length,
+                    good: window.appState.parts.filter(p => p.stock > p.minStock).length,
+                    categories: categoryStats
+                };
+            };
+
+            // 部品名を取得する関数
+            window.getPartNameById = function(partId) {
+                const part = window.appState.parts.find(p => p.id === partId);
+                return part ? part.name : '部品名不明';
+            };
+
+            window.getPartNameByNumber = function(partNumber) {
+                const part = window.appState.parts.find(p => p.partNumber === partNumber);
+                return part ? part.name : '部品名不明';
+            };
+
+            // フィルタリング機能
+            window.applyPartsFilter = function(filterType, filterValue = null) {
+                window.appState.currentFilter = {
+                    type: filterType,
+                    value: filterValue
+                };
+                window.switchTab('list');
+            };
+
+            window.clearPartsFilter = function() {
+                window.appState.currentFilter = {
+                    type: null,
+                    value: null
+                };
+                window.renderPartsList();
+            };
+
+            window.getFilteredParts = function() {
+                let filteredParts = [...window.appState.parts];
+                
+                const filter = window.appState.currentFilter;
+                
+                if (filter.type === 'warning') {
+                    filteredParts = filteredParts.filter(p => p.stock <= p.minStock);
+                } else if (filter.type === 'good') {
+                    filteredParts = filteredParts.filter(p => p.stock > p.minStock);
+                } else if (filter.type === 'category' && filter.value) {
+                    filteredParts = filteredParts.filter(p => p.category === filter.value);
+                }
+                
+                return filteredParts;
+            };
+
+            window.getFilterDisplayText = function() {
+                const filter = window.appState.currentFilter;
+                
+                if (filter.type === 'warning') {
+                    return '要注意部品のみ表示中';
+                } else if (filter.type === 'good') {
+                    return '適正在庫部品のみ表示中';
+                } else if (filter.type === 'category' && filter.value) {
+                    let categoryName = filter.value;
+                    switch(filter.value) {
+                        case 'P': categoryName = 'Parts'; break;
+                        case 'EP': categoryName = 'Equipment Parts'; break;
+                        case 'HL': categoryName = 'Hydraulic/Lubrication'; break;
+                    }
+                    return `カテゴリ「${categoryName}」のみ表示中`;
+                }
+                return null;
+            };
+
+            // ダッシュボード表示
+            window.renderDashboard = function() {
+                const stats = window.calculateStats();
+                const warningParts = window.appState.parts.filter(p => p.stock <= p.minStock);
+                
+                // カテゴリ別の統計カードを生成
+                const categoryCards = Object.entries(stats.categories).map(([category, data]) => {
+                    let categoryName, categoryColor, categoryBg, categoryIcon;
+                    switch(category) {
+                        case 'P':
+                            categoryName = 'Parts';
+                            categoryColor = 'text-blue-600';
+                            categoryBg = 'bg-blue-50';
+                            categoryIcon = '🔧';
+                            break;
+                        case 'EP':
+                            categoryName = 'Equipment Parts';
+                            categoryColor = 'text-green-600';
+                            categoryBg = 'bg-green-50';
+                            categoryIcon = '⚙️';
+                            break;
+                        case 'HL':
+                            categoryName = 'Hydraulic/Lubrication';
+                            categoryColor = 'text-orange-600';
+                            categoryBg = 'bg-orange-50';
+                            categoryIcon = '🛢️';
+                            break;
+                        default:
+                            categoryName = category;
+                            categoryColor = 'text-gray-600';
+                            categoryBg = 'bg-gray-50';
+                            categoryIcon = '📦';
+                    }
+                    
+                    return `
+                        <button class="stats-card" onclick="window.applyPartsFilter('category', '${category}')">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">${categoryName}</p>
+                                    <p class="text-2xl font-bold ${categoryColor}">${data.count}</p>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        要注意: ${data.warning} | 適正: ${data.good}
+                                    </div>
+                                </div>
+                                <span class="text-2xl">${categoryIcon}</span>
+                            </div>
+                        </button>
+                    `;
+                }).join('');
+                
+                document.getElementById('main-content').innerHTML = `
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-gray-900">ダッシュボード</h2>
+                            <div class="text-sm text-gray-600">最終更新: ${new Date().toLocaleString('ja-JP')}</div>
+                        </div>
+                        
+                        <!-- 基本統計 -->
+                        <div class="grid grid-cols-2 grid-cols-3 gap-4">
+                            <button class="stats-card" onclick="window.applyPartsFilter('all')">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-600">総部品数</p>
+                                        <p class="text-2xl font-bold text-gray-900">${stats.total}</p>
+                                    </div>
+                                    <span class="text-2xl">📦</span>
+                                </div>
+                            </button>
+                            <button class="stats-card" onclick="window.applyPartsFilter('warning')">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-600">要注意</p>
+                                        <p class="text-2xl font-bold text-yellow-600">${stats.warning}</p>
+                                    </div>
+                                    <span class="text-2xl">⚠️</span>
+                                </div>
+                            </button>
+                            <button class="stats-card" onclick="window.applyPartsFilter('good')">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-600">適正在庫</p>
+                                        <p class="text-2xl font-bold text-green-600">${stats.good}</p>
+                                    </div>
+                                    <span class="text-2xl">✅</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- カテゴリ別統計 -->
+                        <div class="bg-white rounded-xl shadow-sm border">
+                            <div class="p-4 border-b">
+                                <h3 class="text-lg font-semibold text-gray-900">📊 カテゴリ別部品数（クリックでフィルタ）</h3>
+                            </div>
+                            <div class="p-4">
+                                <div class="grid grid-cols-2 grid-cols-3 gap-4">
+                                    ${categoryCards}
+                                </div>
+                            </div>
+                        </div>
+
+                        ${warningParts.length > 0 ? `
+                        <div class="bg-white rounded-xl shadow-sm border">
+                            <div class="p-4 border-b">
+                                <h3 class="text-lg font-semibold text-yellow-700">⚠️ 補充が推奨される部品 (${warningParts.length} 件)</h3>
+                            </div>
+                            <div class="divide-y">
+                                ${warningParts.map(part => `
+                                    <div class="p-4 hover:bg-gray-50">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <span class="text-gray-900 font-semibold block">${part.partNumber}</span>
+                                                <span class="text-sm text-gray-600">${part.name}</span>
+                                            </div>
+                                            <div class="flex gap-2 items-center">
+                                                <div class="text-sm text-yellow-600 font-bold">${part.stock} / ${part.minStock}</div>
+                                                <button onclick="window.openTransactionModal(${part.id}, '入庫')" class="btn btn-primary text-xs">入庫</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            };
+
+            // 部品一覧表示
+            window.renderPartsList = function() {
+                // フィルタリングされた部品を取得
+                const filteredParts = window.getFilteredParts();
+                window.appState.currentDisplayedParts = [...filteredParts];
+                
+                // フィルタリング状態の表示テキスト
+                const filterText = window.getFilterDisplayText();
+                
+                document.getElementById('main-content').innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-gray-900">部品一覧</h2>
+                            <div class="relative">
+                                <input type="text" id="search-input" placeholder="部品番号、名称、カテゴリで検索..." class="form-input" style="padding-left: 2.5rem;">
+                                <div style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #9ca3af;">🔍</div>
+                            </div>
+                        </div>
+
+                        ${filterText ? `
+                        <div class="filter-indicator">
+                            <span class="filter-text">🔍 ${filterText}</span>
+                            <button class="clear-filter" onclick="window.clearPartsFilter()">フィルタをクリア</button>
+                        </div>
+                        ` : ''}
+
+                        <div id="smart-selection-container">
+                            ${window.generateSmartSelectionButtons()}
+                        </div>
+
+                        <div id="bulk-actions" class="bg-blue-50 border border-blue-200 rounded-lg p-3 flex justify-between items-center" style="display: none;">
+                            <div>
+                                <span id="selected-count" class="text-sm font-medium text-blue-700">0件選択中</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="window.openBulkTransactionModal('入庫')" class="btn btn-success text-xs">一括入庫</button>
+                                <button onclick="window.openBulkTransactionModal('出庫')" class="btn btn-secondary text-xs">一括出庫</button>
+                                <button onclick="window.bulkDeleteParts()" class="btn btn-danger text-xs">一括削除</button>
+                                <button onclick="window.clearAllSelections()" class="btn btn-secondary text-xs">選択解除</button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">
+                                            <input type="checkbox" id="select-all-parts" onchange="window.toggleAllParts()" class="rounded">
+                                        </th>
+                                        <th>部品番号</th>
+                                        <th>部品名</th>
+                                        <th>カテゴリ</th>
+                                        <th>在庫数</th>
+                                        <th>保管場所</th>
+                                        <th>単価</th>
+                                        <th>アクション</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="parts-table-body">
+                                    ${window.renderPartsTableRows(filteredParts)}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                
+                // 検索機能
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function(e) {
+                        const searchTerm = e.target.value.toLowerCase();
+                        const baseFilteredParts = window.getFilteredParts();
+                        const searchFilteredParts = baseFilteredParts.filter(part =>
+                            part.partNumber.toLowerCase().includes(searchTerm) ||
+                            part.name.toLowerCase().includes(searchTerm) ||
+                            part.category.toLowerCase().includes(searchTerm)
+                        );
+                        
+                        window.appState.currentDisplayedParts = searchFilteredParts;
+                        document.getElementById('parts-table-body').innerHTML = window.renderPartsTableRows(searchFilteredParts);
+                        document.getElementById('smart-selection-container').innerHTML = window.generateSmartSelectionButtons();
+                        window.updateSelectionUI();
+                    });
+                }
+                
+                window.updateSelectionUI();
+            };
+
+            window.renderPartsTableRows = function(partsToRender) {
+                if (partsToRender.length === 0) {
+                    return '<tr><td colspan="8" class="text-center text-gray-500">部品が見つかりません。</td></tr>';
+                }
+                
+                return partsToRender.map(part => {
+                    const isSelected = window.appState.selectedPartIds.has(part.id);
+                    const stockStatus = part.stock <= part.minStock ? 'warning' : 'good';
+                    const stockIcon = stockStatus === 'warning' ? '⚠️' : '✅';
+                    const stockBg = stockStatus === 'warning' ? 'bg-yellow-50 text-yellow-700' : 'bg-green-50 text-green-700';
+                    
+                    let categoryBadge = '';
+                    switch(part.category) {
+                        case 'P':
+                            categoryBadge = '<span class="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">P</span>';
+                            break;
+                        case 'EP':
+                            categoryBadge = '<span class="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700">EP</span>';
+                            break;
+                        case 'HL':
+                            categoryBadge = '<span class="px-2 py-1 rounded text-xs font-medium bg-orange-100 text-orange-700">HL</span>';
+                            break;
+                        default:
+                            categoryBadge = `<span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">${part.category}</span>`;
+                    }
+                    
+                    return `
+                        <tr id="row-${part.id}" class="parts-row ${isSelected ? 'selected' : ''}" onclick="window.handleRowClick(event, ${part.id})">
+                            <td onclick="event.stopPropagation();">
+                                <input type="checkbox" id="part-${part.id}" ${isSelected ? 'checked' : ''} 
+                                       onchange="window.togglePartSelection(${part.id})" class="rounded">
+                            </td>
+                            <td class="font-medium">${part.partNumber}</td>
+                            <td>${part.name}</td>
+                            <td>${categoryBadge}</td>
+                            <td>
+                                <div class="flex items-center gap-2 px-2 py-1 rounded-full text-xs w-max ${stockBg}">
+                                    <span>${stockIcon}</span>
+                                    <span>${part.stock} / ${part.minStock}</span>
+                                </div>
+                            </td>
+                            <td>${part.location}</td>
+                            <td>¥${part.unitPrice.toLocaleString()}</td>
+                            <td>
+                                <div class="flex gap-2">
+                                    <button onclick="event.stopPropagation(); window.openTransactionModal(${part.id}, '入庫')" title="入庫" class="btn btn-success text-xs">📈</button>
+                                    <button onclick="event.stopPropagation(); window.openTransactionModal(${part.id}, '出庫')" title="出庫" class="btn btn-secondary text-xs">📉</button>
+                                    <button onclick="event.stopPropagation(); window.editPart(${part.id})" title="編集" class="btn btn-secondary text-xs">✏️</button>
+                                    <button onclick="event.stopPropagation(); window.deletePart(${part.id})" title="削除" class="btn btn-danger text-xs">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            };
+
+            // 履歴表示
+            window.renderHistory = function() {
+                document.getElementById('main-content').innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-gray-900">入出庫履歴</h2>
+                            <div id="history-result-count" class="text-sm text-gray-600">${window.appState.transactions.length} 件の履歴を表示中</div>
+                        </div>
+                        
+                        <!-- 検索・フィルター -->
+                        <div class="history-filters">
+                            <div class="space-y-4">
+                                <!-- フリーワード検索 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">フリーワード検索</label>
+                                    <input type="text" id="history-search" placeholder="部品番号、部品名、種別、理由、担当者で検索..." class="form-input">
+                                </div>
+                                
+                                <!-- 詳細フィルター -->
+                                <div class="filter-row">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">日付（開始）</label>
+                                        <input type="date" id="history-date-from" class="form-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">日付（終了）</label>
+                                        <input type="date" id="history-date-to" class="form-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">部品番号</label>
+                                        <input type="text" id="history-part-number" placeholder="部品番号で絞り込み" class="form-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">種別</label>
+                                        <select id="history-type" class="form-input">
+                                            <option value="">すべて</option>
+                                            <option value="入庫">入庫</option>
+                                            <option value="出庫">出庫</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">理由</label>
+                                        <input type="text" id="history-reason" placeholder="理由で絞り込み" class="form-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">担当者</label>
+                                        <input type="text" id="history-person" placeholder="担当者で絞り込み" class="form-input">
+                                    </div>
+                                </div>
+                                
+                                <!-- ソート・リセット -->
+                                <div class="flex justify-between items-center">
+                                    <div class="sort-controls">
+                                        <span class="text-sm font-medium text-gray-700 mr-2">並び替え:</span>
+                                        <button class="sort-button active" data-sort="date">日付</button>
+                                        <button class="sort-button" data-sort="partNumber">部品番号</button>
+                                        <button class="sort-button" data-sort="partName">部品名</button>
+                                        <button class="sort-button" data-sort="type">種別</button>
+                                        <button class="sort-button" data-sort="quantity">数量</button>
+                                        <button class="sort-button" data-sort="reason">理由</button>
+                                        <button class="sort-button" data-sort="person">担当者</button>
+                                        <button id="sort-order-toggle" class="sort-button">
+                                            順序 <span id="sort-order-indicator">↓</span>
+                                        </button>
+                                    </div>
+                                    <button id="clear-filters" class="btn btn-secondary text-sm">フィルターをクリア</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 履歴テーブル -->
+                        <div class="bg-white rounded-xl shadow-sm border">
+                            <div class="p-4 border-b">
+                                <h3 class="text-lg font-semibold text-gray-900">取引履歴</h3>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>日付</th>
+                                            <th>部品番号・部品名</th>
+                                            <th>種別</th>
+                                            <th>数量</th>
+                                            <th>理由</th>
+                                            <th>担当者</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="history-table-body">
+                                        <!-- ここに履歴が表示されます -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // 初期表示
+                window.updateHistoryDisplay();
+                
+                // イベントリスナーを設定
+                window.setupHistoryEventListeners();
+            };
+
+            // 新規追加フォーム表示
+            window.renderForm = function() {
+                const isEditing = window.appState.editingPart !== null;
+                const formData = isEditing ? window.appState.editingPart : {
+                    partNumber: "", name: "", category: "", stock: 0, minStock: 0,
+                    location: "WH59", supplier: "", unitPrice: 0, notes: ""
+                };
+                
+                document.getElementById('main-content').innerHTML = `
+                    <div class="space-y-4">
+                        <h2 class="text-2xl font-bold text-gray-900">${isEditing ? '部品情報の編集' : '新しい部品の追加'}</h2>
+                        <div class="bg-white rounded-xl shadow-sm border p-6">
+                            <form id="parts-form" class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">部品番号 *</label>
+                                        <input type="text" id="form-partNumber" value="${formData.partNumber}" required class="form-input" placeholder="例: P001">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">部品名 *</label>
+                                        <input type="text" id="form-name" value="${formData.name}" required class="form-input" placeholder="例: ボルト M8x20">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">カテゴリ *</label>
+                                        <select id="form-category" required class="form-input">
+                                            <option value="P" ${formData.category === 'P' ? 'selected' : ''}>P (Parts)</option>
+                                            <option value="EP" ${formData.category === 'EP' ? 'selected' : ''}>EP (Equipment Parts)</option>
+                                            <option value="HL" ${formData.category === 'HL' ? 'selected' : ''}>HL (Hydraulic/Lubrication)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">保管場所</label>
+                                        <input type="text" id="form-location" value="${formData.location}" class="form-input" placeholder="例: WH59">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">現在庫数</label>
+                                        <input type="number" id="form-stock" value="${formData.stock}" min="0" class="form-input" placeholder="例: 150">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">最小在庫数</label>
+                                        <input type="number" id="form-minStock" value="${formData.minStock}" min="0" class="form-input" placeholder="例: 50">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">仕入先</label>
+                                        <input type="text" id="form-supplier" value="${formData.supplier}" class="form-input" placeholder="例: ABC商事">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">単価 (¥)</label>
+                                        <input type="number" id="form-unitPrice" value="${formData.unitPrice}" min="0" step="0.01" class="form-input" placeholder="例: 25">
+                                    </div>
+                                    <div class="col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">備考</label>
+                                        <textarea id="form-notes" rows="3" class="form-input resize-none" placeholder="例: ステンレス製、高耐食性">${formData.notes}</textarea>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end gap-3 mt-6">
+                                    <button type="button" onclick="window.cancelForm()" class="btn btn-secondary">キャンセル</button>
+                                    <button type="submit" class="btn btn-primary">${isEditing ? '更新' : '追加'}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('parts-form').addEventListener('submit', window.handleFormSubmit);
+            };
+
+            // スマート選択ボタン生成
+            window.generateSmartSelectionButtons = function() {
+                return `
+                    <div class="smart-selection-buttons">
+                        <button onclick="window.selectAllDisplayedParts()" class="smart-btn primary">📋 表示結果をすべて選択</button>
+                        <button onclick="window.selectWarningParts()" class="smart-btn">⚠️ 要注意部品を選択</button>
+                        <button onclick="window.selectGoodStockParts()" class="smart-btn">✅ 適正在庫を選択</button>
+                        <button onclick="window.clearAllSelections()" class="smart-btn">🔄 選択をクリア</button>
+                    </div>
+                `;
+            };
+
+            // 選択機能
+            window.togglePartSelection = function(partId) {
+                if (window.appState.selectedPartIds.has(partId)) {
+                    window.appState.selectedPartIds.delete(partId);
+                } else {
+                    window.appState.selectedPartIds.add(partId);
+                }
+                window.updateSelectionUI();
+            };
+
+            window.handleRowClick = function(event, partId) {
+                if (event.ctrlKey || event.metaKey) {
+                    window.togglePartSelection(partId);
+                } else {
+                    window.appState.selectedPartIds.clear();
+                    window.appState.selectedPartIds.add(partId);
+                    window.updateSelectionUI();
+                }
+            };
+
+            window.toggleAllParts = function() {
+                const allCheckbox = document.getElementById('select-all-parts');
+                if (allCheckbox && allCheckbox.checked) {
+                    window.selectAllDisplayedParts();
+                } else {
+                    window.clearAllSelections();
+                }
+            };
+
+            window.selectAllDisplayedParts = function() {
+                window.appState.selectedPartIds.clear();
+                window.appState.currentDisplayedParts.forEach(part => window.appState.selectedPartIds.add(part.id));
+                window.updateSelectionUI();
+            };
+
+            window.selectWarningParts = function() {
+                window.appState.selectedPartIds.clear();
+                const warningParts = window.appState.currentDisplayedParts.filter(p => p.stock <= p.minStock);
+                warningParts.forEach(part => window.appState.selectedPartIds.add(part.id));
+                window.updateSelectionUI();
+            };
+
+            window.selectGoodStockParts = function() {
+                window.appState.selectedPartIds.clear();
+                const goodParts = window.appState.currentDisplayedParts.filter(p => p.stock > p.minStock);
+                goodParts.forEach(part => window.appState.selectedPartIds.add(part.id));
+                window.updateSelectionUI();
+            };
+
+            window.clearAllSelections = function() {
+                window.appState.selectedPartIds.clear();
+                window.updateSelectionUI();
+            };
+
+            window.updateSelectionUI = function() {
+                // 行の背景色更新
+                window.appState.currentDisplayedParts.forEach(part => {
+                    const row = document.getElementById(`row-${part.id}`);
+                    if (row) {
+                        if (window.appState.selectedPartIds.has(part.id)) {
+                            row.classList.add('selected');
+                        } else {
+                            row.classList.remove('selected');
+                        }
+                    }
+                });
+
+                // チェックボックス更新
+                window.appState.currentDisplayedParts.forEach(part => {
+                    const checkbox = document.getElementById(`part-${part.id}`);
+                    if (checkbox) {
+                        checkbox.checked = window.appState.selectedPartIds.has(part.id);
+                    }
+                });
+                
+                // 全選択チェックボックス更新
+                const allCheckbox = document.getElementById('select-all-parts');
+                if (allCheckbox) {
+                    const displayedIds = new Set(window.appState.currentDisplayedParts.map(p => p.id));
+                    const selectedDisplayedCount = [...window.appState.selectedPartIds].filter(id => displayedIds.has(id)).length;
+                    allCheckbox.checked = selectedDisplayedCount === window.appState.currentDisplayedParts.length && window.appState.currentDisplayedParts.length > 0;
+                }
+                
+                // 一括操作ボタン表示制御
+                const bulkActions = document.getElementById('bulk-actions');
+                if (bulkActions) {
+                    bulkActions.style.display = window.appState.selectedPartIds.size > 0 ? 'flex' : 'none';
+                }
+                
+                // 選択件数表示
+                const selectedCount = document.getElementById('selected-count');
+                if (selectedCount) {
+                    selectedCount.textContent = `${window.appState.selectedPartIds.size}件選択中`;
+                }
+            };
+
+            // モーダル操作
+            window.showModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                }
+            };
+
+            window.hideModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            };
+
+            // 入出庫モーダル
+            window.openTransactionModal = function(partId, type) {
+                window.appState.selectedPart = window.appState.parts.find(p => p.id === partId);
+                if (!window.appState.selectedPart) {
+                    alert('部品が見つかりません');
+                    return;
+                }
+                
+                document.getElementById('modal-title').textContent = type + '処理 - ' + window.appState.selectedPart.partNumber;
+                document.getElementById('transaction-type').value = type;
+                document.getElementById('transaction-quantity').value = '1';
+                document.getElementById('transaction-reason').value = '';
+                document.getElementById('transaction-person').value = '';
+                
+                window.updateCurrentStockDisplay();
+                window.showModal('transaction-modal');
+            };
+
+            window.closeTransactionModal = function() {
+                window.hideModal('transaction-modal');
+                window.appState.selectedPart = null;
+            };
+
+            window.updateCurrentStockDisplay = function() {
+                const type = document.getElementById('transaction-type').value;
+                const currentStockElement = document.getElementById('current-stock');
+                
+                if (type === '出庫' && window.appState.selectedPart) {
+                    currentStockElement.textContent = `現在庫: ${window.appState.selectedPart.stock}`;
+                    document.getElementById('transaction-quantity').max = window.appState.selectedPart.stock;
+                } else {
+                    currentStockElement.textContent = '';
+                    document.getElementById('transaction-quantity').removeAttribute('max');
+                }
+            };
+
+            window.executeTransaction = function() {
+                const type = document.getElementById('transaction-type').value;
+                const quantity = parseInt(document.getElementById('transaction-quantity').value);
+                const reason = document.getElementById('transaction-reason').value.trim();
+                const person = document.getElementById('transaction-person').value.trim();
+                
+                if (!window.appState.selectedPart || !quantity || !reason || !person) {
+                    alert('すべての項目を入力してください');
+                    return;
+                }
+                
+                const isInbound = type === "入庫";
+                if (!isInbound && window.appState.selectedPart.stock < quantity) {
+                    alert('在庫数が不足しています');
+                    return;
+                }
+
+                const newStock = isInbound ? window.appState.selectedPart.stock + quantity : window.appState.selectedPart.stock - quantity;
+                const partIndex = window.appState.parts.findIndex(p => p.id === window.appState.selectedPart.id);
+                if (partIndex !== -1) {
+                    window.appState.parts[partIndex].stock = newStock;
+                }
+
+                window.appState.transactions.push({
+                    id: Date.now(),
+                    partId: window.appState.selectedPart.id,
+                    partNumber: window.appState.selectedPart.partNumber,
+                    type: type,
+                    quantity: quantity,
+                    date: new Date().toISOString().split('T')[0],
+                    reason: reason,
+                    person: person
+                });
+                
+                window.saveDataToStorage();
+                window.closeTransactionModal();
+                window.renderCurrentTab();
+                alert(type + '処理が完了しました（新在庫数: ' + newStock + '）');
+                window.debugLog(`${type}処理完了: ${window.appState.selectedPart.partNumber} ${quantity}個 → 新在庫数: ${newStock}`);
+            };
+
+            // フォーム処理
+            window.handleFormSubmit = function(event) {
+                event.preventDefault();
+                
+                const formData = {
+                    partNumber: document.getElementById('form-partNumber').value,
+                    name: document.getElementById('form-name').value,
+                    category: document.getElementById('form-category').value,
+                    stock: parseInt(document.getElementById('form-stock').value) || 0,
+                    minStock: parseInt(document.getElementById('form-minStock').value) || 0,
+                    location: document.getElementById('form-location').value || 'WH59',
+                    supplier: document.getElementById('form-supplier').value,
+                    unitPrice: parseFloat(document.getElementById('form-unitPrice').value) || 0,
+                    notes: document.getElementById('form-notes').value
+                };
+                
+                if (!formData.partNumber || !formData.name || !formData.category) {
+                    alert('必須項目を入力してください');
+                    return;
+                }
+                
+                if (window.appState.editingPart) {
+                    const partIndex = window.appState.parts.findIndex(p => p.id === window.appState.editingPart.id);
+                    if (partIndex !== -1) {
+                        window.appState.parts[partIndex] = { ...window.appState.parts[partIndex], ...formData };
+                    }
+                    window.debugLog(`部品編集完了: ${formData.partNumber} - ${formData.name}`);
+                    alert('部品情報を更新しました');
+                } else {
+                    const newPart = { id: Date.now(), ...formData };
+                    window.appState.parts.push(newPart);
+                    window.debugLog(`新規部品追加: ${formData.partNumber} - ${formData.name}`);
+                    alert('新しい部品を追加しました');
+                }
+                
+                window.saveDataToStorage();
+                window.appState.editingPart = null;
+                window.switchTab('list');
+            };
+
+            window.cancelForm = function() {
+                window.appState.editingPart = null;
+                window.switchTab('list');
+            };
+
+            window.editPart = function(partId) {
+                window.appState.editingPart = window.appState.parts.find(p => p.id === partId);
+                if (window.appState.editingPart) {
+                    window.switchTab('form');
+                }
+            };
+
+            window.deletePart = function(partId) {
+                if (confirm("この部品を削除しますか？")) {
+                    const deletedPart = window.appState.parts.find(part => part.id === partId);
+                    window.appState.parts = window.appState.parts.filter(part => part.id !== partId);
+                    window.appState.transactions = window.appState.transactions.filter(trans => trans.partId !== partId);
+                    
+                    window.saveDataToStorage();
+                    window.renderCurrentTab();
+                    alert('部品を削除しました。');
+                    if (deletedPart) {
+                        window.debugLog(`部品削除完了: ${deletedPart.partNumber} - ${deletedPart.name}`);
+                    }
+                }
+            };
+
+            // 一括操作
+            window.openBulkTransactionModal = function(type) {
+                alert(`一括${type}機能は開発中です`);
+            };
+
+            window.bulkDeleteParts = function() {
+                alert('一括削除機能は開発中です');
+            };
+
+            // CSVエクスポート
+            window.exportToCSV = function() {
+                try {
+                    const headers = ['部品番号', '部品名', 'カテゴリ', '現在庫数', '最小在庫数', '保管場所', '仕入先', '単価', '備考'];
+                    const csvContent = [
+                        headers.join(','),
+                        ...window.appState.parts.map(part => [
+                            part.partNumber, part.name, part.category, part.stock, part.minStock,
+                            part.location, part.supplier, part.unitPrice, part.notes || ''
+                        ].map(field => `"${field}"`).join(','))
+                    ].join('\n');
+
+                    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `parts_inventory_${new Date().toISOString().split('T')[0]}.csv`;
+                    link.click();
+                    
+                    window.debugLog('CSVエクスポート完了');
+                } catch (error) {
+                    alert('CSVエクスポートに失敗しました');
+                }
+            };
+
+            // タブ切り替え
+            window.switchTab = function(tabName) {
+                window.appState.currentTab = tabName;
+                
+                document.querySelectorAll('.nav-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                const activeButton = document.getElementById(`tab-${tabName}`);
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                }
+                
+                window.renderCurrentTab();
+                window.closeSidebar();
+            };
+
+            // サイドバー操作
+            window.toggleSidebar = function() {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('overlay');
+                
+                window.appState.sidebarOpen = !window.appState.sidebarOpen;
+                
+                if (window.appState.sidebarOpen) {
+                    sidebar.classList.add('mobile-open');
+                    overlay.classList.add('show');
+                } else {
+                    sidebar.classList.remove('mobile-open');
+                    overlay.classList.remove('show');
+                }
+            };
+
+            window.closeSidebar = function() {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('overlay');
+                
+                window.appState.sidebarOpen = false;
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('show');
+            };
+
+            // 現在のタブを描画
+            window.renderCurrentTab = function() {
+                switch(window.appState.currentTab) {
+                    case 'dashboard': window.renderDashboard(); break;
+                    case 'list': window.renderPartsList(); break;
+                    case 'history': window.renderHistory(); break;
+                    case 'form': window.renderForm(); break;
+                    default: 
+                        document.getElementById('main-content').innerHTML = `
+                            <div class="text-center p-8">
+                                <p class="text-gray-500">未知のタブです: ${window.appState.currentTab}</p>
+                            </div>
+                        `;
+                }
+            };
+
+            window.resetData = function() {
+                if (confirm('すべてのデータを初期状態にリセットしますか？')) {
+                    window.initializeDefaultData();
+                    window.saveDataToStorage();
+                    window.renderCurrentTab();
+                    alert('データをリセットしました。');
+                    window.debugLog('データリセット実行 - すべて初期値に戻しました');
+                }
+            };
+
+            // 履歴関連関数
+            window.updateHistoryDisplay = function() {
+                const filteredTransactions = window.getFilteredTransactions();
+                const sortedTransactions = window.sortTransactions(filteredTransactions);
+                
+                const resultCount = document.getElementById('history-result-count');
+                if (resultCount) {
+                    resultCount.textContent = `${sortedTransactions.length} 件の履歴を表示中`;
+                }
+                
+                const tbody = document.getElementById('history-table-body');
+                if (tbody) {
+                    if (sortedTransactions.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500">条件に一致する履歴が見つかりません。</td></tr>';
+                    } else {
+                        tbody.innerHTML = sortedTransactions.map(transaction => {
+                            const partName = window.getPartNameByNumber(transaction.partNumber);
+                            return `
+                            <tr>
+                                <td>${transaction.date}</td>
+                                <td class="font-medium">
+                                    <div>${transaction.partNumber}</div>
+                                    <div class="text-sm text-gray-600">${partName}</div>
+                                </td>
+                                <td>
+                                    <span class="px-2 py-1 rounded-full text-xs font-medium ${transaction.type === '入庫' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                                        ${transaction.type}
+                                    </span>
+                                </td>
+                                <td>${transaction.quantity}</td>
+                                <td>${transaction.reason}</td>
+                                <td>${transaction.person}</td>
+                            </tr>
+                        `}).join('');
+                    }
+                }
+            };
+
+            window.getFilteredTransactions = function() {
+                return window.appState.transactions.filter(transaction => {
+                    const partName = window.getPartNameByNumber(transaction.partNumber);
+                    
+                    if (window.historyFilters.search) {
+                        const searchTerm = window.historyFilters.search.toLowerCase();
+                        const searchFields = [
+                            transaction.partNumber,
+                            partName,
+                            transaction.type,
+                            transaction.reason,
+                            transaction.person
+                        ].join(' ').toLowerCase();
+                        
+                        if (!searchFields.includes(searchTerm)) {
+                            return false;
+                        }
+                    }
+                    
+                    if (window.historyFilters.dateFrom && transaction.date < window.historyFilters.dateFrom) {
+                        return false;
+                    }
+                    if (window.historyFilters.dateTo && transaction.date > window.historyFilters.dateTo) {
+                        return false;
+                    }
+                    
+                    if (window.historyFilters.partNumber && !transaction.partNumber.toLowerCase().includes(window.historyFilters.partNumber.toLowerCase())) {
+                        return false;
+                    }
+                    
+                    if (window.historyFilters.type && transaction.type !== window.historyFilters.type) {
+                        return false;
+                    }
+                    
+                    if (window.historyFilters.reason && !transaction.reason.toLowerCase().includes(window.historyFilters.reason.toLowerCase())) {
+                        return false;
+                    }
+                    
+                    if (window.historyFilters.person && !transaction.person.toLowerCase().includes(window.historyFilters.person.toLowerCase())) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+            };
+
+            window.sortTransactions = function(transactions) {
+                return [...transactions].sort((a, b) => {
+                    let aValue, bValue;
+                    
+                    switch (window.historySortBy) {
+                        case 'date':
+                            aValue = a.date;
+                            bValue = b.date;
+                            break;
+                        case 'partNumber':
+                            aValue = a.partNumber;
+                            bValue = b.partNumber;
+                            break;
+                        case 'partName':
+                            aValue = window.getPartNameByNumber(a.partNumber);
+                            bValue = window.getPartNameByNumber(b.partNumber);
+                            break;
+                        case 'type':
+                            aValue = a.type;
+                            bValue = b.type;
+                            break;
+                        case 'quantity':
+                            aValue = a.quantity;
+                            bValue = b.quantity;
+                            break;
+                        case 'reason':
+                            aValue = a.reason;
+                            bValue = b.reason;
+                            break;
+                        case 'person':
+                            aValue = a.person;
+                            bValue = b.person;
+                            break;
+                        default:
+                            aValue = a.date;
+                            bValue = b.date;
+                    }
+                    
+                    if (typeof aValue === 'string') {
+                        aValue = aValue.toLowerCase();
+                        bValue = bValue.toLowerCase();
+                    }
+                    
+                    let result;
+                    if (aValue < bValue) result = -1;
+                    else if (aValue > bValue) result = 1;
+                    else result = 0;
+                    
+                    return window.historySortOrder === 'desc' ? -result : result;
+                });
+            };
+
+            window.setupHistoryEventListeners = function() {
+                const searchInput = document.getElementById('history-search');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function(e) {
+                        window.historyFilters.search = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                const dateFromInput = document.getElementById('history-date-from');
+                const dateToInput = document.getElementById('history-date-to');
+                if (dateFromInput) {
+                    dateFromInput.addEventListener('change', function(e) {
+                        window.historyFilters.dateFrom = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                if (dateToInput) {
+                    dateToInput.addEventListener('change', function(e) {
+                        window.historyFilters.dateTo = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                const partNumberInput = document.getElementById('history-part-number');
+                const typeSelect = document.getElementById('history-type');
+                const reasonInput = document.getElementById('history-reason');
+                const personInput = document.getElementById('history-person');
+                
+                if (partNumberInput) {
+                    partNumberInput.addEventListener('input', function(e) {
+                        window.historyFilters.partNumber = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                if (typeSelect) {
+                    typeSelect.addEventListener('change', function(e) {
+                        window.historyFilters.type = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                if (reasonInput) {
+                    reasonInput.addEventListener('input', function(e) {
+                        window.historyFilters.reason = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                if (personInput) {
+                    personInput.addEventListener('input', function(e) {
+                        window.historyFilters.person = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                const sortButtons = document.querySelectorAll('.sort-button[data-sort]');
+                sortButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const sortBy = this.getAttribute('data-sort');
+                        if (window.historySortBy === sortBy) {
+                            window.historySortOrder = window.historySortOrder === 'asc' ? 'desc' : 'asc';
+                        } else {
+                            window.historySortBy = sortBy;
+                            window.historySortOrder = 'desc';
+                        }
+                        
+                        sortButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        const orderIndicator = document.getElementById('sort-order-indicator');
+                        if (orderIndicator) {
+                            orderIndicator.textContent = window.historySortOrder === 'desc' ? '↓' : '↑';
+                        }
+                        
+                        window.updateHistoryDisplay();
+                    });
+                });
+                
+                const orderToggle = document.getElementById('sort-order-toggle');
+                if (orderToggle) {
+                    orderToggle.addEventListener('click', function() {
+                        window.historySortOrder = window.historySortOrder === 'asc' ? 'desc' : 'asc';
+                        const orderIndicator = document.getElementById('sort-order-indicator');
+                        if (orderIndicator) {
+                            orderIndicator.textContent = window.historySortOrder === 'desc' ? '↓' : '↑';
+                        }
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                const clearButton = document.getElementById('clear-filters');
+                if (clearButton) {
+                    clearButton.addEventListener('click', function() {
+                        window.historyFilters = {
+                            search: '',
+                            dateFrom: '',
+                            dateTo: '',
+                            partNumber: '',
+                            type: '',
+                            reason: '',
+                            person: ''
+                        };
+                        
+                        if (searchInput) searchInput.value = '';
+                        if (dateFromInput) dateFromInput.value = '';
+                        if (dateToInput) dateToInput.value = '';
+                        if (partNumberInput) partNumberInput.value = '';
+                        if (typeSelect) typeSelect.value = '';
+                        if (reasonInput) reasonInput.value = '';
+                        if (personInput) personInput.value = '';
+                        
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                window.debugLog('履歴のイベントリスナー設定完了');
+            };
+
+            // 初期化関数
+            window.initialize = function() {
+                try {
+                    window.debugLog('アプリケーション初期化開始');
+                    
+                    // PWA機能をセットアップ
+                    window.setupPWA();
+                    
+                    if (!window.loadDataFromStorage()) {
+                        window.debugLog('保存データなし - デフォルトデータで初期化');
+                        window.initializeDefaultData();
+                        window.saveDataToStorage();
+                    } else {
+                        window.debugLog('保存されたデータを使用');
+                    }
+                    
+                    // イベントリスナー設定
+                    const exportBtn = document.getElementById('export-csv');
+                    const resetBtn = document.getElementById('reset-data');
+                    const mobileMenuBtn = document.getElementById('mobile-menu');
+                    const overlayElement = document.getElementById('overlay');
+                    
+                    if (exportBtn) {
+                        exportBtn.addEventListener('click', window.exportToCSV);
+                    }
+                    
+                    if (resetBtn) {
+                        resetBtn.addEventListener('click', window.resetData);
+                    }
+                    
+                    if (mobileMenuBtn) {
+                        mobileMenuBtn.addEventListener('click', window.toggleSidebar);
+                    }
+                    
+                    if (overlayElement) {
+                        overlayElement.addEventListener('click', window.closeSidebar);
+                    }
+                    
+                    // タブボタンのイベントリスナー設定
+                    const buttons = [
+                        { id: 'tab-dashboard', tab: 'dashboard' },
+                        { id: 'tab-list', tab: 'list' },
+                        { id: 'tab-history', tab: 'history' },
+                        { id: 'tab-form', tab: 'form' }
+                    ];
+                    
+                    buttons.forEach(function(btnInfo) {
+                        const btn = document.getElementById(btnInfo.id);
+                        if (btn) {
+                            btn.addEventListener('click', function() {
+                                if (btnInfo.tab === 'form') {
+                                    window.appState.editingPart = null;
+                                }
+                                window.switchTab(btnInfo.tab);
+                            });
+                        }
+                    });
+                    
+                    // 入出庫モーダル関連のイベントリスナー
+                    const closeBtn = document.getElementById('close-modal');
+                    const cancelBtn = document.getElementById('cancel-transaction');
+                    const transactionForm = document.getElementById('transaction-form');
+                    const typeSelect = document.getElementById('transaction-type');
+                    
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            window.closeTransactionModal();
+                        });
+                    }
+                    
+                    if (cancelBtn) {
+                        cancelBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            window.closeTransactionModal();
+                        });
+                    }
+                    
+                    if (transactionForm) {
+                        transactionForm.addEventListener('submit', function(e) {
+                            e.preventDefault();
+                            window.executeTransaction();
+                        });
+                    }
+                    
+                    if (typeSelect) {
+                        typeSelect.addEventListener('change', window.updateCurrentStockDisplay);
+                    }
+                    
+                    // タッチイベントの最適化
+                    document.addEventListener('touchstart', function() {}, {passive: true});
+                    
+                    // 初期タブを表示
+                    window.renderCurrentTab();
+                    
+                    window.debugLog('アプリケーション初期化完了');
+                    
+                } catch (error) {
+                    window.debugLog('初期化中に重大なエラー: ' + error.message);
+                    console.error('初期化エラー:', error);
+                    document.getElementById('main-content').innerHTML = `
+                        <div class="p-8 text-center">
+                            <h2 class="text-xl font-bold text-red-600 mb-4">初期化エラー</h2>
+                            <p class="text-gray-600 mb-4">${error.message}</p>
+                            <button onclick="location.reload()" class="btn btn-primary">ページを再読み込み</button>
+                        </div>
+                    `;
+                }
+            };
+
+            // DOMContentLoadedイベントで初期化を実行
+            document.addEventListener('DOMContentLoaded', window.initialize);
+
+        })();
+    </script>
+</body>
+</html>
