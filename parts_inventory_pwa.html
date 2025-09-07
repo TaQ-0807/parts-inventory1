@@ -1,123 +1,50 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>部品在庫1</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f5f5f5;
-        }
-        .header {
-            background: #3498db;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .part-card {
-            background: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .part-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .part-info {
-            color: #666;
-            margin: 5px 0;
-        }
-        .search-box {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
+        body { font-family: Arial; padding: 20px; background: #f0f0f0; }
+        .header { background: #4CAF50; color: white; padding: 15px; text-align: center; }
+        .part { background: white; margin: 10px 0; padding: 15px; border-radius: 5px; }
+        .search { width: 100%; padding: 10px; margin: 10px 0; font-size: 16px; }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>部品在庫1</h1>
-        <p>部品の在庫管理をスマートフォンで行えるツールです</p>
+        <p>部品の在庫管理ツール</p>
     </div>
-
-    <input type="text" id="searchBox" class="search-box" placeholder="部品を検索..." onkeyup="searchParts()">
-
-    <div id="partsList">
-        <!-- 部品一覧がここに表示されます -->
-    </div>
+    
+    <input type="text" class="search" placeholder="検索..." onkeyup="search()">
+    
+    <div id="list"></div>
 
     <script>
-        // 部品データ
         const parts = [
-            {
-                name: "Arduino Uno R3",
-                category: "マイコンボード", 
-                quantity: 5,
-                location: "棚A-1",
-                price: 2500
-            },
-            {
-                name: "抵抗 1kΩ",
-                category: "電子部品",
-                quantity: 100, 
-                location: "引き出し-B2",
-                price: 10
-            },
-            {
-                name: "LED 赤色 5mm",
-                category: "電子部品",
-                quantity: 50,
-                location: "引き出し-C1", 
-                price: 50
-            },
-            {
-                name: "ブレッドボード",
-                category: "ツール",
-                quantity: 3,
-                location: "棚B-1",
-                price: 400
-            }
+            { name: "Arduino Uno", qty: 5, loc: "棚A-1" },
+            { name: "抵抗 1kΩ", qty: 100, loc: "引き出し-B" },
+            { name: "LED 赤", qty: 50, loc: "引き出し-C" },
+            { name: "ブレッドボード", qty: 3, loc: "棚B-1" }
         ];
 
-        // 部品表示
-        function displayParts(partsToShow = parts) {
-            const container = document.getElementById('partsList');
-            container.innerHTML = partsToShow.map(part => `
-                <div class="part-card">
-                    <div class="part-name">${part.name}</div>
-                    <div class="part-info">カテゴリ: ${part.category}</div>
-                    <div class="part-info">在庫: ${part.quantity}個</div>
-                    <div class="part-info">場所: ${part.location}</div>
-                    <div class="part-info">価格: ¥${part.price.toLocaleString()}</div>
-                </div>
-            `).join('');
+        function show(items = parts) {
+            document.getElementById('list').innerHTML = items.map(p => 
+                `<div class="part">
+                    <strong>${p.name}</strong><br>
+                    在庫: ${p.qty}個<br>
+                    場所: ${p.loc}
+                </div>`
+            ).join('');
         }
 
-        // 検索機能
-        function searchParts() {
-            const query = document.getElementById('searchBox').value.toLowerCase();
-            const filtered = parts.filter(part => 
-                part.name.toLowerCase().includes(query) ||
-                part.category.toLowerCase().includes(query) ||
-                part.location.toLowerCase().includes(query)
-            );
-            displayParts(filtered);
+        function search() {
+            const q = event.target.value.toLowerCase();
+            const filtered = parts.filter(p => p.name.toLowerCase().includes(q));
+            show(filtered);
         }
 
-        // 初期表示
-        displayParts();
+        show();
     </script>
 </body>
 </html>
