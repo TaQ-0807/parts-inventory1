@@ -1282,11 +1282,16 @@
                     // イベントリスナー設定
                     const exportBtn = document.getElementById('export-csv');
                     const resetBtn = document.getElementById('reset-data');
+                    const fileImportBtn = document.getElementById('file-import');
                     const mobileMenuBtn = document.getElementById('mobile-menu');
                     const overlayElement = document.getElementById('overlay');
                     
                     if (exportBtn) {
                         exportBtn.addEventListener('click', window.exportToCSV);
+                    }
+                    
+                    if (fileImportBtn) {
+                        fileImportBtn.addEventListener('change', window.handleFileImport);
                     }
                     
                     if (resetBtn) {
