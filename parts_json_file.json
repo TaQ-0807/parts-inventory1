@@ -1,0 +1,70 @@
+{
+  "parts": [
+    {
+      "id": 1,
+      "name": "Arduino Uno R3",
+      "category": "マイコンボード",
+      "description": "ATmega328P搭載開発ボード",
+      "quantity": 5,
+      "location": "棚A-1",
+      "price": 2500,
+      "supplier": "スイッチサイエンス",
+      "datasheet": "https://www.arduino.cc/en/uploads/Main/Arduino_Uno_Rev3-schematic.pdf"
+    },
+    {
+      "id": 2,
+      "name": "抵抗 1kΩ",
+      "category": "電子部品",
+      "description": "カーボン抵抗 1/4W 5%",
+      "quantity": 100,
+      "location": "引き出し-B2",
+      "price": 10,
+      "supplier": "秋月電子",
+      "datasheet": ""
+    },
+    {
+      "id": 3,
+      "name": "LED 赤色 5mm",
+      "category": "電子部品",
+      "description": "赤色LED 5mm径 20mA",
+      "quantity": 50,
+      "location": "引き出し-C1",
+      "price": 50,
+      "supplier": "千石電商",
+      "datasheet": ""
+    },
+    {
+      "id": 4,
+      "name": "コンデンサ 100μF",
+      "category": "電子部品",
+      "description": "電解コンデンサ 16V 100μF",
+      "quantity": 20,
+      "location": "棚A-3",
+      "price": 80,
+      "supplier": "RSコンポーネンツ",
+      "datasheet": ""
+    },
+    {
+      "id": 5,
+      "name": "ブレッドボード",
+      "category": "ツール",
+      "description": "ハーフサイズブレッドボード",
+      "quantity": 3,
+      "location": "棚B-1",
+      "price": 400,
+      "supplier": "スイッチサイエンス",
+      "datasheet": ""
+    },
+    {
+      "id": 6,
+      "name": "ジャンパーワイヤ",
+      "category": "ツール",
+      "description": "オス-メス ジャンパーワイヤ 40本",
+      "quantity": 10,
+      "location": "引き出し-D1",
+      "price": 200,
+      "supplier": "秋月電子",
+      "datasheet": ""
+    }
+  ]
+}
