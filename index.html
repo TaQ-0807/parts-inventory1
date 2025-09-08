@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>部品在庫管理システム ver2.2</title>
+    <title>部品在庫管理システム ver2.4</title>
     <style>
         * { 
             margin: 0; 
@@ -115,7 +115,7 @@
             background-color: #fee2e2;
         }
 
-        /* Stats card styles - Mobile optimized */
+        /* Stats card styles */
         .stats-card {
             background-color: white;
             border-radius: 0.75rem;
@@ -177,35 +177,6 @@
             flex-shrink: 0;
             display: flex;
             align-items: center;
-        }
-
-        /* Category specific adjustments for mobile */
-        @media (max-width: 768px) {
-            .stats-card {
-                padding: 0.75rem;
-                min-height: 70px;
-            }
-            
-            .stats-card-title {
-                font-size: 0.7rem;
-            }
-            
-            .stats-card-number {
-                font-size: 1.25rem;
-            }
-            
-            .stats-card-subtitle {
-                font-size: 0.55rem;
-            }
-            
-            .stats-card-icon {
-                font-size: 1.25rem;
-            }
-
-            /* Shortened text for mobile */
-            .category-hl .stats-card-title {
-                font-size: 0.65rem;
-            }
         }
 
         /* Button styles */
@@ -313,10 +284,14 @@
             background-color: white;
             border-radius: 0.75rem;
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-            max-width: 28rem;
+            max-width: 50rem;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
+        }
+
+        .modal-content.large {
+            max-width: 70rem;
         }
 
         .overlay {
@@ -437,6 +412,82 @@
         .stock-good { background-color: #dcfce7; color: #16a34a; }
         .stock-warning { background-color: #fef3c7; color: #d97706; }
 
+        /* Mapping modal styles */
+        .mapping-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .mapping-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .mapping-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            background: white;
+        }
+
+        .mapping-select {
+            flex: 1;
+            padding: 0.375rem 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .mapping-preview {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+
+        .preview-table th,
+        .preview-table td {
+            padding: 0.5rem;
+            border-bottom: 1px solid #f3f4f6;
+            text-align: left;
+        }
+
+        .preview-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            height: 0.5rem;
+            background-color: #e5e7eb;
+            border-radius: 0.25rem;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #2563eb;
+            transition: width 0.3s ease;
+        }
+
         /* Utility classes */
         .text-xs { font-size: 0.75rem; }
         .text-sm { font-size: 0.875rem; }
@@ -451,6 +502,10 @@
         .text-gray-600 { color: #4b5563; }
         .text-gray-700 { color: #374151; }
         .text-gray-900 { color: #111827; }
+        .text-red-600 { color: #dc2626; }
+        .text-green-600 { color: #16a34a; }
+        .text-blue-600 { color: #2563eb; }
+        .text-orange-600 { color: #ea580c; }
         .flex { display: flex; }
         .items-center { align-items: center; }
         .justify-between { justify-content: space-between; }
@@ -578,9 +633,75 @@
         </div>
     </div>
 
+    <!-- CSVマッピングモーダル -->
+    <div id="mapping-modal" class="modal" style="display: none;">
+        <div class="modal-content large">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">CSVフィールドマッピング</h3>
+                    <button id="close-mapping-modal" class="btn btn-secondary">✕</button>
+                </div>
+                
+                <div class="space-y-4">
+                    <p class="text-sm text-gray-600">CSVファイルの列とシステムのフィールドを対応づけてください：</p>
+                    
+                    <div class="mapping-container">
+                        <div class="mapping-column">
+                            <h4 class="font-semibold text-gray-900 mb-2">システムフィールド</h4>
+                            <div id="system-fields"></div>
+                        </div>
+                        <div class="mapping-column">
+                            <h4 class="font-semibold text-gray-900 mb-2">CSVファイルの列</h4>
+                            <div id="csv-fields"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t pt-4">
+                        <h4 class="font-semibold text-gray-900 mb-2">プレビュー（最初の5行）</h4>
+                        <div class="mapping-preview" id="mapping-preview"></div>
+                    </div>
+                    
+                    <div id="mapping-errors" class="hidden bg-red-50 border border-red-200 rounded-lg p-4">
+                        <h5 class="font-semibold text-red-800 mb-2">エラー:</h5>
+                        <ul id="mapping-error-list" class="text-sm text-red-700 list-disc list-inside"></ul>
+                    </div>
+                    
+                    <div class="flex justify-end gap-3 mt-6">
+                        <button type="button" id="cancel-mapping" class="btn btn-secondary">キャンセル</button>
+                        <button type="button" id="execute-import" class="btn btn-primary">インポート実行</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- インポート進行状況モーダル -->
+    <div id="import-progress-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">インポート処理中</h3>
+                <div class="space-y-4">
+                    <div class="progress-bar">
+                        <div id="import-progress-fill" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <p id="import-status" class="text-sm text-gray-600">準備中...</p>
+                    <div id="import-results" class="hidden">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <p id="import-success-message" class="text-green-800"></p>
+                        </div>
+                        <button id="close-import-progress" class="btn btn-primary mt-4 w-full">完了</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         (function() {
             'use strict';
+
+            // アプリケーション初期化
+            console.log('アプリケーション開始');
 
             // グローバル変数
             window.appState = {
@@ -591,7 +712,9 @@
                 selectedPart: null,
                 editingPart: null,
                 sidebarOpen: false,
-                currentFilter: { type: null, value: null }
+                currentFilter: { type: null, value: null },
+                csvData: null,
+                csvMapping: {}
             };
 
             // 履歴フィルタリング・ソート用の変数
@@ -607,6 +730,19 @@
             window.historySortBy = 'date';
             window.historySortOrder = 'desc';
 
+            // システムフィールド定義
+            window.systemFields = {
+                'partNumber': { name: '部品番号', required: true },
+                'name': { name: '部品名', required: true },
+                'category': { name: 'カテゴリ', required: true },
+                'stock': { name: '現在庫数', required: false },
+                'minStock': { name: '最小在庫数', required: false },
+                'location': { name: '保管場所', required: false },
+                'supplier': { name: '仕入先', required: false },
+                'unitPrice': { name: '単価', required: false },
+                'notes': { name: '備考', required: false }
+            };
+
             // データ永続化関数
             window.saveDataToStorage = function() {
                 try {
@@ -614,7 +750,7 @@
                         parts: window.appState.parts,
                         transactions: window.appState.transactions,
                         timestamp: new Date().toISOString(),
-                        version: '2.2'
+                        version: '2.4'
                     };
                     localStorage.setItem('parts_inventory_data', JSON.stringify(dataToSave));
                     console.log('データを保存しました');
@@ -823,35 +959,31 @@
                 
                 // カテゴリ別の統計カードを生成
                 const categoryCards = Object.entries(stats.categories).map(([category, data]) => {
-                    let categoryName, categoryColor, categoryIcon, categoryClass;
+                    let categoryName, categoryColor, categoryIcon;
                     switch(category) {
                         case 'P':
                             categoryName = 'Parts';
                             categoryColor = 'text-blue-600';
                             categoryIcon = '🔧';
-                            categoryClass = '';
                             break;
                         case 'EP':
                             categoryName = 'Equipment Parts';
                             categoryColor = 'text-green-600';
                             categoryIcon = '⚙️';
-                            categoryClass = '';
                             break;
                         case 'HL':
                             categoryName = 'H/L Parts';
                             categoryColor = 'text-orange-600';
                             categoryIcon = '🛢️';
-                            categoryClass = 'category-hl';
                             break;
                         default:
                             categoryName = category;
                             categoryColor = 'text-gray-600';
                             categoryIcon = '📦';
-                            categoryClass = '';
                     }
                     
                     return `
-                        <button class="stats-card ${categoryClass}" onclick="window.applyPartsFilter('category', '${category}')">
+                        <button class="stats-card" onclick="window.applyPartsFilter('category', '${category}')">
                             <div class="stats-card-content">
                                 <div class="stats-card-info">
                                     <div class="stats-card-title">${categoryName}</div>
@@ -1160,262 +1292,6 @@
                 window.setupHistoryEventListeners();
             };
 
-            // 履歴関連関数
-            window.updateHistoryDisplay = function() {
-                const filteredTransactions = window.getFilteredTransactions();
-                const sortedTransactions = window.sortTransactions(filteredTransactions);
-                
-                const resultCount = document.getElementById('history-result-count');
-                if (resultCount) {
-                    resultCount.textContent = `${sortedTransactions.length} 件の履歴を表示中`;
-                }
-                
-                const tbody = document.getElementById('history-table-body');
-                if (tbody) {
-                    if (sortedTransactions.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500">条件に一致する履歴が見つかりません。</td></tr>';
-                    } else {
-                        tbody.innerHTML = sortedTransactions.map(transaction => {
-                            const partName = window.getPartNameByNumber(transaction.partNumber);
-                            return `
-                            <tr style="border-bottom: 1px solid #e5e7eb;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor=''">
-                                <td>${transaction.date}</td>
-                                <td class="font-medium">
-                                    <div>${transaction.partNumber}</div>
-                                    <div class="text-sm text-gray-600">${partName}</div>
-                                </td>
-                                <td>
-                                    <span class="badge ${transaction.type === '入庫' ? 'badge-green' : 'badge-red'}">
-                                        ${transaction.type}
-                                    </span>
-                                </td>
-                                <td>${transaction.quantity}</td>
-                                <td>${transaction.reason}</td>
-                                <td>${transaction.person}</td>
-                            </tr>
-                        `}).join('');
-                    }
-                }
-            };
-
-            window.getFilteredTransactions = function() {
-                return window.appState.transactions.filter(transaction => {
-                    const partName = window.getPartNameByNumber(transaction.partNumber);
-                    
-                    if (window.historyFilters.search) {
-                        const searchTerm = window.historyFilters.search.toLowerCase();
-                        const searchFields = [
-                            transaction.partNumber,
-                            partName,
-                            transaction.type,
-                            transaction.reason,
-                            transaction.person
-                        ].join(' ').toLowerCase();
-                        
-                        if (!searchFields.includes(searchTerm)) {
-                            return false;
-                        }
-                    }
-                    
-                    if (window.historyFilters.dateFrom && transaction.date < window.historyFilters.dateFrom) {
-                        return false;
-                    }
-                    if (window.historyFilters.dateTo && transaction.date > window.historyFilters.dateTo) {
-                        return false;
-                    }
-                    
-                    if (window.historyFilters.partNumber && !transaction.partNumber.toLowerCase().includes(window.historyFilters.partNumber.toLowerCase())) {
-                        return false;
-                    }
-                    
-                    if (window.historyFilters.type && transaction.type !== window.historyFilters.type) {
-                        return false;
-                    }
-                    
-                    if (window.historyFilters.reason && !transaction.reason.toLowerCase().includes(window.historyFilters.reason.toLowerCase())) {
-                        return false;
-                    }
-                    
-                    if (window.historyFilters.person && !transaction.person.toLowerCase().includes(window.historyFilters.person.toLowerCase())) {
-                        return false;
-                    }
-                    
-                    return true;
-                });
-            };
-
-            window.sortTransactions = function(transactions) {
-                return [...transactions].sort((a, b) => {
-                    let aValue, bValue;
-                    
-                    switch (window.historySortBy) {
-                        case 'date':
-                            aValue = a.date;
-                            bValue = b.date;
-                            break;
-                        case 'partNumber':
-                            aValue = a.partNumber;
-                            bValue = b.partNumber;
-                            break;
-                        case 'partName':
-                            aValue = window.getPartNameByNumber(a.partNumber);
-                            bValue = window.getPartNameByNumber(b.partNumber);
-                            break;
-                        case 'type':
-                            aValue = a.type;
-                            bValue = b.type;
-                            break;
-                        case 'quantity':
-                            aValue = a.quantity;
-                            bValue = b.quantity;
-                            break;
-                        case 'reason':
-                            aValue = a.reason;
-                            bValue = b.reason;
-                            break;
-                        case 'person':
-                            aValue = a.person;
-                            bValue = b.person;
-                            break;
-                        default:
-                            aValue = a.date;
-                            bValue = b.date;
-                    }
-                    
-                    if (typeof aValue === 'string') {
-                        aValue = aValue.toLowerCase();
-                        bValue = bValue.toLowerCase();
-                    }
-                    
-                    let result;
-                    if (aValue < bValue) result = -1;
-                    else if (aValue > bValue) result = 1;
-                    else result = 0;
-                    
-                    return window.historySortOrder === 'desc' ? -result : result;
-                });
-            };
-
-            window.setupHistoryEventListeners = function() {
-                const searchInput = document.getElementById('history-search');
-                if (searchInput) {
-                    searchInput.addEventListener('input', function(e) {
-                        window.historyFilters.search = e.target.value;
-                        window.updateHistoryDisplay();
-                    });
-                }
-                
-                const dateFromInput = document.getElementById('history-date-from');
-                const dateToInput = document.getElementById('history-date-to');
-                if (dateFromInput) {
-                    dateFromInput.addEventListener('change', function(e) {
-                        window.historyFilters.dateFrom = e.target.value;
-                        window.updateHistoryDisplay();
-                    });
-                }
-                if (dateToInput) {
-                    dateToInput.addEventListener('change', function(e) {
-                        window.historyFilters.dateTo = e.target.value;
-                        window.updateHistoryDisplay();
-                    });
-                }
-                
-                const partNumberInput = document.getElementById('history-part-number');
-                const typeSelect = document.getElementById('history-type');
-                const reasonInput = document.getElementById('history-reason');
-                const personInput = document.getElementById('history-person');
-                
-                if (partNumberInput) {
-                    partNumberInput.addEventListener('input', function(e) {
-                        window.historyFilters.partNumber = e.target.value;
-                        window.updateHistoryDisplay();
-                    });
-                }
-                
-                if (typeSelect) {
-                    typeSelect.addEventListener('change', function(e) {
-                        window.historyFilters.type = e.target.value;
-                        window.updateHistoryDisplay();
-                    });
-                }
-                
-                if (reasonInput) {
-                    reasonInput.addEventListener('input', function(e) {
-                        window.historyFilters.reason = e.target.value;
-                        window.updateHistoryDisplay();
-                    });
-                }
-                
-                if (personInput) {
-                    personInput.addEventListener('input', function(e) {
-                        window.historyFilters.person = e.target.value;
-                        window.updateHistoryDisplay();
-                    });
-                }
-                
-                const sortButtons = document.querySelectorAll('.sort-button[data-sort]');
-                sortButtons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        const sortBy = this.getAttribute('data-sort');
-                        if (window.historySortBy === sortBy) {
-                            window.historySortOrder = window.historySortOrder === 'asc' ? 'desc' : 'asc';
-                        } else {
-                            window.historySortBy = sortBy;
-                            window.historySortOrder = 'desc';
-                        }
-                        
-                        sortButtons.forEach(btn => btn.classList.remove('active'));
-                        this.classList.add('active');
-                        
-                        const orderIndicator = document.getElementById('sort-order-indicator');
-                        if (orderIndicator) {
-                            orderIndicator.textContent = window.historySortOrder === 'desc' ? '↓' : '↑';
-                        }
-                        
-                        window.updateHistoryDisplay();
-                    });
-                });
-                
-                const orderToggle = document.getElementById('sort-order-toggle');
-                if (orderToggle) {
-                    orderToggle.addEventListener('click', function() {
-                        window.historySortOrder = window.historySortOrder === 'asc' ? 'desc' : 'asc';
-                        const orderIndicator = document.getElementById('sort-order-indicator');
-                        if (orderIndicator) {
-                            orderIndicator.textContent = window.historySortOrder === 'desc' ? '↓' : '↑';
-                        }
-                        window.updateHistoryDisplay();
-                    });
-                }
-                
-                const clearButton = document.getElementById('clear-filters');
-                if (clearButton) {
-                    clearButton.addEventListener('click', function() {
-                        window.historyFilters = {
-                            search: '',
-                            dateFrom: '',
-                            dateTo: '',
-                            partNumber: '',
-                            type: '',
-                            reason: '',
-                            person: ''
-                        };
-                        
-                        if (searchInput) searchInput.value = '';
-                        if (dateFromInput) dateFromInput.value = '';
-                        if (dateToInput) dateToInput.value = '';
-                        if (partNumberInput) partNumberInput.value = '';
-                        if (typeSelect) typeSelect.value = '';
-                        if (reasonInput) reasonInput.value = '';
-                        if (personInput) personInput.value = '';
-                        
-                        window.updateHistoryDisplay();
-                    });
-                }
-                
-                console.log('履歴のイベントリスナー設定完了');
-            };
-
             // 新規追加フォーム表示
             window.renderForm = function() {
                 const isEditing = window.appState.editingPart !== null;
@@ -1480,7 +1356,13 @@
                     </div>
                 `;
                 
-                document.getElementById('parts-form').addEventListener('submit', window.handleFormSubmit);
+                // フォーム送信イベント
+                setTimeout(() => {
+                    const form = document.getElementById('parts-form');
+                    if (form) {
+                        form.addEventListener('submit', window.handleFormSubmit);
+                    }
+                }, 100);
             };
 
             // CSVインポート・エクスポート機能
@@ -1522,134 +1404,6 @@
                 return { headers, data };
             };
 
-            window.validateCSVData = function(data) {
-                const errors = [];
-                const validParts = [];
-                
-                data.forEach((row, index) => {
-                    const rowNum = index + 2; // ヘッダー行を考慮
-                    const part = {
-                        partNumber: row['部品番号'] || '',
-                        name: row['部品名'] || '',
-                        category: row['カテゴリ'] || 'P',
-                        stock: parseInt(row['現在庫数']) || 0,
-                        minStock: parseInt(row['最小在庫数']) || 0,
-                        location: row['保管場所'] || 'WH59',
-                        supplier: row['仕入先'] || '',
-                        unitPrice: parseFloat(row['単価']) || 0,
-                        notes: row['備考'] || ''
-                    };
-                    
-                    // 必須項目チェック
-                    if (!part.partNumber) {
-                        errors.push(`${rowNum}行目: 部品番号が必要です`);
-                    }
-                    if (!part.name) {
-                        errors.push(`${rowNum}行目: 部品名が必要です`);
-                    }
-                    
-                    // カテゴリチェック
-                    if (!['P', 'EP', 'HL'].includes(part.category)) {
-                        errors.push(`${rowNum}行目: カテゴリは P, EP, HL のいずれかである必要があります`);
-                    }
-                    
-                    // 数値チェック
-                    if (isNaN(part.stock) || part.stock < 0) {
-                        errors.push(`${rowNum}行目: 現在庫数は0以上の数値である必要があります`);
-                    }
-                    if (isNaN(part.minStock) || part.minStock < 0) {
-                        errors.push(`${rowNum}行目: 最小在庫数は0以上の数値である必要があります`);
-                    }
-                    if (isNaN(part.unitPrice) || part.unitPrice < 0) {
-                        errors.push(`${rowNum}行目: 単価は0以上の数値である必要があります`);
-                    }
-                    
-                    if (errors.length === 0 || errors.filter(e => e.includes(`${rowNum}行目`)).length === 0) {
-                        part.id = Date.now() + Math.random(); // 一時的なID
-                        validParts.push(part);
-                    }
-                });
-                
-                return { errors, validParts };
-            };
-
-            window.importCSV = function(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const csvText = e.target.result;
-                        const { headers, data } = window.parseCSV(csvText);
-                        
-                        console.log('CSVヘッダー:', headers);
-                        console.log('CSVデータ行数:', data.length);
-                        
-                        // 必要なヘッダーがあるかチェック
-                        const requiredHeaders = ['部品番号', '部品名'];
-                        const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
-                        
-                        if (missingHeaders.length > 0) {
-                            alert(`必要な列が見つかりません: ${missingHeaders.join(', ')}\n\n必要な列: 部品番号, 部品名, カテゴリ, 現在庫数, 最小在庫数, 保管場所, 仕入先, 単価, 備考`);
-                            return;
-                        }
-                        
-                        const { errors, validParts } = window.validateCSVData(data);
-                        
-                        if (errors.length > 0) {
-                            const errorMessage = `CSVファイルにエラーがあります:\n\n${errors.slice(0, 10).join('\n')}${errors.length > 10 ? `\n\n他 ${errors.length - 10} 件のエラー` : ''}`;
-                            alert(errorMessage);
-                            return;
-                        }
-                        
-                        if (validParts.length === 0) {
-                            alert('インポートできる有効なデータがありません。');
-                            return;
-                        }
-                        
-                        // 重複チェック
-                        const existingPartNumbers = window.appState.parts.map(p => p.partNumber);
-                        const duplicates = validParts.filter(p => existingPartNumbers.includes(p.partNumber));
-                        
-                        let confirmMessage = `${validParts.length}件の部品データをインポートします。`;
-                        if (duplicates.length > 0) {
-                            confirmMessage += `\n\n${duplicates.length}件の重複する部品番号があります。既存データを上書きしますか？\n重複部品: ${duplicates.map(p => p.partNumber).slice(0, 5).join(', ')}${duplicates.length > 5 ? '...' : ''}`;
-                        }
-                        
-                        if (confirm(confirmMessage)) {
-                            // 重複部品を削除
-                            if (duplicates.length > 0) {
-                                const duplicatePartNumbers = duplicates.map(p => p.partNumber);
-                                window.appState.parts = window.appState.parts.filter(p => !duplicatePartNumbers.includes(p.partNumber));
-                            }
-                            
-                            // 新しいIDを割り当て
-                            validParts.forEach(part => {
-                                part.id = Date.now() + Math.random();
-                            });
-                            
-                            // データを追加
-                            window.appState.parts.push(...validParts);
-                            
-                            // 保存と更新
-                            window.saveDataToStorage();
-                            window.renderCurrentTab();
-                            
-                            alert(`CSVインポートが完了しました。\n追加: ${validParts.length - duplicates.length}件\n上書き: ${duplicates.length}件`);
-                            console.log('CSVインポート完了:', validParts.length, '件');
-                        }
-                        
-                    } catch (error) {
-                        console.error('CSVインポートエラー:', error);
-                        alert('CSVファイルの読み込みに失敗しました。ファイル形式を確認してください。');
-                    }
-                };
-                
-                reader.onerror = function() {
-                    alert('ファイルの読み込みに失敗しました。');
-                };
-                
-                reader.readAsText(file, 'UTF-8');
-            };
-
             window.handleFileImport = function(event) {
                 const file = event.target.files[0];
                 if (!file) return;
@@ -1664,10 +1418,272 @@
                     return;
                 }
                 
-                window.importCSV(file);
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const csvText = e.target.result;
+                        const { headers, data } = window.parseCSV(csvText);
+                        
+                        if (data.length === 0) {
+                            alert('CSVファイルにデータが含まれていません。');
+                            return;
+                        }
+                        
+                        // CSVデータを保存してマッピングモーダルを表示
+                        window.appState.csvData = { headers, data };
+                        window.showMappingModal();
+                        
+                    } catch (error) {
+                        console.error('CSVインポートエラー:', error);
+                        alert('CSVファイルの読み込みに失敗しました。ファイル形式を確認してください。');
+                    }
+                };
+                
+                reader.onerror = function() {
+                    alert('ファイルの読み込みに失敗しました。');
+                };
+                
+                reader.readAsText(file, 'UTF-8');
                 
                 // ファイル選択をリセット
                 event.target.value = '';
+            };
+
+            // マッピングモーダル表示
+            window.showMappingModal = function() {
+                const csvData = window.appState.csvData;
+                if (!csvData) return;
+                
+                // システムフィールドを生成
+                const systemFieldsHtml = Object.entries(window.systemFields).map(([key, field]) => {
+                    return `
+                        <div class="mapping-item">
+                            <label class="font-medium text-sm ${field.required ? 'text-red-600' : 'text-gray-700'}">
+                                ${field.name} ${field.required ? '*' : ''}
+                            </label>
+                        </div>
+                    `;
+                }).join('');
+                
+                // CSVフィールドのセレクトボックスを生成
+                const csvFieldsHtml = Object.entries(window.systemFields).map(([key, field]) => {
+                    const options = [
+                        '<option value="">選択してください</option>',
+                        ...csvData.headers.map(header => `<option value="${header}">${header}</option>`)
+                    ].join('');
+                    
+                    return `
+                        <div class="mapping-item">
+                            <select class="mapping-select" data-field="${key}">
+                                ${options}
+                            </select>
+                        </div>
+                    `;
+                }).join('');
+                
+                document.getElementById('system-fields').innerHTML = systemFieldsHtml;
+                document.getElementById('csv-fields').innerHTML = csvFieldsHtml;
+                
+                // プレビューを生成
+                window.updateMappingPreview();
+                
+                window.showModal('mapping-modal');
+            };
+
+            // マッピングプレビュー更新
+            window.updateMappingPreview = function() {
+                const csvData = window.appState.csvData;
+                if (!csvData) return;
+                
+                // 現在のマッピングを取得
+                const mapping = {};
+                document.querySelectorAll('.mapping-select').forEach(select => {
+                    const field = select.dataset.field;
+                    const csvColumn = select.value;
+                    if (csvColumn) {
+                        mapping[field] = csvColumn;
+                    }
+                });
+                
+                // プレビューテーブルを生成（最初の5行）
+                const previewData = csvData.data.slice(0, 5);
+                const previewHtml = `
+                    <table class="preview-table">
+                        <thead>
+                            <tr>
+                                ${Object.entries(window.systemFields).map(([key, field]) => 
+                                    `<th>${field.name}</th>`
+                                ).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${previewData.map(row => `
+                                <tr>
+                                    ${Object.keys(window.systemFields).map(key => {
+                                        const csvColumn = mapping[key];
+                                        const value = csvColumn ? row[csvColumn] || '' : '';
+                                        return `<td>${value}</td>`;
+                                    }).join('')}
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                
+                document.getElementById('mapping-preview').innerHTML = previewHtml;
+                
+                // エラーチェック
+                window.validateMapping(mapping);
+            };
+
+            // マッピング検証
+            window.validateMapping = function(mapping) {
+                const errors = [];
+                
+                // 必須フィールドチェック
+                Object.entries(window.systemFields).forEach(([key, field]) => {
+                    if (field.required && !mapping[key]) {
+                        errors.push(`${field.name}は必須フィールドです`);
+                    }
+                });
+                
+                // 重複チェック
+                const usedColumns = Object.values(mapping).filter(col => col);
+                const duplicates = usedColumns.filter((col, index) => usedColumns.indexOf(col) !== index);
+                if (duplicates.length > 0) {
+                    errors.push(`重複したCSV列が使用されています: ${duplicates.join(', ')}`);
+                }
+                
+                const errorContainer = document.getElementById('mapping-errors');
+                const errorList = document.getElementById('mapping-error-list');
+                const executeBtn = document.getElementById('execute-import');
+                
+                if (errors.length > 0) {
+                    errorList.innerHTML = errors.map(error => `<li>${error}</li>`).join('');
+                    errorContainer.classList.remove('hidden');
+                    if (executeBtn) executeBtn.disabled = true;
+                } else {
+                    errorContainer.classList.add('hidden');
+                    if (executeBtn) executeBtn.disabled = false;
+                }
+                
+                return errors.length === 0;
+            };
+
+            // インポート実行
+            window.executeImport = function() {
+                const csvData = window.appState.csvData;
+                if (!csvData) return;
+                
+                // 現在のマッピングを取得
+                const mapping = {};
+                document.querySelectorAll('.mapping-select').forEach(select => {
+                    const field = select.dataset.field;
+                    const csvColumn = select.value;
+                    if (csvColumn) {
+                        mapping[field] = csvColumn;
+                    }
+                });
+                
+                if (!window.validateMapping(mapping)) {
+                    alert('マッピングエラーがあります。修正してください。');
+                    return;
+                }
+                
+                window.hideModal('mapping-modal');
+                window.showModal('import-progress-modal');
+                
+                // プログレス表示
+                const progressFill = document.getElementById('import-progress-fill');
+                const statusElement = document.getElementById('import-status');
+                
+                let processed = 0;
+                const total = csvData.data.length;
+                const validParts = [];
+                const errors = [];
+                
+                // データ処理
+                csvData.data.forEach((row, index) => {
+                    try {
+                        const part = {};
+                        
+                        // マッピングに従ってデータを変換
+                        Object.entries(mapping).forEach(([field, csvColumn]) => {
+                            let value = row[csvColumn] || '';
+                            
+                            // データ型変換
+                            switch (field) {
+                                case 'stock':
+                                case 'minStock':
+                                    part[field] = parseInt(value) || 0;
+                                    break;
+                                case 'unitPrice':
+                                    part[field] = parseFloat(value) || 0;
+                                    break;
+                                default:
+                                    part[field] = value.toString();
+                            }
+                        });
+                        
+                        // デフォルト値設定
+                        if (!part.category) part.category = 'P';
+                        if (!part.location) part.location = 'WH59';
+                        if (part.stock === undefined) part.stock = 0;
+                        if (part.minStock === undefined) part.minStock = 0;
+                        if (part.unitPrice === undefined) part.unitPrice = 0;
+                        if (!part.supplier) part.supplier = '';
+                        if (!part.notes) part.notes = '';
+                        
+                        // バリデーション
+                        if (!part.partNumber || !part.name) {
+                            errors.push(`行 ${index + 2}: 部品番号と部品名は必須です`);
+                        } else {
+                            part.id = Date.now() + Math.random();
+                            validParts.push(part);
+                        }
+                        
+                    } catch (error) {
+                        errors.push(`行 ${index + 2}: データ処理エラー - ${error.message}`);
+                    }
+                    
+                    processed++;
+                    const progress = (processed / total) * 100;
+                    if (progressFill) progressFill.style.width = `${progress}%`;
+                    if (statusElement) statusElement.textContent = `処理中... ${processed}/${total}`;
+                });
+                
+                // 結果表示
+                setTimeout(() => {
+                    if (validParts.length > 0) {
+                        // 重複チェック
+                        const existingPartNumbers = window.appState.parts.map(p => p.partNumber);
+                        const duplicates = validParts.filter(p => existingPartNumbers.includes(p.partNumber));
+                        
+                        if (duplicates.length > 0) {
+                            const duplicateNumbers = duplicates.map(p => p.partNumber);
+                            window.appState.parts = window.appState.parts.filter(p => !duplicateNumbers.includes(p.partNumber));
+                        }
+                        
+                        // データ追加
+                        window.appState.parts.push(...validParts);
+                        window.saveDataToStorage();
+                        
+                        let successMsg = `インポート完了! 追加: ${validParts.length - duplicates.length}件, 更新: ${duplicates.length}件`;
+                        if (errors.length > 0) {
+                            successMsg += ` (エラー: ${errors.length}件)`;
+                        }
+                        
+                        const successElement = document.getElementById('import-success-message');
+                        const resultsElement = document.getElementById('import-results');
+                        
+                        if (successElement) successElement.textContent = successMsg;
+                        if (resultsElement) resultsElement.classList.remove('hidden');
+                        if (statusElement) statusElement.style.display = 'none';
+                    } else {
+                        alert('インポートできる有効なデータがありませんでした。');
+                        window.hideModal('import-progress-modal');
+                    }
+                }, 500);
             };
 
             window.exportToCSV = function() {
@@ -1693,7 +1709,7 @@
                 }
             };
 
-            // モーダル・トランザクション処理
+            // モーダル操作
             window.showModal = function(modalId) {
                 const modal = document.getElementById(modalId);
                 if (modal) {
@@ -1708,6 +1724,7 @@
                 }
             };
 
+            // 入出庫モーダル
             window.openTransactionModal = function(partId, type) {
                 window.appState.selectedPart = window.appState.parts.find(p => p.id === partId);
                 if (!window.appState.selectedPart) {
@@ -1835,7 +1852,6 @@
 
             window.deletePart = function(partId) {
                 if (confirm("この部品を削除しますか？")) {
-                    const deletedPart = window.appState.parts.find(part => part.id === partId);
                     window.appState.parts = window.appState.parts.filter(part => part.id !== partId);
                     window.appState.transactions = window.appState.transactions.filter(trans => trans.partId !== partId);
                     
@@ -1887,17 +1903,34 @@
             };
 
             window.renderCurrentTab = function() {
-                switch(window.appState.currentTab) {
-                    case 'dashboard': window.renderDashboard(); break;
-                    case 'list': window.renderPartsList(); break;
-                    case 'history': window.renderHistory(); break;
-                    case 'form': window.renderForm(); break;
-                    default: 
-                        document.getElementById('main-content').innerHTML = `
-                            <div class="text-center p-8">
-                                <p class="text-gray-500">未知のタブです: ${window.appState.currentTab}</p>
-                            </div>
-                        `;
+                try {
+                    switch(window.appState.currentTab) {
+                        case 'dashboard': 
+                            window.renderDashboard(); 
+                            break;
+                        case 'list': 
+                            window.renderPartsList(); 
+                            break;
+                        case 'history': 
+                            window.renderHistory(); 
+                            break;
+                        case 'form': 
+                            window.renderForm(); 
+                            break;
+                        default: 
+                            document.getElementById('main-content').innerHTML = `
+                                <div class="text-center p-8">
+                                    <p class="text-gray-500">未知のタブです: ${window.appState.currentTab}</p>
+                                </div>
+                            `;
+                    }
+                } catch (error) {
+                    console.error('タブ表示エラー:', error);
+                    document.getElementById('main-content').innerHTML = `
+                        <div class="text-center p-8">
+                            <p class="text-red-600">表示エラーが発生しました: ${error.message}</p>
+                        </div>
+                    `;
                 }
             };
 
@@ -1907,6 +1940,280 @@
                     window.saveDataToStorage();
                     window.renderCurrentTab();
                     alert('データをリセットしました。');
+                }
+            };
+
+            // 履歴関連関数
+            window.updateHistoryDisplay = function() {
+                try {
+                    const filteredTransactions = window.getFilteredTransactions();
+                    const sortedTransactions = window.sortTransactions(filteredTransactions);
+                    
+                    const resultCount = document.getElementById('history-result-count');
+                    if (resultCount) {
+                        resultCount.textContent = `${sortedTransactions.length} 件の履歴を表示中`;
+                    }
+                    
+                    const tbody = document.getElementById('history-table-body');
+                    if (tbody) {
+                        if (sortedTransactions.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500">条件に一致する履歴が見つかりません。</td></tr>';
+                        } else {
+                            tbody.innerHTML = sortedTransactions.map(transaction => {
+                                const partName = window.getPartNameByNumber(transaction.partNumber);
+                                return `
+                                <tr style="border-bottom: 1px solid #e5e7eb;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor=''">
+                                    <td>${transaction.date}</td>
+                                    <td class="font-medium">
+                                        <div>${transaction.partNumber}</div>
+                                        <div class="text-sm text-gray-600">${partName}</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge ${transaction.type === '入庫' ? 'badge-green' : 'badge-red'}">
+                                            ${transaction.type}
+                                        </span>
+                                    </td>
+                                    <td>${transaction.quantity}</td>
+                                    <td>${transaction.reason}</td>
+                                    <td>${transaction.person}</td>
+                                </tr>
+                            `}).join('');
+                        }
+                    }
+                } catch (error) {
+                    console.error('履歴表示エラー:', error);
+                }
+            };
+
+            window.getFilteredTransactions = function() {
+                return window.appState.transactions.filter(transaction => {
+                    try {
+                        const partName = window.getPartNameByNumber(transaction.partNumber);
+                        
+                        if (window.historyFilters.search) {
+                            const searchTerm = window.historyFilters.search.toLowerCase();
+                            const searchFields = [
+                                transaction.partNumber,
+                                partName,
+                                transaction.type,
+                                transaction.reason,
+                                transaction.person
+                            ].join(' ').toLowerCase();
+                            
+                            if (!searchFields.includes(searchTerm)) {
+                                return false;
+                            }
+                        }
+                        
+                        if (window.historyFilters.dateFrom && transaction.date < window.historyFilters.dateFrom) {
+                            return false;
+                        }
+                        if (window.historyFilters.dateTo && transaction.date > window.historyFilters.dateTo) {
+                            return false;
+                        }
+                        
+                        if (window.historyFilters.partNumber && !transaction.partNumber.toLowerCase().includes(window.historyFilters.partNumber.toLowerCase())) {
+                            return false;
+                        }
+                        
+                        if (window.historyFilters.type && transaction.type !== window.historyFilters.type) {
+                            return false;
+                        }
+                        
+                        if (window.historyFilters.reason && !transaction.reason.toLowerCase().includes(window.historyFilters.reason.toLowerCase())) {
+                            return false;
+                        }
+                        
+                        if (window.historyFilters.person && !transaction.person.toLowerCase().includes(window.historyFilters.person.toLowerCase())) {
+                            return false;
+                        }
+                        
+                        return true;
+                    } catch (error) {
+                        console.error('フィルター処理エラー:', error);
+                        return false;
+                    }
+                });
+            };
+
+            window.sortTransactions = function(transactions) {
+                return [...transactions].sort((a, b) => {
+                    try {
+                        let aValue, bValue;
+                        
+                        switch (window.historySortBy) {
+                            case 'date':
+                                aValue = a.date;
+                                bValue = b.date;
+                                break;
+                            case 'partNumber':
+                                aValue = a.partNumber;
+                                bValue = b.partNumber;
+                                break;
+                            case 'partName':
+                                aValue = window.getPartNameByNumber(a.partNumber);
+                                bValue = window.getPartNameByNumber(b.partNumber);
+                                break;
+                            case 'type':
+                                aValue = a.type;
+                                bValue = b.type;
+                                break;
+                            case 'quantity':
+                                aValue = a.quantity;
+                                bValue = b.quantity;
+                                break;
+                            case 'reason':
+                                aValue = a.reason;
+                                bValue = b.reason;
+                                break;
+                            case 'person':
+                                aValue = a.person;
+                                bValue = b.person;
+                                break;
+                            default:
+                                aValue = a.date;
+                                bValue = b.date;
+                        }
+                        
+                        if (typeof aValue === 'string') {
+                            aValue = aValue.toLowerCase();
+                            bValue = bValue.toLowerCase();
+                        }
+                        
+                        let result;
+                        if (aValue < bValue) result = -1;
+                        else if (aValue > bValue) result = 1;
+                        else result = 0;
+                        
+                        return window.historySortOrder === 'desc' ? -result : result;
+                    } catch (error) {
+                        console.error('ソート処理エラー:', error);
+                        return 0;
+                    }
+                });
+            };
+
+            window.setupHistoryEventListeners = function() {
+                try {
+                    const searchInput = document.getElementById('history-search');
+                    if (searchInput) {
+                        searchInput.addEventListener('input', function(e) {
+                            window.historyFilters.search = e.target.value;
+                            window.updateHistoryDisplay();
+                        });
+                    }
+                    
+                    const dateFromInput = document.getElementById('history-date-from');
+                    const dateToInput = document.getElementById('history-date-to');
+                    if (dateFromInput) {
+                        dateFromInput.addEventListener('change', function(e) {
+                            window.historyFilters.dateFrom = e.target.value;
+                            window.updateHistoryDisplay();
+                        });
+                    }
+                    if (dateToInput) {
+                        dateToInput.addEventListener('change', function(e) {
+                            window.historyFilters.dateTo = e.target.value;
+                            window.updateHistoryDisplay();
+                        });
+                    }
+                    
+                    const partNumberInput = document.getElementById('history-part-number');
+                    const typeSelect = document.getElementById('history-type');
+                    const reasonInput = document.getElementById('history-reason');
+                    const personInput = document.getElementById('history-person');
+                    
+                    if (partNumberInput) {
+                        partNumberInput.addEventListener('input', function(e) {
+                            window.historyFilters.partNumber = e.target.value;
+                            window.updateHistoryDisplay();
+                        });
+                    }
+                    
+                    if (typeSelect) {
+                        typeSelect.addEventListener('change', function(e) {
+                            window.historyFilters.type = e.target.value;
+                            window.updateHistoryDisplay();
+                        });
+                    }
+                    
+                    if (reasonInput) {
+                        reasonInput.addEventListener('input', function(e) {
+                            window.historyFilters.reason = e.target.value;
+                            window.updateHistoryDisplay();
+                        });
+                    }
+                    
+                    if (personInput) {
+                        personInput.addEventListener('input', function(e) {
+                            window.historyFilters.person = e.target.value;
+                            window.updateHistoryDisplay();
+                        });
+                    }
+                    
+                    const sortButtons = document.querySelectorAll('.sort-button[data-sort]');
+                    sortButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            const sortBy = this.getAttribute('data-sort');
+                            if (window.historySortBy === sortBy) {
+                                window.historySortOrder = window.historySortOrder === 'asc' ? 'desc' : 'asc';
+                            } else {
+                                window.historySortBy = sortBy;
+                                window.historySortOrder = 'desc';
+                            }
+                            
+                            sortButtons.forEach(btn => btn.classList.remove('active'));
+                            this.classList.add('active');
+                            
+                            const orderIndicator = document.getElementById('sort-order-indicator');
+                            if (orderIndicator) {
+                                orderIndicator.textContent = window.historySortOrder === 'desc' ? '↓' : '↑';
+                            }
+                            
+                            window.updateHistoryDisplay();
+                        });
+                    });
+                    
+                    const orderToggle = document.getElementById('sort-order-toggle');
+                    if (orderToggle) {
+                        orderToggle.addEventListener('click', function() {
+                            window.historySortOrder = window.historySortOrder === 'asc' ? 'desc' : 'asc';
+                            const orderIndicator = document.getElementById('sort-order-indicator');
+                            if (orderIndicator) {
+                                orderIndicator.textContent = window.historySortOrder === 'desc' ? '↓' : '↑';
+                            }
+                            window.updateHistoryDisplay();
+                        });
+                    }
+                    
+                    const clearButton = document.getElementById('clear-filters');
+                    if (clearButton) {
+                        clearButton.addEventListener('click', function() {
+                            window.historyFilters = {
+                                search: '',
+                                dateFrom: '',
+                                dateTo: '',
+                                partNumber: '',
+                                type: '',
+                                reason: '',
+                                person: ''
+                            };
+                            
+                            if (searchInput) searchInput.value = '';
+                            if (dateFromInput) dateFromInput.value = '';
+                            if (dateToInput) dateToInput.value = '';
+                            if (partNumberInput) partNumberInput.value = '';
+                            if (typeSelect) typeSelect.value = '';
+                            if (reasonInput) reasonInput.value = '';
+                            if (personInput) personInput.value = '';
+                            
+                            window.updateHistoryDisplay();
+                        });
+                    }
+                    
+                    console.log('履歴のイベントリスナー設定完了');
+                } catch (error) {
+                    console.error('履歴イベントリスナー設定エラー:', error);
                 }
             };
 
@@ -1998,6 +2305,42 @@
                     if (typeSelect) {
                         typeSelect.addEventListener('change', window.updateCurrentStockDisplay);
                     }
+
+                    // マッピングモーダル関連のイベントリスナー
+                    const closeMappingBtn = document.getElementById('close-mapping-modal');
+                    const cancelMappingBtn = document.getElementById('cancel-mapping');
+                    const executeImportBtn = document.getElementById('execute-import');
+                    const closeImportProgressBtn = document.getElementById('close-import-progress');
+                    
+                    if (closeMappingBtn) {
+                        closeMappingBtn.addEventListener('click', function() {
+                            window.hideModal('mapping-modal');
+                        });
+                    }
+                    
+                    if (cancelMappingBtn) {
+                        cancelMappingBtn.addEventListener('click', function() {
+                            window.hideModal('mapping-modal');
+                        });
+                    }
+                    
+                    if (executeImportBtn) {
+                        executeImportBtn.addEventListener('click', window.executeImport);
+                    }
+                    
+                    if (closeImportProgressBtn) {
+                        closeImportProgressBtn.addEventListener('click', function() {
+                            window.hideModal('import-progress-modal');
+                            window.renderCurrentTab();
+                        });
+                    }
+
+                    // マッピングの変更を監視
+                    document.addEventListener('change', function(e) {
+                        if (e.target.classList.contains('mapping-select')) {
+                            window.updateMappingPreview();
+                        }
+                    });
                     
                     // 初期タブを表示
                     window.renderCurrentTab();
@@ -2017,7 +2360,12 @@
             };
 
             // DOMContentLoadedイベントで初期化を実行
-            document.addEventListener('DOMContentLoaded', window.initialize);
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', window.initialize);
+            } else {
+                // 既に読み込み済みの場合は即座に実行
+                window.initialize();
+            }
 
         })();
     </script>
