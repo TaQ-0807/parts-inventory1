@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>部品在庫管理システム ver2.3 - Firebase修正版</title>
+    <title>部品在庫管理システム ver2.2</title>
     <style>
         * { 
             margin: 0; 
@@ -14,6 +14,7 @@
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             background-color: #f9fafb; 
+            line-height: 1.6;
         }
         
         .app-container {
@@ -79,126 +80,8 @@
                 padding: 1rem;
             }
         }
-        
-        /* 基本スタイル */
-        .bg-white { background-color: white; }
-        .bg-gray-50 { background-color: #f9fafb; }
-        .bg-blue-50 { background-color: #eff6ff; }
-        .bg-blue-100 { background-color: #dbeafe; }
-        .bg-gray-100 { background-color: #f3f4f6; }
-        .bg-red-50 { background-color: #fef2f2; }
-        .bg-red-100 { background-color: #fee2e2; }
-        .bg-yellow-50 { background-color: #fefce8; }
-        .bg-green-50 { background-color: #f0fdf4; }
-        .bg-green-100 { background-color: #dcfce7; }
-        .bg-orange-100 { background-color: #fed7aa; }
-        .bg-orange-50 { background-color: #fff7ed; }
-        .bg-purple-50 { background-color: #faf5ff; }
-        .bg-purple-100 { background-color: #f3e8ff; }
-        .bg-indigo-50 { background-color: #eef2ff; }
-        .text-gray-900 { color: #111827; }
-        .text-gray-700 { color: #374151; }
-        .text-gray-600 { color: #4b5563; }
-        .text-gray-500 { color: #6b7280; }
-        .text-blue-700 { color: #1d4ed8; }
-        .text-blue-600 { color: #2563eb; }
-        .text-blue-800 { color: #1e40af; }
-        .text-blue-200 { color: #bfdbfe; }
-        .text-red-600 { color: #dc2626; }
-        .text-red-700 { color: #b91c1c; }
-        .text-red-800 { color: #991b1b; }
-        .text-yellow-600 { color: #d97706; }
-        .text-yellow-700 { color: #a16207; }
-        .text-green-600 { color: #16a34a; }
-        .text-green-700 { color: #15803d; }
-        .text-green-800 { color: #166534; }
-        .text-orange-600 { color: #ea580c; }
-        .text-orange-700 { color: #c2410c; }
-        .text-purple-600 { color: #9333ea; }
-        .text-purple-700 { color: #7c3aed; }
-        .text-purple-800 { color: #6b21a8; }
-        .text-indigo-600 { color: #4f46e5; }
-        .text-indigo-700 { color: #4338ca; }
-        .border-blue-200 { border-color: #bfdbfe; }
-        .rounded-lg { border-radius: 0.5rem; }
-        .rounded-xl { border-radius: 0.75rem; }
-        .rounded-full { border-radius: 9999px; }
-        .rounded { border-radius: 0.25rem; }
-        .shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
-        .border { border: 1px solid #d1d5db; }
-        .border-b { border-bottom: 1px solid #d1d5db; }
-        .p-3 { padding: 0.75rem; }
-        .p-4 { padding: 1rem; }
-        .p-6 { padding: 1.5rem; }
-        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
-        .px-4 { padding-left: 1rem; padding-right: 1rem; }
-        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
-        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
-        .mb-1 { margin-bottom: 0.25rem; }
-        .mb-2 { margin-bottom: 0.5rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .mt-1 { margin-top: 0.25rem; }
-        .mt-4 { margin-top: 1rem; }
-        .mt-6 { margin-top: 1.5rem; }
-        .flex { display: flex; }
-        .items-center { align-items: center; }
-        .justify-between { justify-content: space-between; }
-        .justify-end { justify-content: flex-end; }
-        .gap-2 { gap: 0.5rem; }
-        .gap-3 { gap: 0.75rem; }
-        .gap-4 { gap: 1rem; }
-        .w-full { width: 100%; }
-        .w-8 { width: 2rem; }
-        .w-max { width: max-content; }
-        .max-h-40 { max-height: 10rem; }
-        .font-bold { font-weight: 700; }
-        .font-semibold { font-weight: 600; }
-        .font-medium { font-weight: 500; }
-        .text-xs { font-size: 0.75rem; line-height: 1rem; }
-        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
-        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
-        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
-        .cursor-pointer { cursor: pointer; }
-        .transition-colors { transition: background-color 0.15s, color 0.15s; }
-        .transition-all { transition: all 0.15s; }
-        .hover\:bg-gray-50:hover { background-color: #f9fafb; }
-        .hover\:bg-gray-100:hover { background-color: #f3f4f6; }
-        .hover\:bg-red-100:hover { background-color: #fee2e2; }
-        .hover\:bg-blue-100:hover { background-color: #dbeafe; }
-        .hover\:text-blue-800:hover { color: #1e40af; }
-        .hover\:shadow-md:hover { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-        .space-y-2 > * + * { margin-top: 0.5rem; }
-        .space-y-4 > * + * { margin-top: 1rem; }
-        .space-y-6 > * + * { margin-top: 1.5rem; }
-        .grid { display: grid; }
-        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-        .grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-        .col-span-2 { grid-column: span 2 / span 2; }
-        .whitespace-nowrap { white-space: nowrap; }
-        .overflow-x-auto { overflow-x: auto; }
-        .overflow-y-auto { overflow-y: auto; }
-        .overflow-hidden { overflow: hidden; }
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        .text-left { text-align: left; }
-        .block { display: block; }
-        .hidden { display: none; }
-        .fixed { position: fixed; }
-        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
-        .z-50 { z-index: 50; }
-        .resize-none { resize: none; }
-        .min-w-full { min-width: 100%; }
-        .divide-y > * + * { border-top: 1px solid #e5e7eb; }
-        .uppercase { text-transform: uppercase; }
-        .tracking-wider { letter-spacing: 0.05em; }
-        
-        /* ナビゲーションボタン */
+
+        /* Navigation styles */
         .nav-button {
             width: 100%;
             display: flex;
@@ -212,6 +95,7 @@
             color: #374151;
             text-align: left;
             cursor: pointer;
+            font-size: 0.875rem;
         }
         
         .nav-button:hover {
@@ -230,44 +114,101 @@
         .nav-button.danger:hover {
             background-color: #fee2e2;
         }
-        
-        /* テーブルスタイル */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th, td {
+
+        /* Stats card styles - Mobile optimized */
+        .stats-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.15s;
             text-align: left;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #e5e7eb;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 80px;
         }
         
-        th {
-            background-color: #f9fafb;
-            font-weight: 600;
+        .stats-card:hover {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            background-color: #f8fafc;
+        }
+
+        .stats-card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            height: 100%;
+        }
+
+        .stats-card-info {
+            flex: 1;
+            min-width: 0;
+            margin-right: 0.5rem;
+        }
+
+        .stats-card-title {
             font-size: 0.75rem;
             color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        
-        /* 行選択スタイル */
-        .parts-row {
-            cursor: pointer;
-            transition: background-color 0.15s;
-            user-select: none;
+
+        .stats-card-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
         }
-        
-        .parts-row:hover {
-            background-color: #f3f4f6;
+
+        .stats-card-subtitle {
+            font-size: 0.6rem;
+            color: #6b7280;
+            line-height: 1.2;
+            word-wrap: break-word;
         }
-        
-        .parts-row.selected {
-            background-color: #dbeafe !important;
+
+        .stats-card-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
         }
-        
-        /* ボタンスタイル */
+
+        /* Category specific adjustments for mobile */
+        @media (max-width: 768px) {
+            .stats-card {
+                padding: 0.75rem;
+                min-height: 70px;
+            }
+            
+            .stats-card-title {
+                font-size: 0.7rem;
+            }
+            
+            .stats-card-number {
+                font-size: 1.25rem;
+            }
+            
+            .stats-card-subtitle {
+                font-size: 0.55rem;
+            }
+            
+            .stats-card-icon {
+                font-size: 1.25rem;
+            }
+
+            /* Shortened text for mobile */
+            .category-hl .stats-card-title {
+                font-size: 0.65rem;
+            }
+        }
+
+        /* Button styles */
         .btn {
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
@@ -276,6 +217,9 @@
             cursor: pointer;
             transition: background-color 0.15s;
             border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .btn-primary {
@@ -314,7 +258,7 @@
             background-color: #b91c1c;
         }
 
-        /* フォームスタイル */
+        /* Form styles */
         .form-input {
             width: 100%;
             padding: 0.5rem 1rem;
@@ -329,90 +273,28 @@
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         }
 
-        /* スマート選択ボタン */
-        .smart-selection-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .smart-btn {
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.375rem;
-            font-size: 0.75rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.15s;
-            border: 1px solid #d1d5db;
-            background: white;
-            color: #374151;
-        }
-        
-        .smart-btn:hover {
-            background-color: #f3f4f6;
-            border-color: #9ca3af;
-        }
-        
-        .smart-btn.primary {
-            background-color: #2563eb;
-            color: white;
-            border-color: #2563eb;
-        }
-        
-        .smart-btn.primary:hover {
-            background-color: #1d4ed8;
-        }
-
-        /* 統計カードボタンスタイル */
-        .stats-card {
-            background-color: white;
-            border-radius: 0.75rem;
-            padding: 1rem;
-            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            border: 1px solid #e5e7eb;
-            cursor: pointer;
-            transition: all 0.15s;
-            text-align: left;
+        /* Table styles */
+        table {
             width: 100%;
+            border-collapse: collapse;
         }
         
-        .stats-card:hover {
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            background-color: #f8fafc;
+        th, td {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
         }
         
-        .stats-card:active {
-            transform: translateY(1px);
-        }
-
-        /* レスポンシブ調整 */
-        @media (min-width: 768px) {
-            .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        }
-        
-        @media (min-width: 1024px) {
-            .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-            .grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-            .content-area { padding: 1.5rem; }
-        }
-
-        /* 接続状態インジケーター - 位置を左下に変更 */
-        .connection-status {
-            position: fixed;
-            bottom: 1rem;
-            left: 1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
             font-size: 0.75rem;
-            font-weight: 500;
-            z-index: 100;
-            background-color: #fef3c7;
-            color: #a16207;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        /* モーダルスタイル */
+        /* Modal styles */
         .modal {
             position: fixed;
             top: 0;
@@ -427,19 +309,61 @@
             z-index: 50;
         }
         
-        .modal.hidden {
-            display: none;
-        }
-        
         .modal-content {
             background-color: white;
             border-radius: 0.75rem;
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
             max-width: 28rem;
             width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        /* 履歴検索・フィルター用スタイル */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Filter styles */
+        .filter-indicator {
+            background-color: #dbeafe;
+            border: 1px solid #93c5fd;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .filter-indicator .filter-text {
+            color: #1e40af;
+            font-weight: 500;
+        }
+        
+        .filter-indicator .clear-filter {
+            background: none;
+            border: none;
+            color: #1e40af;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.875rem;
+        }
+
+        /* History filter styles */
         .history-filters {
             background-color: #f9fafb;
             border: 1px solid #e5e7eb;
@@ -459,6 +383,7 @@
             display: flex;
             gap: 0.5rem;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         .sort-button {
@@ -476,12 +401,94 @@
             border-color: #2563eb;
         }
         
-        .sort-button:hover {
+        .sort-button:hover:not(.active) {
             background-color: #f3f4f6;
         }
+
+        /* Badge styles */
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            max-width: 100%;
+        }
+
+        .badge-blue { background-color: #dbeafe; color: #1d4ed8; }
+        .badge-green { background-color: #dcfce7; color: #16a34a; }
+        .badge-orange { background-color: #fed7aa; color: #ea580c; }
+        .badge-yellow { background-color: #fef3c7; color: #d97706; }
+        .badge-red { background-color: #fecaca; color: #dc2626; }
+
+        /* Stock indicator */
+        .stock-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            max-width: fit-content;
+        }
+
+        .stock-good { background-color: #dcfce7; color: #16a34a; }
+        .stock-warning { background-color: #fef3c7; color: #d97706; }
+
+        /* Utility classes */
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        .font-medium { font-weight: 500; }
+        .text-center { text-align: center; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-900 { color: #111827; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-end { justify-content: flex-end; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        .grid { display: grid; }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .overflow-x-auto { overflow-x: auto; }
+        .bg-white { background-color: white; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+        .border { border: 1px solid #e5e7eb; }
+        .border-b { border-bottom: 1px solid #e5e7eb; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .hidden { display: none; }
+        .block { display: block; }
+
+        /* Responsive grid adjustments */
+        @media (max-width: 640px) {
+            .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
         
-        .sort-button.active:hover {
-            background-color: #1d4ed8;
+        @media (min-width: 768px) {
+            .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        
+        @media (min-width: 1024px) {
+            .content-area { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -490,10 +497,9 @@
         <!-- サイドバー -->
         <div class="sidebar" id="sidebar">
             <div class="p-6">
-                <h1 class="text-2xl font-bold text-gray-900">📦 部品在庫管理</h1>
-                <div class="text-xs text-gray-500 mt-1">Ver 2.3 - Firebase修正版</div>
+                <h1 class="text-2xl font-bold text-gray-900">部品在庫管理</h1>
             </div>
-            <nav class="p-4 space-y-2">
+            <nav class="p-4 space-y-4">
                 <button id="tab-dashboard" class="nav-button active">📊 ダッシュボード</button>
                 <button id="tab-list" class="nav-button">📋 部品一覧</button>
                 <button id="tab-history" class="nav-button">📈 入出庫履歴</button>
@@ -501,11 +507,10 @@
                 <hr style="margin: 1rem 0; border: none; border-top: 1px solid #e5e7eb;" />
                 <button id="export-csv" class="nav-button">💾 CSVエクスポート</button>
                 <label for="file-import" class="nav-button" style="margin: 0;">
-                    📁 ファイルインポート
+                    📁 CSVインポート
                     <input type="file" id="file-import" accept=".csv" style="display: none;" />
                 </label>
                 <button id="reset-data" class="nav-button danger">🔄 データリセット</button>
-                <button id="test-firebase" class="nav-button">🧪 Firebase接続テスト</button>
             </nav>
         </div>
 
@@ -513,1832 +518,1521 @@
         <div class="main-area">
             <!-- モバイルヘッダー -->
             <div class="mobile-header">
-                <button id="mobile-menu" class="p-2 hover:bg-gray-100 rounded-lg">☰</button>
+                <button id="mobile-menu" class="btn btn-secondary">☰</button>
                 <h1 class="text-xl font-bold text-gray-900">部品在庫管理</h1>
-                <div class="w-8"></div>
+                <div style="width: 2rem;"></div>
             </div>
 
             <!-- コンテンツエリア -->
             <div class="content-area" id="main-content">
                 <div class="text-center p-6">
-                    <p class="text-gray-500">アプリケーション初期化中...</p>
+                    <p class="text-gray-500">読み込み中...</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 接続状態インジケーター -->
-    <div id="connection-status" class="connection-status">
-        🟡 初期化中...
+    <!-- オーバーレイ -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 入出庫モーダル -->
+    <div id="transaction-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modal-title" class="text-lg font-semibold text-gray-900">入出庫処理</h3>
+                    <button id="close-modal" class="btn btn-secondary">✕</button>
+                </div>
+                
+                <form id="transaction-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">種別</label>
+                        <select id="transaction-type" class="form-input">
+                            <option value="入庫">入庫</option>
+                            <option value="出庫">出庫</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">数量 *</label>
+                        <input type="number" id="transaction-quantity" required min="1" class="form-input" placeholder="数量を入力">
+                        <p id="current-stock" class="text-sm text-gray-500 mt-1"></p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">理由 *</label>
+                        <input type="text" id="transaction-reason" required class="form-input" placeholder="例: 定期補充、生産ライン使用">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">担当者 *</label>
+                        <input type="text" id="transaction-person" required class="form-input" placeholder="例: 田中">
+                    </div>
+                    
+                    <div class="flex justify-end gap-3 mt-6">
+                        <button type="button" id="cancel-transaction" class="btn btn-secondary">キャンセル</button>
+                        <button type="submit" id="submit-transaction" class="btn btn-primary">実行</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script defer src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-
     <script>
-        // デバッグ情報表示（切り替え機能付き）
-        let debugVisible = false;
-        function updateDebugInfo(message) {
-            let debugDiv = document.getElementById('debug-info');
-            let debugToggle = document.getElementById('debug-toggle');
-            
-            if (!debugDiv) {
-                // デバッグ情報エリア
-                debugDiv = document.createElement('div');
-                debugDiv.id = 'debug-info';
-                debugDiv.style.cssText = `
-                    position: fixed;
-                    bottom: 4rem;
-                    right: 1rem;
-                    max-width: 400px;
-                    max-height: 300px;
-                    padding: 0.75rem;
-                    background-color: #f3f4f6;
-                    border: 2px solid #d1d5db;
-                    border-radius: 0.5rem;
-                    font-size: 0.75rem;
-                    color: #374151;
-                    z-index: 100;
-                    overflow-y: auto;
-                    white-space: pre-line;
-                    font-family: monospace;
-                    display: none;
-                `;
-                document.body.appendChild(debugDiv);
-                
-                // デバッグ切り替えボタン
-                debugToggle = document.createElement('button');
-                debugToggle.id = 'debug-toggle';
-                debugToggle.textContent = '🛠';
-                debugToggle.style.cssText = `
-                    position: fixed;
-                    bottom: 1rem;
-                    right: 1rem;
-                    width: 2.5rem;
-                    height: 2.5rem;
-                    background-color: #374151;
-                    color: white;
-                    border: none;
-                    border-radius: 50%;
-                    font-size: 1rem;
-                    cursor: pointer;
-                    z-index: 101;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                `;
-                debugToggle.addEventListener('click', () => {
-                    debugVisible = !debugVisible;
-                    debugDiv.style.display = debugVisible ? 'block' : 'none';
-                    debugToggle.style.backgroundColor = debugVisible ? '#16a34a' : '#374151';
-                });
-                document.body.appendChild(debugToggle);
-            }
-            
-            const timestamp = new Date().toLocaleTimeString();
-            const newMessage = `[${timestamp}] ${message}`;
-            debugDiv.textContent = newMessage + '\n' + debugDiv.textContent.split('\n').slice(0, 15).join('\n');
-        }
+        (function() {
+            'use strict';
 
-        // 初期メッセージ
-        updateDebugInfo('アプリケーション開始 - Firebase修正版 v2.3');
+            // グローバル変数
+            window.appState = {
+                currentTab: 'dashboard',
+                parts: [],
+                transactions: [],
+                currentDisplayedParts: [],
+                selectedPart: null,
+                editingPart: null,
+                sidebarOpen: false,
+                currentFilter: { type: null, value: null }
+            };
 
-        // Firebase設定
-        const firebaseConfig = {
-            apiKey: "AIzaSyC3-80VPIiBekHxsJBOqZ0iI5NyXZLXTp8",
-            authDomain: "parts-inventory-project-4835b.firebaseapp.com",
-            databaseURL: "https://parts-inventory-project-4835b-default-rtdb.firebaseio.com",
-            projectId: "parts-inventory-project-4835b",
-            storageBucket: "parts-inventory-project-4835b.firebasestorage.app",
-            messagingSenderId: "76731926862",
-            appId: "1:76731926862:web:414c08c875beae3ea0f61f",
-            measurementId: "G-KVRJZWDT3K"
-        };
+            // 履歴フィルタリング・ソート用の変数
+            window.historyFilters = {
+                search: '',
+                dateFrom: '',
+                dateTo: '',
+                partNumber: '',
+                type: '',
+                reason: '',
+                person: ''
+            };
+            window.historySortBy = 'date';
+            window.historySortOrder = 'desc';
 
-        // Firebase初期化状態
-        let firebaseApp = null;
-        let database = null;
-        let isOnline = false;
-        let isInitialized = false;
-
-        // グローバル状態
-        const appState = {
-            currentTab: 'dashboard',
-            parts: [],
-            transactions: [],
-            selectedPart: null,
-            editingPart: null,
-            selectedPartIds: new Set(),
-            currentDisplayedParts: []
-        };
-
-        // 履歴フィルタリング・ソート用の変数
-        const historyFilters = {
-            search: '',
-            dateFrom: '',
-            dateTo: '',
-            partNumber: '',
-            type: '',
-            reason: '',
-            person: ''
-        };
-        let historySortBy = 'date';
-        let historySortOrder = 'desc';
-
-        // デバッグログ
-        function debugLog(message) {
-            console.log('部品管理:', message);
-            updateDebugInfo(message);
-        }
-
-        // 接続状態更新
-        function updateConnectionStatus() {
-            const statusElement = document.getElementById('connection-status');
-            if (!statusElement) return;
-
-            if (!isInitialized) {
-                statusElement.style.backgroundColor = '#fef3c7';
-                statusElement.style.color = '#a16207';
-                statusElement.textContent = '🟡 Firebase初期化中...';
-            } else if (isOnline) {
-                statusElement.style.backgroundColor = '#dcfce7';
-                statusElement.style.color = '#15803d';
-                statusElement.textContent = '🟢 クラウド保存';
-            } else {
-                statusElement.style.backgroundColor = '#fee2e2';
-                statusElement.style.color = '#b91c1c';
-                statusElement.textContent = '🔴 ローカルモード';
-            }
-        }
-
-        // Firebase初期化
-        function initializeFirebase() {
-            return new Promise((resolve) => {
-                debugLog('Firebase初期化プロセス開始...');
-                
-                let checkAttempts = 0;
-                const maxAttempts = 100;
-                
-                const checkFirebase = () => {
-                    checkAttempts++;
-                    debugLog(`Firebase SDK確認中... (${checkAttempts}/${maxAttempts})`);
-                    
-                    if (typeof firebase !== 'undefined') {
-                        debugLog('✅ Firebase SDK読み込み成功！');
-                        initFirebaseCore().then(resolve);
-                    } else if (checkAttempts >= maxAttempts) {
-                        debugLog('❌ Firebase SDK読み込み失敗 - タイムアウト');
-                        showConnectionError('Firebase SDKの読み込みに失敗\nネットワーク接続を確認してください');
-                        resolve(false);
-                    } else {
-                        setTimeout(checkFirebase, 200);
-                    }
-                };
-                
-                checkFirebase();
-            });
-        }
-
-        function initFirebaseCore() {
-            return new Promise((resolve) => {
+            // データ永続化関数
+            window.saveDataToStorage = function() {
                 try {
-                    debugLog('Firebaseアプリ初期化開始...');
-                    firebaseApp = firebase.initializeApp(firebaseConfig);
-                    database = firebase.database();
-                    debugLog('✅ Firebaseアプリ初期化完了');
-                    
-                    const testRef = database.ref('connection_test');
-                    const testData = {
+                    const dataToSave = {
+                        parts: window.appState.parts,
+                        transactions: window.appState.transactions,
                         timestamp: new Date().toISOString(),
-                        test: true,
-                        version: '2.3'
+                        version: '2.2'
                     };
-                    
-                    testRef.set(testData).then(() => {
-                        debugLog('✅ Firebase書き込みテスト成功');
-                        return testRef.once('value');
-                    }).then((snapshot) => {
-                        const data = snapshot.val();
-                        debugLog('✅ Firebase読み込みテスト成功');
-                        return testRef.remove();
-                    }).then(() => {
-                        debugLog('🎉 Firebase接続テスト完全成功！');
-                        
-                        const connectedRef = database.ref('.info/connected');
-                        connectedRef.on('value', (snapshot) => {
-                            isOnline = snapshot.val() === true;
-                            debugLog(`Firebase接続状態変更: ${isOnline ? 'オンライン' : 'オフライン'}`);
-                            updateConnectionStatus();
-                        });
-                        
-                        hideConnectionError();
-                        resolve(true);
-                    }).catch((error) => {
-                        debugLog('❌ Firebase接続テストエラー: ' + error.message);
-                        showConnectionError('Firebase接続エラー\n' + error.message);
-                        resolve(false);
-                    });
-                    
+                    localStorage.setItem('parts_inventory_data', JSON.stringify(dataToSave));
+                    console.log('データを保存しました');
+                    return true;
                 } catch (error) {
-                    debugLog('❌ Firebase初期化エラー: ' + error.message);
-                    showConnectionError('Firebase初期化エラー\n' + error.message);
-                    resolve(false);
+                    console.error('データ保存エラー:', error);
+                    return false;
                 }
-            });
-        }
+            };
 
-        // エラー表示機能
-        function showConnectionError(message) {
-            let errorDiv = document.getElementById('connection-error');
-            if (!errorDiv) {
-                errorDiv = document.createElement('div');
-                errorDiv.id = 'connection-error';
-                errorDiv.style.cssText = `
-                    position: fixed;
-                    top: 60px;
-                    right: 1rem;
-                    max-width: 300px;
-                    padding: 1rem;
-                    background-color: #fee2e2;
-                    border: 2px solid #fca5a5;
-                    border-radius: 0.5rem;
-                    font-size: 0.75rem;
-                    color: #b91c1c;
-                    z-index: 100;
-                    white-space: pre-line;
-                `;
-                document.body.appendChild(errorDiv);
-            }
-            errorDiv.textContent = 'クラウド接続エラー:\n' + message;
-            errorDiv.style.display = 'block';
-        }
-
-        function hideConnectionError() {
-            const errorDiv = document.getElementById('connection-error');
-            if (errorDiv) {
-                errorDiv.style.display = 'none';
-            }
-        }
-
-        // Firebase手動テスト機能
-        function testFirebaseConnection() {
-            debugLog('=== 手動Firebase接続テスト開始 ===');
-            
-            if (typeof firebase === 'undefined') {
-                alert('Firebase SDKが読み込まれていません');
-                return;
-            }
-            
-            if (!database) {
-                alert('Firebase Databaseが初期化されていません');
-                return;
-            }
-            
-            const manualTestRef = database.ref('manual_test');
-            manualTestRef.set({
-                timestamp: new Date().toISOString(),
-                manualTest: true
-            }).then(() => {
-                alert('Firebase接続テスト成功！');
-                manualTestRef.remove();
-            }).catch((error) => {
-                alert('Firebase接続テスト失敗: ' + error.message);
-            });
-        }
-
-        // データ保存関数
-        function saveData() {
-            return new Promise((resolve) => {
-                if (database && isOnline) {
-                    debugLog('Firebaseに保存中...');
-                    Promise.all([
-                        database.ref('parts').set(appState.parts),
-                        database.ref('transactions').set(appState.transactions)
-                    ]).then(() => {
-                        debugLog('✅ Firebase保存完了');
-                        resolve();
-                    }).catch((error) => {
-                        debugLog('❌ Firebase保存エラー: ' + error.message);
-                        resolve();
-                    });
-                } else {
-                    debugLog('ローカルストレージに保存中...');
-                    try {
-                        localStorage.setItem('parts_inventory_data', JSON.stringify({
-                            parts: appState.parts,
-                            transactions: appState.transactions,
-                            timestamp: new Date().toISOString()
-                        }));
-                        debugLog('✅ ローカル保存完了');
-                    } catch (error) {
-                        debugLog('❌ ローカル保存エラー: ' + error.message);
-                    }
-                    resolve();
-                }
-            });
-        }
-
-        // データ読み込み関数
-        function loadData() {
-            return new Promise((resolve) => {
-                if (database) {
-                    debugLog('Firebaseからデータ読み込み中...');
-                    Promise.all([
-                        database.ref('parts').once('value'),
-                        database.ref('transactions').once('value')
-                    ]).then(([partsSnapshot, transactionsSnapshot]) => {
-                        const partsData = partsSnapshot.val();
-                        const transactionsData = transactionsSnapshot.val();
-                        
-                        if (partsData) {
-                            appState.parts = Array.isArray(partsData) ? partsData : Object.values(partsData);
-                            debugLog(`✅ Firebase部品データ読み込み完了 (${appState.parts.length}件)`);
-                        }
-                        
-                        if (transactionsData) {
-                            appState.transactions = Array.isArray(transactionsData) ? transactionsData : Object.values(transactionsData);
-                            debugLog(`✅ Firebase履歴データ読み込み完了 (${appState.transactions.length}件)`);
-                        }
-                        
-                        resolve();
-                    }).catch((error) => {
-                        debugLog('❌ Firebase読み込みエラー: ' + error.message);
-                        loadFromLocalStorage().then(resolve);
-                    });
-                } else {
-                    loadFromLocalStorage().then(resolve);
-                }
-            });
-        }
-
-        function loadFromLocalStorage() {
-            return new Promise((resolve) => {
-                debugLog('ローカルストレージから読み込み中...');
+            window.loadDataFromStorage = function() {
                 try {
                     const savedData = localStorage.getItem('parts_inventory_data');
                     if (savedData) {
                         const data = JSON.parse(savedData);
-                        appState.parts = data.parts || [];
-                        appState.transactions = data.transactions || [];
-                        debugLog(`✅ ローカルデータ読み込み完了 (部品:${appState.parts.length}件, 履歴:${appState.transactions.length}件)`);
-                    } else {
-                        debugLog('ローカルデータなし');
+                        window.appState.parts = data.parts || [];
+                        window.appState.transactions = data.transactions || [];
+                        console.log('保存されたデータを読み込みました');
+                        return true;
                     }
+                    return false;
                 } catch (error) {
-                    debugLog('❌ ローカル読み込みエラー: ' + error.message);
+                    console.error('データ読み込みエラー:', error);
+                    return false;
                 }
-                resolve();
-            });
-        }
-
-        // デフォルトデータ初期化
-        function initDefaultData() {
-            debugLog('デフォルトデータ初期化中...');
-            appState.parts = [
-                { 
-                    id: 1, 
-                    partNumber: "P001", 
-                    name: "ボルト M8x20", 
-                    category: "P", 
-                    stock: 150, 
-                    minStock: 50, 
-                    location: "WH59", 
-                    supplier: "ABC商事", 
-                    unitPrice: 25, 
-                    notes: "ステンレス製、高耐食性" 
-                },
-                { 
-                    id: 2, 
-                    partNumber: "EP001", 
-                    name: "ベアリング 6001", 
-                    category: "EP", 
-                    stock: 25, 
-                    minStock: 10, 
-                    location: "WH59", 
-                    supplier: "XYZ工業", 
-                    unitPrice: 850, 
-                    notes: "高温環境用、年次交換推奨" 
-                },
-                { 
-                    id: 3, 
-                    partNumber: "P003", 
-                    name: "Oリング 20x3", 
-                    category: "P", 
-                    stock: 80, 
-                    minStock: 30, 
-                    location: "WH59", 
-                    supplier: "DEF部品", 
-                    unitPrice: 120, 
-                    notes: "NBR材質、-20℃～+80℃対応" 
-                },
-                { 
-                    id: 4, 
-                    partNumber: "HL001", 
-                    name: "ガスケット 100A", 
-                    category: "HL", 
-                    stock: 5, 
-                    minStock: 20, 
-                    location: "WH60", 
-                    supplier: "DEF部品", 
-                    unitPrice: 450, 
-                    notes: "フランジ用、定期交換部品" 
-                },
-                { 
-                    id: 5, 
-                    partNumber: "EP002", 
-                    name: "モーター 1.5kW", 
-                    category: "EP", 
-                    stock: 3, 
-                    minStock: 2, 
-                    location: "WH60", 
-                    supplier: "XYZ工業", 
-                    unitPrice: 12500, 
-                    notes: "予備機、年1回点検" 
-                },
-                { 
-                    id: 6, 
-                    partNumber: "HL002", 
-                    name: "油圧ホース 10m", 
-                    category: "HL", 
-                    stock: 8, 
-                    minStock: 5, 
-                    location: "WH61", 
-                    supplier: "GHI機材", 
-                    unitPrice: 2800, 
-                    notes: "高圧対応、定期点検必要" 
-                }
-            ];
-            
-            appState.transactions = [
-                { id: 1, partId: 1, partNumber: "P001", type: "入庫", quantity: 100, date: "2024-01-15", reason: "定期補充", person: "田中" },
-                { id: 2, partId: 1, partNumber: "P001", type: "出庫", quantity: 20, date: "2024-01-20", reason: "生産ライン使用", person: "佐藤" },
-                { id: 3, partId: 2, partNumber: "EP001", type: "入庫", quantity: 50, date: "2024-01-10", reason: "新規調達", person: "鈴木" },
-                { id: 4, partId: 4, partNumber: "HL001", type: "出庫", quantity: 2, date: "2024-01-25", reason: "メンテナンス", person: "高橋" },
-                { id: 5, partId: 3, partNumber: "P003", type: "入庫", quantity: 30, date: "2024-02-01", reason: "緊急補充", person: "田中" }
-            ];
-            
-            debugLog('✅ デフォルトデータ初期化完了');
-        }
-
-        // ダッシュボード描画
-        function renderDashboard() {
-            const stats = {
-                total: appState.parts.length,
-                warning: appState.parts.filter(p => p.stock <= p.minStock).length,
-                good: appState.parts.filter(p => p.stock > p.minStock).length
             };
 
-            // カテゴリ別統計
-            const categoryStats = {};
-            appState.parts.forEach(part => {
-                if (!categoryStats[part.category]) {
-                    categoryStats[part.category] = { count: 0, warning: 0 };
-                }
-                categoryStats[part.category].count++;
-                if (part.stock <= part.minStock) {
-                    categoryStats[part.category].warning++;
-                }
-            });
-
-            const categoryColors = {
-                'P': 'bg-blue-50 text-blue-700',
-                'EP': 'bg-green-50 text-green-700',
-                'HL': 'bg-purple-50 text-purple-700'
+            // デフォルトデータ初期化
+            window.initializeDefaultData = function() {
+                window.appState.parts = [
+                    { 
+                        id: 1, 
+                        partNumber: "P001", 
+                        name: "ボルト M8x20", 
+                        category: "P", 
+                        stock: 150, 
+                        minStock: 50, 
+                        location: "WH59", 
+                        supplier: "ABC商事", 
+                        unitPrice: 25, 
+                        notes: "ステンレス製、高耐食性" 
+                    },
+                    { 
+                        id: 2, 
+                        partNumber: "EP001", 
+                        name: "ベアリング 6001", 
+                        category: "EP", 
+                        stock: 25, 
+                        minStock: 10, 
+                        location: "WH59", 
+                        supplier: "XYZ工業", 
+                        unitPrice: 850, 
+                        notes: "高温環境用、年次交換推奨" 
+                    },
+                    { 
+                        id: 3, 
+                        partNumber: "P003", 
+                        name: "Oリング 20x3", 
+                        category: "P", 
+                        stock: 80, 
+                        minStock: 30, 
+                        location: "WH59", 
+                        supplier: "DEF部品", 
+                        unitPrice: 120, 
+                        notes: "NBR材質、-20℃～+80℃対応" 
+                    },
+                    { 
+                        id: 4, 
+                        partNumber: "HL001", 
+                        name: "ガスケット 100A", 
+                        category: "HL", 
+                        stock: 5, 
+                        minStock: 20, 
+                        location: "WH60", 
+                        supplier: "DEF部品", 
+                        unitPrice: 450, 
+                        notes: "フランジ用、定期交換部品" 
+                    },
+                    { 
+                        id: 5, 
+                        partNumber: "EP002", 
+                        name: "モーター 1.5kW", 
+                        category: "EP", 
+                        stock: 3, 
+                        minStock: 2, 
+                        location: "WH60", 
+                        supplier: "XYZ工業", 
+                        unitPrice: 12500, 
+                        notes: "予備機、年1回点検" 
+                    },
+                    { 
+                        id: 6, 
+                        partNumber: "HL002", 
+                        name: "油圧ホース 10m", 
+                        category: "HL", 
+                        stock: 8, 
+                        minStock: 5, 
+                        location: "WH61", 
+                        supplier: "GHI機材", 
+                        unitPrice: 2800, 
+                        notes: "高圧対応、定期点検必要" 
+                    }
+                ];
+                
+                window.appState.transactions = [
+                    { id: 1, partId: 1, partNumber: "P001", type: "入庫", quantity: 100, date: "2024-01-15", reason: "定期補充", person: "田中" },
+                    { id: 2, partId: 1, partNumber: "P001", type: "出庫", quantity: 20, date: "2024-01-20", reason: "生産ライン使用", person: "佐藤" },
+                    { id: 3, partId: 2, partNumber: "EP001", type: "入庫", quantity: 50, date: "2024-01-10", reason: "新規調達", person: "鈴木" },
+                    { id: 4, partId: 4, partNumber: "HL001", type: "出庫", quantity: 2, date: "2024-01-25", reason: "メンテナンス", person: "高橋" },
+                    { id: 5, partId: 3, partNumber: "P003", type: "入庫", quantity: 30, date: "2024-02-01", reason: "緊急補充", person: "田中" }
+                ];
+                
+                console.log('デフォルトデータ初期化完了');
             };
-            
-            document.getElementById('main-content').innerHTML = `
-                <div class="space-y-6">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-2xl font-bold text-gray-900">ダッシュボード</h2>
-                        <div class="text-sm text-gray-600">ver 2.3</div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 grid-cols-3 gap-4">
-                        <div class="stats-card">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">総部品数</p>
-                                    <p class="text-2xl font-bold text-gray-900">${stats.total}</p>
-                                </div>
-                                <span class="text-2xl">📦</span>
-                            </div>
-                        </div>
-                        <div class="stats-card">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">要注意</p>
-                                    <p class="text-2xl font-bold text-yellow-600">${stats.warning}</p>
-                                </div>
-                                <span class="text-2xl">⚠️</span>
-                            </div>
-                        </div>
-                        <div class="stats-card">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">適正在庫</p>
-                                    <p class="text-2xl font-bold text-green-600">${stats.good}</p>
-                                </div>
-                                <span class="text-2xl">✅</span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="bg-white rounded-xl shadow-sm border p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">カテゴリ別部品点数</h3>
-                        <div class="grid grid-cols-2 grid-cols-3 gap-4">
-                            ${['P', 'EP', 'HL'].map(cat => {
-                                const data = categoryStats[cat] || { count: 0, warning: 0 };
-                                const icons = { 'P': '🔧', 'EP': '⚙️', 'HL': '🛢️' };
-                                return `
-                                    <button onclick="filterByCategory('${cat}')" class="stats-card ${categoryColors[cat] || 'bg-gray-50 text-gray-700'}">
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <p class="text-sm font-medium">${cat}</p>
-                                                <p class="text-xl font-bold">${data.count}</p>
-                                                ${data.warning > 0 ? `<p class="text-xs text-red-600">⚠️ ${data.warning}件要注意</p>` : ''}
-                                            </div>
-                                            <span class="text-2xl">${icons[cat] || '📦'}</span>
-                                        </div>
-                                    </button>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
+            // 統計計算
+            window.calculateStats = function() {
+                const categoryStats = {};
+                window.appState.parts.forEach(part => {
+                    if (!categoryStats[part.category]) {
+                        categoryStats[part.category] = { count: 0, warning: 0, good: 0 };
+                    }
+                    categoryStats[part.category].count++;
+                    if (part.stock <= part.minStock) {
+                        categoryStats[part.category].warning++;
+                    } else {
+                        categoryStats[part.category].good++;
+                    }
+                });
 
-                    <div class="bg-white rounded-xl shadow-sm border p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Firebase接続情報</h3>
-                        <div class="space-y-2 text-sm">
-                            <p><strong>Firebase SDK:</strong> ${typeof firebase !== 'undefined' ? '読み込み済み' : '未読み込み'}</p>
-                            <p><strong>Database:</strong> ${database ? '初期化済み' : '未初期化'}</p>
-                            <p><strong>接続状態:</strong> ${isOnline ? 'オンライン' : 'オフライン'}</p>
-                            <p><strong>データソース:</strong> ${isOnline ? 'Firebase' : 'ローカルストレージ'}</p>
-                        </div>
-                        <button onclick="testFirebaseConnection()" class="btn btn-primary mt-4">Firebase接続テスト実行</button>
-                    </div>
-                </div>
-            `;
-        }
+                return {
+                    total: window.appState.parts.length,
+                    warning: window.appState.parts.filter(p => p.stock <= p.minStock).length,
+                    good: window.appState.parts.filter(p => p.stock > p.minStock).length,
+                    categories: categoryStats
+                };
+            };
 
-        // 部品一覧描画
-        function renderPartsList() {
-            let filteredParts = appState.parts;
-            
-            document.getElementById('main-content').innerHTML = `
-                <div class="space-y-6">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-2xl font-bold text-gray-900">部品一覧</h2>
-                        <button onclick="exportToCSV()" class="btn btn-secondary">CSVエクスポート</button>
-                    </div>
-                    
-                    <!-- スマート選択ボタン -->
-                    <div class="smart-selection-buttons">
-                        <button onclick="selectAllDisplayedParts()" class="smart-btn primary">📋 表示結果をすべて選択</button>
-                        <button onclick="selectWarningParts()" class="smart-btn">⚠️ 要注意部品を選択</button>
-                        <button onclick="selectGoodStockParts()" class="smart-btn">✅ 適正在庫を選択</button>
-                        <button onclick="clearAllSelections()" class="smart-btn">🔄 選択をクリア</button>
-                    </div>
+            // 部品名を取得する関数
+            window.getPartNameById = function(partId) {
+                const part = window.appState.parts.find(p => p.id === partId);
+                return part ? part.name : '部品名不明';
+            };
 
-                    <!-- 一括操作バー -->
-                    <div id="bulk-actions" class="bg-blue-50 border border-blue-200 rounded-lg p-3 flex justify-between items-center" style="display: none;">
-                        <div>
-                            <span id="selected-count" class="text-sm font-medium text-blue-700">0件選択中</span>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="openBulkTransactionModal('入庫')" class="btn btn-success text-xs">一括入庫</button>
-                            <button onclick="openBulkTransactionModal('出庫')" class="btn btn-secondary text-xs">一括出庫</button>
-                            <button onclick="bulkDeleteParts()" class="btn btn-danger text-xs">一括削除</button>
-                            <button onclick="clearAllSelections()" class="btn btn-secondary text-xs">選択解除</button>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 50px;">
-                                            <input type="checkbox" id="select-all-parts" onchange="toggleAllParts()" class="rounded">
-                                        </th>
-                                        <th>部品番号</th>
-                                        <th>部品名</th>
-                                        <th>カテゴリ</th>
-                                        <th>現在庫数</th>
-                                        <th>最少在庫</th>
-                                        <th>状態</th>
-                                        <th>保管場所</th>
-                                        <th>アクション</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="parts-table-body" class="divide-y">
-                                    ${renderPartsTableRows(filteredParts)}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // 現在表示中の部品を記録
-            appState.currentDisplayedParts = [...filteredParts];
-            updateSelectionUI();
-        }
+            window.getPartNameByNumber = function(partNumber) {
+                const part = window.appState.parts.find(p => p.partNumber === partNumber);
+                return part ? part.name : '部品名不明';
+            };
 
-        function renderPartsTableRows(partsToRender) {
-            if (partsToRender.length === 0) {
-                return '<tr><td colspan="9" class="text-center text-gray-500">部品が見つかりません。</td></tr>';
-            }
-            
-            return partsToRender.map(part => {
-                const isSelected = appState.selectedPartIds ? appState.selectedPartIds.has(part.id) : false;
-                const stockStatus = part.stock <= part.minStock ? 'warning' : 'good';
-                const stockIcon = stockStatus === 'warning' ? '⚠️' : '✅';
-                const stockBg = stockStatus === 'warning' ? 'bg-yellow-50 text-yellow-700' : 'bg-green-50 text-green-700';
+            // フィルタリング機能
+            window.applyPartsFilter = function(filterType, filterValue = null) {
+                window.appState.currentFilter = {
+                    type: filterType,
+                    value: filterValue
+                };
+                window.switchTab('list');
+            };
+
+            window.clearPartsFilter = function() {
+                window.appState.currentFilter = {
+                    type: null,
+                    value: null
+                };
+                window.renderPartsList();
+            };
+
+            window.getFilteredParts = function() {
+                let filteredParts = [...window.appState.parts];
                 
-                let categoryBadge = '';
-                switch(part.category) {
-                    case 'P':
-                        categoryBadge = '<span class="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">P</span>';
-                        break;
-                    case 'EP':
-                        categoryBadge = '<span class="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700">EP</span>';
-                        break;
-                    case 'HL':
-                        categoryBadge = '<span class="px-2 py-1 rounded text-xs font-medium bg-orange-100 text-orange-700">HL</span>';
-                        break;
-                    default:
-                        categoryBadge = `<span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">${part.category}</span>`;
+                const filter = window.appState.currentFilter;
+                
+                if (filter.type === 'warning') {
+                    filteredParts = filteredParts.filter(p => p.stock <= p.minStock);
+                } else if (filter.type === 'good') {
+                    filteredParts = filteredParts.filter(p => p.stock > p.minStock);
+                } else if (filter.type === 'category' && filter.value) {
+                    filteredParts = filteredParts.filter(p => p.category === filter.value);
                 }
                 
-                return `
-                    <tr id="row-${part.id}" class="parts-row ${isSelected ? 'selected' : ''}" onclick="handleRowClick(event, ${part.id})">
-                        <td onclick="event.stopPropagation();">
-                            <input type="checkbox" id="part-${part.id}" ${isSelected ? 'checked' : ''} 
-                                   onchange="togglePartSelection(${part.id})" class="rounded">
-                        </td>
-                        <td class="font-medium text-gray-900">${part.partNumber}</td>
-                        <td>${part.name}</td>
-                        <td>${categoryBadge}</td>
-                        <td class="font-semibold">${part.stock}</td>
-                        <td>${part.minStock}</td>
-                        <td>
-                            <div class="flex items-center gap-2 px-2 py-1 rounded-full text-xs w-max ${stockBg}">
-                                <span>${stockIcon}</span>
-                                <span>${getStockStatus(part)}</span>
-                            </div>
-                        </td>
-                        <td>${part.location}</td>
-                        <td>
-                            <div class="flex gap-1">
-                                <button onclick="event.stopPropagation(); showStockModal(${part.id}, '入庫')" title="入庫" class="btn btn-success text-xs px-2 py-1">📈</button>
-                                <button onclick="event.stopPropagation(); showStockModal(${part.id}, '出庫')" title="出庫" class="btn btn-secondary text-xs px-2 py-1">📉</button>
-                                <button onclick="event.stopPropagation(); editPart(${part.id})" title="編集" class="btn btn-secondary text-xs px-2 py-1">✏️</button>
-                                <button onclick="event.stopPropagation(); deletePart(${part.id})" title="削除" class="btn btn-danger text-xs px-2 py-1">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
+                return filteredParts;
+            };
 
-        // 履歴一覧描画（フィルター機能付き）
-        function renderHistory() {
-            document.getElementById('main-content').innerHTML = `
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-2xl font-bold text-gray-900">入出庫履歴</h2>
-                        <div id="history-result-count" class="text-sm text-gray-600">${appState.transactions.length} 件の履歴を表示中</div>
-                    </div>
+            window.getFilterDisplayText = function() {
+                const filter = window.appState.currentFilter;
+                
+                if (filter.type === 'warning') {
+                    return '要注意部品のみ表示中';
+                } else if (filter.type === 'good') {
+                    return '適正在庫部品のみ表示中';
+                } else if (filter.type === 'category' && filter.value) {
+                    let categoryName = filter.value;
+                    switch(filter.value) {
+                        case 'P': categoryName = 'Parts'; break;
+                        case 'EP': categoryName = 'Equipment Parts'; break;
+                        case 'HL': categoryName = 'Hydraulic/Lubrication'; break;
+                    }
+                    return `カテゴリ「${categoryName}」のみ表示中`;
+                }
+                return null;
+            };
+
+            // ダッシュボード表示
+            window.renderDashboard = function() {
+                const stats = window.calculateStats();
+                const warningParts = window.appState.parts.filter(p => p.stock <= p.minStock);
+                
+                // カテゴリ別の統計カードを生成
+                const categoryCards = Object.entries(stats.categories).map(([category, data]) => {
+                    let categoryName, categoryColor, categoryIcon, categoryClass;
+                    switch(category) {
+                        case 'P':
+                            categoryName = 'Parts';
+                            categoryColor = 'text-blue-600';
+                            categoryIcon = '🔧';
+                            categoryClass = '';
+                            break;
+                        case 'EP':
+                            categoryName = 'Equipment Parts';
+                            categoryColor = 'text-green-600';
+                            categoryIcon = '⚙️';
+                            categoryClass = '';
+                            break;
+                        case 'HL':
+                            categoryName = 'H/L Parts';
+                            categoryColor = 'text-orange-600';
+                            categoryIcon = '🛢️';
+                            categoryClass = 'category-hl';
+                            break;
+                        default:
+                            categoryName = category;
+                            categoryColor = 'text-gray-600';
+                            categoryIcon = '📦';
+                            categoryClass = '';
+                    }
                     
-                    <!-- 検索・フィルター -->
-                    <div class="history-filters">
-                        <div class="space-y-4">
-                            <!-- フリーワード検索 -->
+                    return `
+                        <button class="stats-card ${categoryClass}" onclick="window.applyPartsFilter('category', '${category}')">
+                            <div class="stats-card-content">
+                                <div class="stats-card-info">
+                                    <div class="stats-card-title">${categoryName}</div>
+                                    <div class="stats-card-number ${categoryColor}">${data.count}</div>
+                                    <div class="stats-card-subtitle">
+                                        要注意: ${data.warning} | 適正: ${data.good}
+                                    </div>
+                                </div>
+                                <div class="stats-card-icon">${categoryIcon}</div>
+                            </div>
+                        </button>
+                    `;
+                }).join('');
+                
+                document.getElementById('main-content').innerHTML = `
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-gray-900">ダッシュボード</h2>
+                            <div class="text-sm text-gray-600">最終更新: ${new Date().toLocaleString('ja-JP')}</div>
+                        </div>
+                        
+                        <!-- 基本統計 -->
+                        <div class="grid grid-cols-3 gap-4">
+                            <button class="stats-card" onclick="window.applyPartsFilter('all')">
+                                <div class="stats-card-content">
+                                    <div class="stats-card-info">
+                                        <div class="stats-card-title">総部品数</div>
+                                        <div class="stats-card-number text-gray-900">${stats.total}</div>
+                                    </div>
+                                    <div class="stats-card-icon">📦</div>
+                                </div>
+                            </button>
+                            <button class="stats-card" onclick="window.applyPartsFilter('warning')">
+                                <div class="stats-card-content">
+                                    <div class="stats-card-info">
+                                        <div class="stats-card-title">要注意</div>
+                                        <div class="stats-card-number" style="color: #d97706;">${stats.warning}</div>
+                                    </div>
+                                    <div class="stats-card-icon">⚠️</div>
+                                </div>
+                            </button>
+                            <button class="stats-card" onclick="window.applyPartsFilter('good')">
+                                <div class="stats-card-content">
+                                    <div class="stats-card-info">
+                                        <div class="stats-card-title">適正在庫</div>
+                                        <div class="stats-card-number" style="color: #16a34a;">${stats.good}</div>
+                                    </div>
+                                    <div class="stats-card-icon">✅</div>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- カテゴリ別統計 -->
+                        <div class="bg-white rounded-xl shadow-sm border">
+                            <div class="p-4 border-b">
+                                <h3 class="text-lg font-semibold text-gray-900">📊 カテゴリ別部品数（クリックでフィルタ）</h3>
+                            </div>
+                            <div class="p-4">
+                                <div class="grid grid-cols-3 gap-4">
+                                    ${categoryCards}
+                                </div>
+                            </div>
+                        </div>
+
+                        ${warningParts.length > 0 ? `
+                        <div class="bg-white rounded-xl shadow-sm border">
+                            <div class="p-4 border-b">
+                                <h3 class="text-lg font-semibold" style="color: #d97706;">⚠️ 補充が推奨される部品 (${warningParts.length} 件)</h3>
+                            </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">フリーワード検索</label>
-                                <input type="text" id="history-search" placeholder="部品番号、部品名、種別、理由、担当者で検索..." class="form-input">
-                            </div>
-                            
-                            <!-- 詳細フィルター -->
-                            <div class="filter-row">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">日付（開始）</label>
-                                    <input type="date" id="history-date-from" class="form-input">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">日付（終了）</label>
-                                    <input type="date" id="history-date-to" class="form-input">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">部品番号</label>
-                                    <input type="text" id="history-part-number" placeholder="部品番号で絞り込み" class="form-input">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">種別</label>
-                                    <select id="history-type" class="form-input">
-                                        <option value="">すべて</option>
-                                        <option value="入庫">入庫</option>
-                                        <option value="出庫">出庫</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">理由</label>
-                                    <input type="text" id="history-reason" placeholder="理由で絞り込み" class="form-input">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">担当者</label>
-                                    <input type="text" id="history-person" placeholder="担当者で絞り込み" class="form-input">
-                                </div>
-                            </div>
-                            
-                            <!-- ソート・リセット -->
-                            <div class="flex justify-between items-center">
-                                <div class="sort-controls">
-                                    <span class="text-sm font-medium text-gray-700 mr-2">並び替え:</span>
-                                    <button class="sort-button active" data-sort="date">日付</button>
-                                    <button class="sort-button" data-sort="partNumber">部品番号</button>
-                                    <button class="sort-button" data-sort="partName">部品名</button>
-                                    <button class="sort-button" data-sort="type">種別</button>
-                                    <button class="sort-button" data-sort="quantity">数量</button>
-                                    <button class="sort-button" data-sort="reason">理由</button>
-                                    <button class="sort-button" data-sort="person">担当者</button>
-                                    <button id="sort-order-toggle" class="sort-button">
-                                        順序 <span id="sort-order-indicator">↓</span>
-                                    </button>
-                                </div>
-                                <button id="clear-filters" class="btn btn-secondary text-sm">フィルターをクリア</button>
+                                ${warningParts.map(part => `
+                                    <div class="p-4 border-b last:border-b-0 hover:bg-gray-50">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <span class="text-gray-900 font-semibold block">${part.partNumber}</span>
+                                                <span class="text-sm text-gray-600">${part.name}</span>
+                                            </div>
+                                            <div class="flex gap-2 items-center">
+                                                <div class="text-sm font-bold" style="color: #d97706;">${part.stock} / ${part.minStock}</div>
+                                                <button onclick="window.openTransactionModal(${part.id}, '入庫')" class="btn btn-primary text-xs">入庫</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
                             </div>
                         </div>
+                        ` : ''}
                     </div>
-                    
-                    <!-- 履歴テーブル -->
-                    <div class="bg-white rounded-xl shadow-sm border">
-                        <div class="p-4 border-b">
-                            <h3 class="text-lg font-semibold text-gray-900">取引履歴</h3>
+                `;
+            };
+
+            // 部品一覧表示
+            window.renderPartsList = function() {
+                const filteredParts = window.getFilteredParts();
+                window.appState.currentDisplayedParts = [...filteredParts];
+                
+                const filterText = window.getFilterDisplayText();
+                
+                document.getElementById('main-content').innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-gray-900">部品一覧</h2>
+                            <div class="relative">
+                                <input type="text" id="search-input" placeholder="部品番号、名称、カテゴリで検索..." class="form-input" style="padding-left: 2.5rem;">
+                                <div style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #9ca3af;">🔍</div>
+                            </div>
                         </div>
-                        <div class="overflow-x-auto">
+
+                        ${filterText ? `
+                        <div class="filter-indicator">
+                            <span class="filter-text">🔍 ${filterText}</span>
+                            <button class="clear-filter" onclick="window.clearPartsFilter()">フィルタをクリア</button>
+                        </div>
+                        ` : ''}
+
+                        <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>日付</th>
-                                        <th>部品番号・部品名</th>
+                                        <th>部品番号</th>
+                                        <th>部品名</th>
                                         <th>カテゴリ</th>
-                                        <th>種別</th>
-                                        <th>数量</th>
-                                        <th>理由</th>
-                                        <th>担当者</th>
+                                        <th>在庫数</th>
+                                        <th>保管場所</th>
+                                        <th>単価</th>
+                                        <th>アクション</th>
                                     </tr>
                                 </thead>
-                                <tbody id="history-table-body">
-                                    <!-- ここに履歴が表示されます -->
+                                <tbody id="parts-table-body">
+                                    ${window.renderPartsTableRows(filteredParts)}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-            `;
-            
-            // 初期表示
-            updateHistoryDisplay();
-            
-            // イベントリスナーを設定
-            setupHistoryEventListeners();
-        }
+                `;
+                
+                // 検索機能
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function(e) {
+                        const searchTerm = e.target.value.toLowerCase();
+                        const baseFilteredParts = window.getFilteredParts();
+                        const searchFilteredParts = baseFilteredParts.filter(part =>
+                            part.partNumber.toLowerCase().includes(searchTerm) ||
+                            part.name.toLowerCase().includes(searchTerm) ||
+                            part.category.toLowerCase().includes(searchTerm)
+                        );
+                        
+                        window.appState.currentDisplayedParts = searchFilteredParts;
+                        document.getElementById('parts-table-body').innerHTML = window.renderPartsTableRows(searchFilteredParts);
+                    });
+                }
+            };
 
-        // フォーム描画
-        function renderForm() {
-            document.getElementById('main-content').innerHTML = `
-                <div class="space-y-6">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-2xl font-bold text-gray-900">新規部品追加</h2>
-                        <button onclick="showImportModal()" class="btn btn-secondary">CSVインポート</button>
-                    </div>
+            window.renderPartsTableRows = function(partsToRender) {
+                if (partsToRender.length === 0) {
+                    return '<tr><td colspan="7" class="text-center text-gray-500">部品が見つかりません。</td></tr>';
+                }
+                
+                return partsToRender.map(part => {
+                    const stockStatus = part.stock <= part.minStock ? 'warning' : 'good';
+                    const stockIcon = stockStatus === 'warning' ? '⚠️' : '✅';
+                    const stockClass = stockStatus === 'warning' ? 'stock-warning' : 'stock-good';
                     
-                    <div class="bg-white rounded-xl shadow-sm border p-6">
-                        <form id="part-form" class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">部品番号 *</label>
-                                    <input type="text" id="partNumber" class="form-input" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">部品名 *</label>
-                                    <input type="text" id="partName" class="form-input" required>
-                                </div>
-                            </div>
-                            
-                            <div class="grid grid-cols-3 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">カテゴリ *</label>
-                                    <select id="category" class="form-input" required>
-                                        <option value="">選択してください</option>
-                                        <option value="P">汎用部品</option>
-                                        <option value="EP">電気部品</option>
-                                        <option value="HL">油圧部品</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">現在庫数 *</label>
-                                    <input type="number" id="stock" class="form-input" min="0" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">最少在庫数 *</label>
-                                    <input type="number" id="minStock" class="form-input" min="0" required>
-                                </div>
-                            </div>
-                            
-                            <div class="grid grid-cols-3 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">保管場所</label>
-                                    <input type="text" id="location" class="form-input">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">供給業者</label>
-                                    <input type="text" id="supplier" class="form-input">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">単価（円）</label>
-                                    <input type="number" id="unitPrice" class="form-input" min="0">
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">備考</label>
-                                <textarea id="notes" class="form-input resize-none" rows="3"></textarea>
-                            </div>
-                            
-                            <div class="flex justify-end gap-3 pt-4">
-                                <button type="button" onclick="resetForm()" class="btn btn-secondary">リセット</button>
-                                <button type="submit" class="btn btn-primary">追加</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('part-form').addEventListener('submit', handleFormSubmit);
-        }
-
-        // ヘルパー関数
-        function getCategoryBadge(category) {
-            const badges = {
-                'P': 'bg-blue-100 text-blue-800',
-                'EP': 'bg-green-100 text-green-800',
-                'HL': 'bg-purple-100 text-purple-800'
-            };
-            return badges[category] || 'bg-gray-100 text-gray-800';
-        }
-
-        function getCategoryName(category) {
-            const names = {
-                'P': '汎用部品',
-                'EP': '電気部品',
-                'HL': '油圧部品'
-            };
-            return names[category] || category;
-        }
-
-        function getStockStatusBadge(part) {
-            return part.stock <= part.minStock ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800';
-        }
-
-        function getStockStatus(part) {
-            return part.stock <= part.minStock ? '要注意' : '適正';
-        }
-
-        // 部品名を取得する関数
-        function getPartNameById(partId) {
-            const part = appState.parts.find(p => p.id === partId);
-            return part ? part.name : '部品名不明';
-        }
-
-        function getPartNameByNumber(partNumber) {
-            const part = appState.parts.find(p => p.partNumber === partNumber);
-            return part ? part.name : '部品名不明';
-        }
-
-        // 部品カテゴリを取得する関数
-        function getPartCategoryByNumber(partNumber) {
-            const part = appState.parts.find(p => p.partNumber === partNumber);
-            return part ? part.category : '-';
-        }
-
-        // 選択機能
-        function togglePartSelection(partId) {
-            if (appState.selectedPartIds.has(partId)) {
-                appState.selectedPartIds.delete(partId);
-            } else {
-                appState.selectedPartIds.add(partId);
-            }
-            updateSelectionUI();
-        }
-
-        function handleRowClick(event, partId) {
-            if (event.ctrlKey || event.metaKey) {
-                togglePartSelection(partId);
-            } else {
-                appState.selectedPartIds.clear();
-                appState.selectedPartIds.add(partId);
-                updateSelectionUI();
-            }
-        }
-
-        function toggleAllParts() {
-            const allCheckbox = document.getElementById('select-all-parts');
-            if (allCheckbox && allCheckbox.checked) {
-                selectAllDisplayedParts();
-            } else {
-                clearAllSelections();
-            }
-        }
-
-        function selectAllDisplayedParts() {
-            appState.selectedPartIds.clear();
-            appState.currentDisplayedParts.forEach(part => appState.selectedPartIds.add(part.id));
-            updateSelectionUI();
-        }
-
-        function selectWarningParts() {
-            appState.selectedPartIds.clear();
-            const warningParts = appState.currentDisplayedParts.filter(p => p.stock <= p.minStock);
-            warningParts.forEach(part => appState.selectedPartIds.add(part.id));
-            updateSelectionUI();
-        }
-
-        function selectGoodStockParts() {
-            appState.selectedPartIds.clear();
-            const goodParts = appState.currentDisplayedParts.filter(p => p.stock > p.minStock);
-            goodParts.forEach(part => appState.selectedPartIds.add(part.id));
-            updateSelectionUI();
-        }
-
-        function clearAllSelections() {
-            appState.selectedPartIds.clear();
-            updateSelectionUI();
-        }
-
-        function updateSelectionUI() {
-            // 行の背景色更新
-            appState.currentDisplayedParts.forEach(part => {
-                const row = document.getElementById(`row-${part.id}`);
-                if (row) {
-                    if (appState.selectedPartIds.has(part.id)) {
-                        row.classList.add('selected');
-                    } else {
-                        row.classList.remove('selected');
+                    let categoryBadge = '';
+                    switch(part.category) {
+                        case 'P':
+                            categoryBadge = '<span class="badge badge-blue">P</span>';
+                            break;
+                        case 'EP':
+                            categoryBadge = '<span class="badge badge-green">EP</span>';
+                            break;
+                        case 'HL':
+                            categoryBadge = '<span class="badge badge-orange">HL</span>';
+                            break;
+                        default:
+                            categoryBadge = `<span class="badge" style="background-color: #f3f4f6; color: #6b7280;">${part.category}</span>`;
                     }
-                }
-            });
-
-            // チェックボックス更新
-            appState.currentDisplayedParts.forEach(part => {
-                const checkbox = document.getElementById(`part-${part.id}`);
-                if (checkbox) {
-                    checkbox.checked = appState.selectedPartIds.has(part.id);
-                }
-            });
-            
-            // 全選択チェックボックス更新
-            const allCheckbox = document.getElementById('select-all-parts');
-            if (allCheckbox) {
-                const displayedIds = new Set(appState.currentDisplayedParts.map(p => p.id));
-                const selectedDisplayedCount = [...appState.selectedPartIds].filter(id => displayedIds.has(id)).length;
-                allCheckbox.checked = selectedDisplayedCount === appState.currentDisplayedParts.length && appState.currentDisplayedParts.length > 0;
-            }
-            
-            // 一括操作ボタン表示制御
-            const bulkActions = document.getElementById('bulk-actions');
-            if (bulkActions) {
-                bulkActions.style.display = appState.selectedPartIds.size > 0 ? 'flex' : 'none';
-            }
-            
-            // 選択件数表示
-            const selectedCount = document.getElementById('selected-count');
-            if (selectedCount) {
-                selectedCount.textContent = `${appState.selectedPartIds.size}件選択中`;
-            }
-        }
-
-        // 一括操作（プレースホルダー）
-        function openBulkTransactionModal(type) {
-            alert(`一括${type}機能は開発中です`);
-        }
-
-        function bulkDeleteParts() {
-            if (appState.selectedPartIds.size === 0) {
-                alert('削除する部品を選択してください');
-                return;
-            }
-            
-            if (confirm(`選択された${appState.selectedPartIds.size}件の部品を削除しますか？`)) {
-                const selectedIds = Array.from(appState.selectedPartIds);
-                appState.parts = appState.parts.filter(part => !selectedIds.includes(part.id));
-                appState.transactions = appState.transactions.filter(trans => !selectedIds.includes(trans.partId));
-                appState.selectedPartIds.clear();
-                
-                saveData().then(() => {
-                    alert('選択された部品を削除しました');
-                    renderCurrentTab();
-                });
-            }
-        }
-
-        function editPart(partId) {
-            appState.editingPart = appState.parts.find(p => p.id === partId);
-            if (appState.editingPart) {
-                switchTab('form');
-            }
-        }
-
-        function deletePart(partId) {
-            if (confirm("この部品を削除しますか？")) {
-                const deletedPart = appState.parts.find(part => part.id === partId);
-                appState.parts = appState.parts.filter(part => part.id !== partId);
-                appState.transactions = appState.transactions.filter(trans => trans.partId !== partId);
-                
-                saveData().then(() => {
-                    alert('部品を削除しました。');
-                    renderCurrentTab();
-                });
-                
-                if (deletedPart) {
-                    debugLog(`部品削除完了: ${deletedPart.partNumber} - ${deletedPart.name}`);
-                }
-            }
-        }
-
-        // カテゴリフィルター
-        function filterByCategory(category) {
-            switchTab('list');
-        }
-
-        // 在庫入出庫モーダル（新しいshowStockModal関数）
-        function showStockModal(partId, defaultType = '入庫') {
-            const part = appState.parts.find(p => p.id === partId);
-            if (!part) return;
-
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">入出庫処理 - ${part.name}</h3>
-                        <div class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">処理種別</label>
-                                    <select id="stockType" class="form-input">
-                                        <option value="入庫" ${defaultType === '入庫' ? 'selected' : ''}>入庫</option>
-                                        <option value="出庫" ${defaultType === '出庫' ? 'selected' : ''}>出庫</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">数量</label>
-                                    <input type="number" id="stockQuantity" class="form-input" min="1" required>
-                                    <p id="currentStock" class="text-xs text-gray-500 mt-1">現在庫: ${part.stock}</p>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">理由</label>
-                                <input type="text" id="stockReason" class="form-input" placeholder="例: 定期補充、メンテナンス使用">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">担当者</label>
-                                <input type="text" id="stockPerson" class="form-input">
-                            </div>
-                            <div class="flex justify-end gap-3 pt-4">
-                                <button onclick="closeModal()" class="btn btn-secondary">キャンセル</button>
-                                <button onclick="processStock(${partId})" class="btn btn-primary">実行</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        }
-
-        // 在庫処理実行
-        function processStock(partId) {
-            const part = appState.parts.find(p => p.id === partId);
-            const type = document.getElementById('stockType').value;
-            const quantity = parseInt(document.getElementById('stockQuantity').value);
-            const reason = document.getElementById('stockReason').value;
-            const person = document.getElementById('stockPerson').value;
-
-            if (!quantity || quantity <= 0) {
-                alert('有効な数量を入力してください');
-                return;
-            }
-
-            // 在庫更新
-            if (type === '入庫') {
-                part.stock += quantity;
-            } else {
-                if (part.stock < quantity) {
-                    alert('出庫数量が在庫数を超えています');
-                    return;
-                }
-                part.stock -= quantity;
-            }
-
-            // 履歴追加
-            const transaction = {
-                id: Date.now(),
-                partId: partId,
-                partNumber: part.partNumber,
-                type: type,
-                quantity: quantity,
-                date: new Date().toISOString().split('T')[0],
-                reason: reason || '',
-                person: person || ''
-            };
-            appState.transactions.push(transaction);
-
-            saveData().then(() => {
-                alert(`${type}処理を完了しました`);
-                closeModal();
-                renderCurrentTab();
-            });
-        }
-
-        // 履歴関連関数
-        function updateHistoryDisplay() {
-            const filteredTransactions = getFilteredTransactions();
-            const sortedTransactions = sortTransactions(filteredTransactions);
-            
-            const resultCount = document.getElementById('history-result-count');
-            if (resultCount) {
-                resultCount.textContent = `${sortedTransactions.length} 件の履歴を表示中`;
-            }
-            
-            const tbody = document.getElementById('history-table-body');
-            if (tbody) {
-                if (sortedTransactions.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500">条件に一致する履歴が見つかりません。</td></tr>';
-                } else {
-                    tbody.innerHTML = sortedTransactions.map(transaction => {
-                        const partName = getPartNameByNumber(transaction.partNumber);
-                        const partCategory = getPartCategoryByNumber(transaction.partNumber);
-                        
-                        // カテゴリバッジを生成
-                        let categoryBadge = '';
-                        switch(partCategory) {
-                            case 'P':
-                                categoryBadge = '<span class="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">P</span>';
-                                break;
-                            case 'EP':
-                                categoryBadge = '<span class="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700">EP</span>';
-                                break;
-                            case 'HL':
-                                categoryBadge = '<span class="px-2 py-1 rounded text-xs font-medium bg-orange-100 text-orange-700">HL</span>';
-                                break;
-                            default:
-                                categoryBadge = `<span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">${partCategory}</span>`;
-                        }
-                        
-                        return `
-                        <tr>
-                            <td>${transaction.date}</td>
-                            <td class="font-medium">
-                                <div>${transaction.partNumber}</div>
-                                <div class="text-sm text-gray-600">${partName}</div>
-                            </td>
+                    
+                    return `
+                        <tr style="border-bottom: 1px solid #e5e7eb;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor=''">
+                            <td class="font-medium">${part.partNumber}</td>
+                            <td>${part.name}</td>
                             <td>${categoryBadge}</td>
                             <td>
-                                <span class="px-2 py-1 rounded-full text-xs font-medium ${transaction.type === '入庫' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
-                                    ${transaction.type}
-                                </span>
-                            </td>
-                            <td>${transaction.quantity}</td>
-                            <td>${transaction.reason}</td>
-                            <td>${transaction.person}</td>
-                        </tr>
-                    `}).join('');
-                }
-            }
-        }
-
-        function getFilteredTransactions() {
-            return appState.transactions.filter(transaction => {
-                const partName = getPartNameByNumber(transaction.partNumber);
-                
-                if (historyFilters.search) {
-                    const searchTerm = historyFilters.search.toLowerCase();
-                    const searchFields = [
-                        transaction.partNumber,
-                        partName,
-                        transaction.type,
-                        transaction.reason,
-                        transaction.person
-                    ].join(' ').toLowerCase();
-                    
-                    if (!searchFields.includes(searchTerm)) {
-                        return false;
-                    }
-                }
-                
-                if (historyFilters.dateFrom && transaction.date < historyFilters.dateFrom) {
-                    return false;
-                }
-                if (historyFilters.dateTo && transaction.date > historyFilters.dateTo) {
-                    return false;
-                }
-                
-                if (historyFilters.partNumber && !transaction.partNumber.toLowerCase().includes(historyFilters.partNumber.toLowerCase())) {
-                    return false;
-                }
-                
-                if (historyFilters.type && transaction.type !== historyFilters.type) {
-                    return false;
-                }
-                
-                if (historyFilters.reason && !transaction.reason.toLowerCase().includes(historyFilters.reason.toLowerCase())) {
-                    return false;
-                }
-                
-                if (historyFilters.person && !transaction.person.toLowerCase().includes(historyFilters.person.toLowerCase())) {
-                    return false;
-                }
-                
-                return true;
-            });
-        }
-
-        function sortTransactions(transactions) {
-            return [...transactions].sort((a, b) => {
-                let aValue, bValue;
-                
-                switch (historySortBy) {
-                    case 'date':
-                        aValue = a.date;
-                        bValue = b.date;
-                        break;
-                    case 'partNumber':
-                        aValue = a.partNumber;
-                        bValue = b.partNumber;
-                        break;
-                    case 'partName':
-                        aValue = getPartNameByNumber(a.partNumber);
-                        bValue = getPartNameByNumber(b.partNumber);
-                        break;
-                    case 'type':
-                        aValue = a.type;
-                        bValue = b.type;
-                        break;
-                    case 'quantity':
-                        aValue = a.quantity;
-                        bValue = b.quantity;
-                        break;
-                    case 'reason':
-                        aValue = a.reason;
-                        bValue = b.reason;
-                        break;
-                    case 'person':
-                        aValue = a.person;
-                        bValue = b.person;
-                        break;
-                    default:
-                        aValue = a.date;
-                        bValue = b.date;
-                }
-                
-                if (typeof aValue === 'string') {
-                    aValue = aValue.toLowerCase();
-                    bValue = bValue.toLowerCase();
-                }
-                
-                let result;
-                if (aValue < bValue) result = -1;
-                else if (aValue > bValue) result = 1;
-                else result = 0;
-                
-                return historySortOrder === 'desc' ? -result : result;
-            });
-        }
-
-        function setupHistoryEventListeners() {
-            const searchInput = document.getElementById('history-search');
-            if (searchInput) {
-                searchInput.addEventListener('input', function(e) {
-                    historyFilters.search = e.target.value;
-                    updateHistoryDisplay();
-                });
-            }
-            
-            const dateFromInput = document.getElementById('history-date-from');
-            const dateToInput = document.getElementById('history-date-to');
-            if (dateFromInput) {
-                dateFromInput.addEventListener('change', function(e) {
-                    historyFilters.dateFrom = e.target.value;
-                    updateHistoryDisplay();
-                });
-            }
-            if (dateToInput) {
-                dateToInput.addEventListener('change', function(e) {
-                    historyFilters.dateTo = e.target.value;
-                    updateHistoryDisplay();
-                });
-            }
-            
-            const partNumberInput = document.getElementById('history-part-number');
-            const typeSelect = document.getElementById('history-type');
-            const reasonInput = document.getElementById('history-reason');
-            const personInput = document.getElementById('history-person');
-            
-            if (partNumberInput) {
-                partNumberInput.addEventListener('input', function(e) {
-                    historyFilters.partNumber = e.target.value;
-                    updateHistoryDisplay();
-                });
-            }
-            
-            if (typeSelect) {
-                typeSelect.addEventListener('change', function(e) {
-                    historyFilters.type = e.target.value;
-                    updateHistoryDisplay();
-                });
-            }
-            
-            if (reasonInput) {
-                reasonInput.addEventListener('input', function(e) {
-                    historyFilters.reason = e.target.value;
-                    updateHistoryDisplay();
-                });
-            }
-            
-            if (personInput) {
-                personInput.addEventListener('input', function(e) {
-                    historyFilters.person = e.target.value;
-                    updateHistoryDisplay();
-                });
-            }
-            
-            const sortButtons = document.querySelectorAll('.sort-button[data-sort]');
-            sortButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const sortBy = this.getAttribute('data-sort');
-                    if (historySortBy === sortBy) {
-                        historySortOrder = historySortOrder === 'asc' ? 'desc' : 'asc';
-                    } else {
-                        historySortBy = sortBy;
-                        historySortOrder = 'desc';
-                    }
-                    
-                    sortButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    const orderIndicator = document.getElementById('sort-order-indicator');
-                    if (orderIndicator) {
-                        orderIndicator.textContent = historySortOrder === 'desc' ? '↓' : '↑';
-                    }
-                    
-                    updateHistoryDisplay();
-                });
-            });
-            
-            const orderToggle = document.getElementById('sort-order-toggle');
-            if (orderToggle) {
-                orderToggle.addEventListener('click', function() {
-                    historySortOrder = historySortOrder === 'asc' ? 'desc' : 'asc';
-                    const orderIndicator = document.getElementById('sort-order-indicator');
-                    if (orderIndicator) {
-                        orderIndicator.textContent = historySortOrder === 'desc' ? '↓' : '↑';
-                    }
-                    updateHistoryDisplay();
-                });
-            }
-            
-            const clearButton = document.getElementById('clear-filters');
-            if (clearButton) {
-                clearButton.addEventListener('click', function() {
-                    historyFilters.search = '';
-                    historyFilters.dateFrom = '';
-                    historyFilters.dateTo = '';
-                    historyFilters.partNumber = '';
-                    historyFilters.type = '';
-                    historyFilters.reason = '';
-                    historyFilters.person = '';
-                    
-                    if (searchInput) searchInput.value = '';
-                    if (dateFromInput) dateFromInput.value = '';
-                    if (dateToInput) dateToInput.value = '';
-                    if (partNumberInput) partNumberInput.value = '';
-                    if (typeSelect) typeSelect.value = '';
-                    if (reasonInput) reasonInput.value = '';
-                    if (personInput) personInput.value = '';
-                    
-                    updateHistoryDisplay();
-                });
-            }
-            
-            debugLog('履歴のイベントリスナー設定完了');
-        }
-
-        // CSVインポートモーダル表示（マッピング機能付き）
-        function showImportModal() {
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">CSVファイルインポート</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">CSVファイルを選択</label>
-                                <input type="file" id="csvFile" accept=".csv" class="form-input">
-                                <p class="text-xs text-gray-500 mt-1">CSVファイルを選択すると、カラムマッピング画面が表示されます</p>
-                            </div>
-                            <div class="flex justify-end gap-3 pt-4">
-                                <button onclick="closeModal()" class="btn btn-secondary">キャンセル</button>
-                                <button onclick="proceedWithMapping()" class="btn btn-primary">次へ</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        }
-
-        // カラムマッピングモーダル表示
-        function showMappingModal(csvData, headers) {
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content" style="max-width: 42rem; max-height: 90vh; display: flex; flex-direction: column;">
-                    <div class="p-6" style="flex: 1; overflow-y: auto;">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">カラムマッピング設定</h3>
-                        <p class="text-sm text-gray-600 mb-4">CSVファイルの各カラムをシステムの項目に割り当ててください</p>
-                        
-                        <div class="space-y-3" style="max-height: 300px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1rem;">
-                            ${headers.map((header, index) => `
-                                <div class="grid grid-cols-2 gap-4 items-center">
-                                    <div class="text-sm font-medium text-gray-700">
-                                        CSVカラム: "${header}" (${index + 1}列目)
-                                    </div>
-                                    <select id="mapping-${index}" class="form-input text-sm">
-                                        <option value="">割り当てなし</option>
-                                        <option value="partNumber" ${header.toLowerCase().includes('番号') || header.toLowerCase().includes('number') ? 'selected' : ''}>部品番号</option>
-                                        <option value="name" ${header.toLowerCase().includes('名') || header.toLowerCase().includes('name') ? 'selected' : ''}>部品名</option>
-                                        <option value="category" ${header.toLowerCase().includes('カテゴリ') || header.toLowerCase().includes('category') ? 'selected' : ''}>カテゴリ</option>
-                                        <option value="stock" ${header.toLowerCase().includes('在庫') || header.toLowerCase().includes('stock') ? 'selected' : ''}>現在庫数</option>
-                                        <option value="minStock" ${header.toLowerCase().includes('最少') || header.toLowerCase().includes('min') ? 'selected' : ''}>最少在庫数</option>
-                                        <option value="location" ${header.toLowerCase().includes('場所') || header.toLowerCase().includes('location') ? 'selected' : ''}>保管場所</option>
-                                        <option value="supplier" ${header.toLowerCase().includes('供給') || header.toLowerCase().includes('supplier') ? 'selected' : ''}>供給業者</option>
-                                        <option value="unitPrice" ${header.toLowerCase().includes('価格') || header.toLowerCase().includes('price') ? 'selected' : ''}>単価</option>
-                                        <option value="notes" ${header.toLowerCase().includes('備考') || header.toLowerCase().includes('note') ? 'selected' : ''}>備考</option>
-                                    </select>
+                                <div class="stock-indicator ${stockClass}">
+                                    <span>${stockIcon}</span>
+                                    <span>${part.stock} / ${part.minStock}</span>
                                 </div>
-                            `).join('')}
+                            </td>
+                            <td>${part.location}</td>
+                            <td>¥${part.unitPrice.toLocaleString()}</td>
+                            <td>
+                                <div class="flex gap-2">
+                                    <button onclick="window.openTransactionModal(${part.id}, '入庫')" title="入庫" class="btn btn-success text-xs">📈</button>
+                                    <button onclick="window.openTransactionModal(${part.id}, '出庫')" title="出庫" class="btn btn-secondary text-xs">📉</button>
+                                    <button onclick="window.editPart(${part.id})" title="編集" class="btn btn-secondary text-xs">✏️</button>
+                                    <button onclick="window.deletePart(${part.id})" title="削除" class="btn btn-danger text-xs">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            };
+
+            // 履歴表示
+            window.renderHistory = function() {
+                document.getElementById('main-content').innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-gray-900">入出庫履歴</h2>
+                            <div id="history-result-count" class="text-sm text-gray-600">${window.appState.transactions.length} 件の履歴を表示中</div>
                         </div>
                         
-                        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                            <h4 class="text-sm font-medium text-gray-700 mb-2">プレビュー (最初の3行)</h4>
-                            <div class="overflow-x-auto" style="max-height: 200px; overflow-y: auto;">
-                                <table class="text-xs border border-gray-300">
+                        <!-- 検索・フィルター -->
+                        <div class="history-filters">
+                            <div class="space-y-4">
+                                <!-- フリーワード検索 -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">フリーワード検索</label>
+                                    <input type="text" id="history-search" placeholder="部品番号、部品名、種別、理由、担当者で検索..." class="form-input">
+                                </div>
+                                
+                                <!-- 詳細フィルター -->
+                                <div class="filter-row">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">日付（開始）</label>
+                                        <input type="date" id="history-date-from" class="form-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">日付（終了）</label>
+                                        <input type="date" id="history-date-to" class="form-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">部品番号</label>
+                                        <input type="text" id="history-part-number" placeholder="部品番号で絞り込み" class="form-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">種別</label>
+                                        <select id="history-type" class="form-input">
+                                            <option value="">すべて</option>
+                                            <option value="入庫">入庫</option>
+                                            <option value="出庫">出庫</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">理由</label>
+                                        <input type="text" id="history-reason" placeholder="理由で絞り込み" class="form-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">担当者</label>
+                                        <input type="text" id="history-person" placeholder="担当者で絞り込み" class="form-input">
+                                    </div>
+                                </div>
+                                
+                                <!-- ソート・リセット -->
+                                <div class="flex justify-between items-center">
+                                    <div class="sort-controls">
+                                        <span class="text-sm font-medium text-gray-700 mr-2">並び替え:</span>
+                                        <button class="sort-button active" data-sort="date">日付</button>
+                                        <button class="sort-button" data-sort="partNumber">部品番号</button>
+                                        <button class="sort-button" data-sort="partName">部品名</button>
+                                        <button class="sort-button" data-sort="type">種別</button>
+                                        <button class="sort-button" data-sort="quantity">数量</button>
+                                        <button class="sort-button" data-sort="reason">理由</button>
+                                        <button class="sort-button" data-sort="person">担当者</button>
+                                        <button id="sort-order-toggle" class="sort-button">
+                                            順序 <span id="sort-order-indicator">↓</span>
+                                        </button>
+                                    </div>
+                                    <button id="clear-filters" class="btn btn-secondary text-sm">フィルターをクリア</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 履歴テーブル -->
+                        <div class="bg-white rounded-xl shadow-sm border">
+                            <div class="p-4 border-b">
+                                <h3 class="text-lg font-semibold text-gray-900">取引履歴</h3>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table>
                                     <thead>
-                                        <tr class="bg-gray-100">
-                                            ${headers.map(h => `<th class="border border-gray-300 px-2 py-1">${h}</th>`).join('')}
+                                        <tr>
+                                            <th>日付</th>
+                                            <th>部品番号・部品名</th>
+                                            <th>種別</th>
+                                            <th>数量</th>
+                                            <th>理由</th>
+                                            <th>担当者</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        ${csvData.slice(0, 3).map(row => `
-                                            <tr>
-                                                ${row.map(cell => `<td class="border border-gray-300 px-2 py-1">${cell}</td>`).join('')}
-                                            </tr>
-                                        `).join('')}
+                                    <tbody id="history-table-body">
+                                        <!-- ここに履歴が表示されます -->
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="flex justify-end gap-3 p-6 border-t" style="flex-shrink: 0;">
-                        <button onclick="closeModal()" class="btn btn-secondary">キャンセル</button>
-                        <button onclick="executeMappedImport()" class="btn btn-primary">インポート実行</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            
-            // グローバルに保存
-            window.csvImportData = csvData;
-            window.csvImportHeaders = headers;
-        }
+                `;
+                
+                // 初期表示
+                window.updateHistoryDisplay();
+                
+                // イベントリスナーを設定
+                window.setupHistoryEventListeners();
+            };
 
-        // マッピング処理の実行
-        function proceedWithMapping() {
-            const fileInput = document.getElementById('csvFile');
-            if (!fileInput.files.length) {
-                alert('ファイルを選択してください');
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const csv = e.target.result;
-                    const lines = csv.split('\n').filter(line => line.trim());
-                    
-                    if (lines.length < 2) {
-                        alert('有効なCSVデータが見つかりません');
-                        return;
+            // 履歴関連関数
+            window.updateHistoryDisplay = function() {
+                const filteredTransactions = window.getFilteredTransactions();
+                const sortedTransactions = window.sortTransactions(filteredTransactions);
+                
+                const resultCount = document.getElementById('history-result-count');
+                if (resultCount) {
+                    resultCount.textContent = `${sortedTransactions.length} 件の履歴を表示中`;
+                }
+                
+                const tbody = document.getElementById('history-table-body');
+                if (tbody) {
+                    if (sortedTransactions.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500">条件に一致する履歴が見つかりません。</td></tr>';
+                    } else {
+                        tbody.innerHTML = sortedTransactions.map(transaction => {
+                            const partName = window.getPartNameByNumber(transaction.partNumber);
+                            return `
+                            <tr style="border-bottom: 1px solid #e5e7eb;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor=''">
+                                <td>${transaction.date}</td>
+                                <td class="font-medium">
+                                    <div>${transaction.partNumber}</div>
+                                    <div class="text-sm text-gray-600">${partName}</div>
+                                </td>
+                                <td>
+                                    <span class="badge ${transaction.type === '入庫' ? 'badge-green' : 'badge-red'}">
+                                        ${transaction.type}
+                                    </span>
+                                </td>
+                                <td>${transaction.quantity}</td>
+                                <td>${transaction.reason}</td>
+                                <td>${transaction.person}</td>
+                            </tr>
+                        `}).join('');
                     }
-                    
-                    const headers = lines[0].split(',').map(col => col.trim().replace(/^"|"$/g, ''));
-                    const dataRows = lines.slice(1).map(line => 
-                        line.split(',').map(col => col.trim().replace(/^"|"$/g, ''))
-                    );
-                    
-                    closeModal();
-                    showMappingModal(dataRows, headers);
-                    
-                } catch (error) {
-                    alert('CSVファイルの読み込みに失敗しました: ' + error.message);
                 }
             };
-            reader.readAsText(file);
-        }
 
-        // マッピングに基づくインポート実行
-        function executeMappedImport() {
-            const mapping = {};
-            let mappingCount = 0;
-            
-            // マッピング情報を収集
-            window.csvImportHeaders.forEach((header, index) => {
-                const select = document.getElementById(`mapping-${index}`);
-                if (select && select.value) {
-                    mapping[index] = select.value;
-                    mappingCount++;
+            window.getFilteredTransactions = function() {
+                return window.appState.transactions.filter(transaction => {
+                    const partName = window.getPartNameByNumber(transaction.partNumber);
+                    
+                    if (window.historyFilters.search) {
+                        const searchTerm = window.historyFilters.search.toLowerCase();
+                        const searchFields = [
+                            transaction.partNumber,
+                            partName,
+                            transaction.type,
+                            transaction.reason,
+                            transaction.person
+                        ].join(' ').toLowerCase();
+                        
+                        if (!searchFields.includes(searchTerm)) {
+                            return false;
+                        }
+                    }
+                    
+                    if (window.historyFilters.dateFrom && transaction.date < window.historyFilters.dateFrom) {
+                        return false;
+                    }
+                    if (window.historyFilters.dateTo && transaction.date > window.historyFilters.dateTo) {
+                        return false;
+                    }
+                    
+                    if (window.historyFilters.partNumber && !transaction.partNumber.toLowerCase().includes(window.historyFilters.partNumber.toLowerCase())) {
+                        return false;
+                    }
+                    
+                    if (window.historyFilters.type && transaction.type !== window.historyFilters.type) {
+                        return false;
+                    }
+                    
+                    if (window.historyFilters.reason && !transaction.reason.toLowerCase().includes(window.historyFilters.reason.toLowerCase())) {
+                        return false;
+                    }
+                    
+                    if (window.historyFilters.person && !transaction.person.toLowerCase().includes(window.historyFilters.person.toLowerCase())) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+            };
+
+            window.sortTransactions = function(transactions) {
+                return [...transactions].sort((a, b) => {
+                    let aValue, bValue;
+                    
+                    switch (window.historySortBy) {
+                        case 'date':
+                            aValue = a.date;
+                            bValue = b.date;
+                            break;
+                        case 'partNumber':
+                            aValue = a.partNumber;
+                            bValue = b.partNumber;
+                            break;
+                        case 'partName':
+                            aValue = window.getPartNameByNumber(a.partNumber);
+                            bValue = window.getPartNameByNumber(b.partNumber);
+                            break;
+                        case 'type':
+                            aValue = a.type;
+                            bValue = b.type;
+                            break;
+                        case 'quantity':
+                            aValue = a.quantity;
+                            bValue = b.quantity;
+                            break;
+                        case 'reason':
+                            aValue = a.reason;
+                            bValue = b.reason;
+                            break;
+                        case 'person':
+                            aValue = a.person;
+                            bValue = b.person;
+                            break;
+                        default:
+                            aValue = a.date;
+                            bValue = b.date;
+                    }
+                    
+                    if (typeof aValue === 'string') {
+                        aValue = aValue.toLowerCase();
+                        bValue = bValue.toLowerCase();
+                    }
+                    
+                    let result;
+                    if (aValue < bValue) result = -1;
+                    else if (aValue > bValue) result = 1;
+                    else result = 0;
+                    
+                    return window.historySortOrder === 'desc' ? -result : result;
+                });
+            };
+
+            window.setupHistoryEventListeners = function() {
+                const searchInput = document.getElementById('history-search');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function(e) {
+                        window.historyFilters.search = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
                 }
-            });
-            
-            if (mappingCount === 0) {
-                alert('少なくとも1つのカラムを割り当ててください');
-                return;
-            }
-            
-            let importCount = 0;
-            const errors = [];
-            
-            // データ処理
-            window.csvImportData.forEach((row, rowIndex) => {
-                try {
-                    const newPart = {
-                        id: Date.now() + rowIndex,
-                        partNumber: '',
-                        name: '',
-                        category: 'P',
-                        stock: 0,
-                        minStock: 0,
-                        location: '',
-                        supplier: '',
-                        unitPrice: 0,
-                        notes: ''
+                
+                const dateFromInput = document.getElementById('history-date-from');
+                const dateToInput = document.getElementById('history-date-to');
+                if (dateFromInput) {
+                    dateFromInput.addEventListener('change', function(e) {
+                        window.historyFilters.dateFrom = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                if (dateToInput) {
+                    dateToInput.addEventListener('change', function(e) {
+                        window.historyFilters.dateTo = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                const partNumberInput = document.getElementById('history-part-number');
+                const typeSelect = document.getElementById('history-type');
+                const reasonInput = document.getElementById('history-reason');
+                const personInput = document.getElementById('history-person');
+                
+                if (partNumberInput) {
+                    partNumberInput.addEventListener('input', function(e) {
+                        window.historyFilters.partNumber = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                if (typeSelect) {
+                    typeSelect.addEventListener('change', function(e) {
+                        window.historyFilters.type = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                if (reasonInput) {
+                    reasonInput.addEventListener('input', function(e) {
+                        window.historyFilters.reason = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                if (personInput) {
+                    personInput.addEventListener('input', function(e) {
+                        window.historyFilters.person = e.target.value;
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                const sortButtons = document.querySelectorAll('.sort-button[data-sort]');
+                sortButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const sortBy = this.getAttribute('data-sort');
+                        if (window.historySortBy === sortBy) {
+                            window.historySortOrder = window.historySortOrder === 'asc' ? 'desc' : 'asc';
+                        } else {
+                            window.historySortBy = sortBy;
+                            window.historySortOrder = 'desc';
+                        }
+                        
+                        sortButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        const orderIndicator = document.getElementById('sort-order-indicator');
+                        if (orderIndicator) {
+                            orderIndicator.textContent = window.historySortOrder === 'desc' ? '↓' : '↑';
+                        }
+                        
+                        window.updateHistoryDisplay();
+                    });
+                });
+                
+                const orderToggle = document.getElementById('sort-order-toggle');
+                if (orderToggle) {
+                    orderToggle.addEventListener('click', function() {
+                        window.historySortOrder = window.historySortOrder === 'asc' ? 'desc' : 'asc';
+                        const orderIndicator = document.getElementById('sort-order-indicator');
+                        if (orderIndicator) {
+                            orderIndicator.textContent = window.historySortOrder === 'desc' ? '↓' : '↑';
+                        }
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                const clearButton = document.getElementById('clear-filters');
+                if (clearButton) {
+                    clearButton.addEventListener('click', function() {
+                        window.historyFilters = {
+                            search: '',
+                            dateFrom: '',
+                            dateTo: '',
+                            partNumber: '',
+                            type: '',
+                            reason: '',
+                            person: ''
+                        };
+                        
+                        if (searchInput) searchInput.value = '';
+                        if (dateFromInput) dateFromInput.value = '';
+                        if (dateToInput) dateToInput.value = '';
+                        if (partNumberInput) partNumberInput.value = '';
+                        if (typeSelect) typeSelect.value = '';
+                        if (reasonInput) reasonInput.value = '';
+                        if (personInput) personInput.value = '';
+                        
+                        window.updateHistoryDisplay();
+                    });
+                }
+                
+                console.log('履歴のイベントリスナー設定完了');
+            };
+
+            // 新規追加フォーム表示
+            window.renderForm = function() {
+                const isEditing = window.appState.editingPart !== null;
+                const formData = isEditing ? window.appState.editingPart : {
+                    partNumber: "", name: "", category: "P", stock: 0, minStock: 0,
+                    location: "WH59", supplier: "", unitPrice: 0, notes: ""
+                };
+                
+                document.getElementById('main-content').innerHTML = `
+                    <div class="space-y-4">
+                        <h2 class="text-2xl font-bold text-gray-900">${isEditing ? '部品情報の編集' : '新しい部品の追加'}</h2>
+                        <div class="bg-white rounded-xl shadow-sm border p-6">
+                            <form id="parts-form" class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">部品番号 *</label>
+                                        <input type="text" id="form-partNumber" value="${formData.partNumber}" required class="form-input" placeholder="例: P001">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">部品名 *</label>
+                                        <input type="text" id="form-name" value="${formData.name}" required class="form-input" placeholder="例: ボルト M8x20">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">カテゴリ *</label>
+                                        <select id="form-category" required class="form-input">
+                                            <option value="P" ${formData.category === 'P' ? 'selected' : ''}>P (Parts)</option>
+                                            <option value="EP" ${formData.category === 'EP' ? 'selected' : ''}>EP (Equipment Parts)</option>
+                                            <option value="HL" ${formData.category === 'HL' ? 'selected' : ''}>HL (Hydraulic/Lubrication)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">保管場所</label>
+                                        <input type="text" id="form-location" value="${formData.location}" class="form-input" placeholder="例: WH59">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">現在庫数</label>
+                                        <input type="number" id="form-stock" value="${formData.stock}" min="0" class="form-input" placeholder="例: 150">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">最小在庫数</label>
+                                        <input type="number" id="form-minStock" value="${formData.minStock}" min="0" class="form-input" placeholder="例: 50">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">仕入先</label>
+                                        <input type="text" id="form-supplier" value="${formData.supplier}" class="form-input" placeholder="例: ABC商事">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">単価 (¥)</label>
+                                        <input type="number" id="form-unitPrice" value="${formData.unitPrice}" min="0" step="0.01" class="form-input" placeholder="例: 25">
+                                    </div>
+                                    <div style="grid-column: span 2;">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">備考</label>
+                                        <textarea id="form-notes" rows="3" class="form-input" style="resize: none;" placeholder="例: ステンレス製、高耐食性">${formData.notes}</textarea>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end gap-3 mt-6">
+                                    <button type="button" onclick="window.cancelForm()" class="btn btn-secondary">キャンセル</button>
+                                    <button type="submit" class="btn btn-primary">${isEditing ? '更新' : '追加'}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('parts-form').addEventListener('submit', window.handleFormSubmit);
+            };
+
+            // CSVインポート・エクスポート機能
+            window.parseCSV = function(csvText) {
+                const lines = csvText.trim().split('\n');
+                const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+                const data = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (!line.trim()) continue;
+                    
+                    const values = [];
+                    let current = '';
+                    let inQuotes = false;
+                    
+                    for (let j = 0; j < line.length; j++) {
+                        const char = line[j];
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            values.push(current.trim());
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    values.push(current.trim());
+                    
+                    if (values.length >= headers.length) {
+                        const row = {};
+                        headers.forEach((header, index) => {
+                            row[header] = values[index] || '';
+                        });
+                        data.push(row);
+                    }
+                }
+                
+                return { headers, data };
+            };
+
+            window.validateCSVData = function(data) {
+                const errors = [];
+                const validParts = [];
+                
+                data.forEach((row, index) => {
+                    const rowNum = index + 2; // ヘッダー行を考慮
+                    const part = {
+                        partNumber: row['部品番号'] || '',
+                        name: row['部品名'] || '',
+                        category: row['カテゴリ'] || 'P',
+                        stock: parseInt(row['現在庫数']) || 0,
+                        minStock: parseInt(row['最小在庫数']) || 0,
+                        location: row['保管場所'] || 'WH59',
+                        supplier: row['仕入先'] || '',
+                        unitPrice: parseFloat(row['単価']) || 0,
+                        notes: row['備考'] || ''
                     };
                     
-                    // マッピングに基づいてデータを割り当て
-                    Object.entries(mapping).forEach(([colIndex, fieldName]) => {
-                        const value = row[parseInt(colIndex)] || '';
-                        
-                        switch(fieldName) {
-                            case 'partNumber':
-                            case 'name':
-                            case 'location':
-                            case 'supplier':
-                            case 'notes':
-                                newPart[fieldName] = value;
-                                break;
-                            case 'category':
-                                newPart[fieldName] = value || 'P';
-                                break;
-                            case 'stock':
-                            case 'minStock':
-                                newPart[fieldName] = parseInt(value) || 0;
-                                break;
-                            case 'unitPrice':
-                                newPart[fieldName] = parseFloat(value) || 0;
-                                break;
-                        }
-                    });
-                    
                     // 必須項目チェック
-                    if (newPart.partNumber && newPart.name) {
-                        appState.parts.push(newPart);
-                        importCount++;
-                    } else {
-                        errors.push(`行 ${rowIndex + 2}: 部品番号または部品名が不足`);
+                    if (!part.partNumber) {
+                        errors.push(`${rowNum}行目: 部品番号が必要です`);
+                    }
+                    if (!part.name) {
+                        errors.push(`${rowNum}行目: 部品名が必要です`);
                     }
                     
-                } catch (error) {
-                    errors.push(`行 ${rowIndex + 2}: ${error.message}`);
-                }
-            });
-            
-            saveData().then(() => {
-                let message = `${importCount}件の部品をインポートしました`;
-                if (errors.length > 0) {
-                    message += `\n\n${errors.length}件のエラー:\n${errors.slice(0, 5).join('\n')}`;
-                    if (errors.length > 5) {
-                        message += `\n...他${errors.length - 5}件`;
+                    // カテゴリチェック
+                    if (!['P', 'EP', 'HL'].includes(part.category)) {
+                        errors.push(`${rowNum}行目: カテゴリは P, EP, HL のいずれかである必要があります`);
                     }
-                }
-                alert(message);
-                closeModal();
-                renderCurrentTab();
-            });
-        }
-
-        // モーダルを閉じる
-        function closeModal() {
-            const modal = document.querySelector('.modal');
-            if (modal) {
-                document.body.removeChild(modal);
-            }
-        }
-
-        // CSVエクスポート
-        function exportToCSV() {
-            const headers = ['部品番号', '部品名', 'カテゴリ', '現在庫数', '最少在庫数', '保管場所', '供給業者', '単価', '備考'];
-            const csvContent = [
-                headers.join(','),
-                ...appState.parts.map(part => [
-                    `"${part.partNumber}"`,
-                    `"${part.name}"`,
-                    `"${part.category}"`,
-                    part.stock,
-                    part.minStock,
-                    `"${part.location}"`,
-                    `"${part.supplier}"`,
-                    part.unitPrice,
-                    `"${part.notes}"`
-                ].join(','))
-            ].join('\n');
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `部品在庫_${new Date().toISOString().split('T')[0]}.csv`;
-            link.click();
-        }
-
-        // フォーム送信処理
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            
-            const formData = {
-                id: Date.now(),
-                partNumber: document.getElementById('partNumber').value,
-                name: document.getElementById('partName').value,
-                category: document.getElementById('category').value,
-                stock: parseInt(document.getElementById('stock').value),
-                minStock: parseInt(document.getElementById('minStock').value),
-                location: document.getElementById('location').value || '',
-                supplier: document.getElementById('supplier').value || '',
-                unitPrice: parseFloat(document.getElementById('unitPrice').value) || 0,
-                notes: document.getElementById('notes').value || ''
-            };
-
-            appState.parts.push(formData);
-            saveData().then(() => {
-                alert('部品を追加しました');
-                resetForm();
-            });
-        }
-
-        // フォームリセット
-        function resetForm() {
-            document.getElementById('part-form').reset();
-        }
-
-        // データリセット
-        function resetAllData() {
-            if (confirm('すべてのデータが削除されます。よろしいですか？')) {
-                appState.parts = [];
-                appState.transactions = [];
-                
-                // Firebase削除
-                if (database && isOnline) {
-                    Promise.all([
-                        database.ref('parts').remove(),
-                        database.ref('transactions').remove()
-                    ]).then(() => {
-                        alert('データをリセットしました');
-                        initDefaultData();
-                        saveData().then(() => renderCurrentTab());
-                    });
-                } else {
-                    localStorage.removeItem('parts_inventory_data');
-                    alert('データをリセットしました');
-                    initDefaultData();
-                    renderCurrentTab();
-                }
-            }
-        }
-
-        // 現在のタブを描画
-        function renderCurrentTab() {
-            switch(appState.currentTab) {
-                case 'dashboard': 
-                    renderDashboard(); 
-                    break;
-                case 'list':
-                    renderPartsList();
-                    break;
-                case 'history':
-                    renderHistory();
-                    break;
-                case 'form':
-                    renderForm();
-                    break;
-                default:
-                    renderDashboard();
-            }
-        }
-
-        // タブ切り替え
-        function switchTab(tabName) {
-            appState.currentTab = tabName;
-            
-            document.querySelectorAll('.nav-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            const activeButton = document.getElementById(`tab-${tabName}`);
-            if (activeButton) {
-                activeButton.classList.add('active');
-            }
-            
-            renderCurrentTab();
-        }
-
-        // イベントリスナー設定
-        function setupEventListeners() {
-            document.getElementById('tab-dashboard').addEventListener('click', () => switchTab('dashboard'));
-            document.getElementById('tab-list').addEventListener('click', () => switchTab('list'));
-            document.getElementById('tab-history').addEventListener('click', () => switchTab('history'));
-            document.getElementById('tab-form').addEventListener('click', () => switchTab('form'));
-            document.getElementById('export-csv').addEventListener('click', exportToCSV);
-            document.getElementById('reset-data').addEventListener('click', resetAllData);
-            document.getElementById('test-firebase').addEventListener('click', testFirebaseConnection);
-            
-            // CSVインポートのイベントリスナー追加
-            const fileImport = document.getElementById('file-import');
-            if (fileImport) {
-                fileImport.addEventListener('change', function(e) {
-                    if (e.target.files.length > 0) {
-                        showImportModal();
-                        // ファイル選択をリセット
-                        e.target.value = '';
+                    
+                    // 数値チェック
+                    if (isNaN(part.stock) || part.stock < 0) {
+                        errors.push(`${rowNum}行目: 現在庫数は0以上の数値である必要があります`);
+                    }
+                    if (isNaN(part.minStock) || part.minStock < 0) {
+                        errors.push(`${rowNum}行目: 最小在庫数は0以上の数値である必要があります`);
+                    }
+                    if (isNaN(part.unitPrice) || part.unitPrice < 0) {
+                        errors.push(`${rowNum}行目: 単価は0以上の数値である必要があります`);
+                    }
+                    
+                    if (errors.length === 0 || errors.filter(e => e.includes(`${rowNum}行目`)).length === 0) {
+                        part.id = Date.now() + Math.random(); // 一時的なID
+                        validParts.push(part);
                     }
                 });
-            }
-        }
-
-        // 初期化
-        function initialize() {
-            debugLog('=== アプリケーション初期化開始 ===');
-            
-            // 初期接続状態表示
-            updateConnectionStatus();
-            
-            // Firebase初期化
-            initializeFirebase().then((firebaseReady) => {
-                isInitialized = true;
                 
-                if (firebaseReady) {
-                    debugLog('🎉 Firebase利用可能 - クラウドモードで開始');
-                } else {
-                    debugLog('⚠️ Firebase利用不可 - ローカルモードで開始');
+                return { errors, validParts };
+            };
+
+            window.importCSV = function(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const csvText = e.target.result;
+                        const { headers, data } = window.parseCSV(csvText);
+                        
+                        console.log('CSVヘッダー:', headers);
+                        console.log('CSVデータ行数:', data.length);
+                        
+                        // 必要なヘッダーがあるかチェック
+                        const requiredHeaders = ['部品番号', '部品名'];
+                        const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
+                        
+                        if (missingHeaders.length > 0) {
+                            alert(`必要な列が見つかりません: ${missingHeaders.join(', ')}\n\n必要な列: 部品番号, 部品名, カテゴリ, 現在庫数, 最小在庫数, 保管場所, 仕入先, 単価, 備考`);
+                            return;
+                        }
+                        
+                        const { errors, validParts } = window.validateCSVData(data);
+                        
+                        if (errors.length > 0) {
+                            const errorMessage = `CSVファイルにエラーがあります:\n\n${errors.slice(0, 10).join('\n')}${errors.length > 10 ? `\n\n他 ${errors.length - 10} 件のエラー` : ''}`;
+                            alert(errorMessage);
+                            return;
+                        }
+                        
+                        if (validParts.length === 0) {
+                            alert('インポートできる有効なデータがありません。');
+                            return;
+                        }
+                        
+                        // 重複チェック
+                        const existingPartNumbers = window.appState.parts.map(p => p.partNumber);
+                        const duplicates = validParts.filter(p => existingPartNumbers.includes(p.partNumber));
+                        
+                        let confirmMessage = `${validParts.length}件の部品データをインポートします。`;
+                        if (duplicates.length > 0) {
+                            confirmMessage += `\n\n${duplicates.length}件の重複する部品番号があります。既存データを上書きしますか？\n重複部品: ${duplicates.map(p => p.partNumber).slice(0, 5).join(', ')}${duplicates.length > 5 ? '...' : ''}`;
+                        }
+                        
+                        if (confirm(confirmMessage)) {
+                            // 重複部品を削除
+                            if (duplicates.length > 0) {
+                                const duplicatePartNumbers = duplicates.map(p => p.partNumber);
+                                window.appState.parts = window.appState.parts.filter(p => !duplicatePartNumbers.includes(p.partNumber));
+                            }
+                            
+                            // 新しいIDを割り当て
+                            validParts.forEach(part => {
+                                part.id = Date.now() + Math.random();
+                            });
+                            
+                            // データを追加
+                            window.appState.parts.push(...validParts);
+                            
+                            // 保存と更新
+                            window.saveDataToStorage();
+                            window.renderCurrentTab();
+                            
+                            alert(`CSVインポートが完了しました。\n追加: ${validParts.length - duplicates.length}件\n上書き: ${duplicates.length}件`);
+                            console.log('CSVインポート完了:', validParts.length, '件');
+                        }
+                        
+                    } catch (error) {
+                        console.error('CSVインポートエラー:', error);
+                        alert('CSVファイルの読み込みに失敗しました。ファイル形式を確認してください。');
+                    }
+                };
+                
+                reader.onerror = function() {
+                    alert('ファイルの読み込みに失敗しました。');
+                };
+                
+                reader.readAsText(file, 'UTF-8');
+            };
+
+            window.handleFileImport = function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                if (!file.name.toLowerCase().endsWith('.csv')) {
+                    alert('CSVファイルを選択してください。');
+                    return;
                 }
                 
-                updateConnectionStatus();
+                if (file.size > 5 * 1024 * 1024) { // 5MB制限
+                    alert('ファイルサイズが大きすぎます。5MB以下のファイルを選択してください。');
+                    return;
+                }
                 
-                // データ読み込み
-                loadData().then(() => {
-                    // データが空の場合はデフォルトデータで初期化
-                    if (appState.parts.length === 0) {
-                        debugLog('データなし - デフォルトデータで初期化');
-                        initDefaultData();
-                        saveData();
+                window.importCSV(file);
+                
+                // ファイル選択をリセット
+                event.target.value = '';
+            };
+
+            window.exportToCSV = function() {
+                try {
+                    const headers = ['部品番号', '部品名', 'カテゴリ', '現在庫数', '最小在庫数', '保管場所', '仕入先', '単価', '備考'];
+                    const csvContent = [
+                        headers.join(','),
+                        ...window.appState.parts.map(part => [
+                            part.partNumber, part.name, part.category, part.stock, part.minStock,
+                            part.location, part.supplier, part.unitPrice, part.notes || ''
+                        ].map(field => `"${field}"`).join(','))
+                    ].join('\n');
+
+                    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `parts_inventory_${new Date().toISOString().split('T')[0]}.csv`;
+                    link.click();
+                    
+                    console.log('CSVエクスポート完了');
+                } catch (error) {
+                    alert('CSVエクスポートに失敗しました');
+                }
+            };
+
+            // モーダル・トランザクション処理
+            window.showModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                }
+            };
+
+            window.hideModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            };
+
+            window.openTransactionModal = function(partId, type) {
+                window.appState.selectedPart = window.appState.parts.find(p => p.id === partId);
+                if (!window.appState.selectedPart) {
+                    alert('部品が見つかりません');
+                    return;
+                }
+                
+                document.getElementById('modal-title').textContent = type + '処理 - ' + window.appState.selectedPart.partNumber;
+                document.getElementById('transaction-type').value = type;
+                document.getElementById('transaction-quantity').value = '1';
+                document.getElementById('transaction-reason').value = '';
+                document.getElementById('transaction-person').value = '';
+                
+                window.updateCurrentStockDisplay();
+                window.showModal('transaction-modal');
+            };
+
+            window.closeTransactionModal = function() {
+                window.hideModal('transaction-modal');
+                window.appState.selectedPart = null;
+            };
+
+            window.updateCurrentStockDisplay = function() {
+                const type = document.getElementById('transaction-type').value;
+                const currentStockElement = document.getElementById('current-stock');
+                
+                if (type === '出庫' && window.appState.selectedPart) {
+                    currentStockElement.textContent = `現在庫: ${window.appState.selectedPart.stock}`;
+                    document.getElementById('transaction-quantity').max = window.appState.selectedPart.stock;
+                } else {
+                    currentStockElement.textContent = '';
+                    document.getElementById('transaction-quantity').removeAttribute('max');
+                }
+            };
+
+            window.executeTransaction = function() {
+                const type = document.getElementById('transaction-type').value;
+                const quantity = parseInt(document.getElementById('transaction-quantity').value);
+                const reason = document.getElementById('transaction-reason').value.trim();
+                const person = document.getElementById('transaction-person').value.trim();
+                
+                if (!window.appState.selectedPart || !quantity || !reason || !person) {
+                    alert('すべての項目を入力してください');
+                    return;
+                }
+                
+                const isInbound = type === "入庫";
+                if (!isInbound && window.appState.selectedPart.stock < quantity) {
+                    alert('在庫数が不足しています');
+                    return;
+                }
+
+                const newStock = isInbound ? window.appState.selectedPart.stock + quantity : window.appState.selectedPart.stock - quantity;
+                const partIndex = window.appState.parts.findIndex(p => p.id === window.appState.selectedPart.id);
+                if (partIndex !== -1) {
+                    window.appState.parts[partIndex].stock = newStock;
+                }
+
+                window.appState.transactions.push({
+                    id: Date.now(),
+                    partId: window.appState.selectedPart.id,
+                    partNumber: window.appState.selectedPart.partNumber,
+                    type: type,
+                    quantity: quantity,
+                    date: new Date().toISOString().split('T')[0],
+                    reason: reason,
+                    person: person
+                });
+                
+                window.saveDataToStorage();
+                window.closeTransactionModal();
+                window.renderCurrentTab();
+                alert(type + '処理が完了しました（新在庫数: ' + newStock + '）');
+            };
+
+            // フォーム処理
+            window.handleFormSubmit = function(event) {
+                event.preventDefault();
+                
+                const formData = {
+                    partNumber: document.getElementById('form-partNumber').value,
+                    name: document.getElementById('form-name').value,
+                    category: document.getElementById('form-category').value,
+                    stock: parseInt(document.getElementById('form-stock').value) || 0,
+                    minStock: parseInt(document.getElementById('form-minStock').value) || 0,
+                    location: document.getElementById('form-location').value || 'WH59',
+                    supplier: document.getElementById('form-supplier').value,
+                    unitPrice: parseFloat(document.getElementById('form-unitPrice').value) || 0,
+                    notes: document.getElementById('form-notes').value
+                };
+                
+                if (!formData.partNumber || !formData.name || !formData.category) {
+                    alert('必須項目を入力してください');
+                    return;
+                }
+                
+                if (window.appState.editingPart) {
+                    const partIndex = window.appState.parts.findIndex(p => p.id === window.appState.editingPart.id);
+                    if (partIndex !== -1) {
+                        window.appState.parts[partIndex] = { ...window.appState.parts[partIndex], ...formData };
+                    }
+                    alert('部品情報を更新しました');
+                } else {
+                    const newPart = { id: Date.now(), ...formData };
+                    window.appState.parts.push(newPart);
+                    alert('新しい部品を追加しました');
+                }
+                
+                window.saveDataToStorage();
+                window.appState.editingPart = null;
+                window.switchTab('list');
+            };
+
+            window.cancelForm = function() {
+                window.appState.editingPart = null;
+                window.switchTab('list');
+            };
+
+            window.editPart = function(partId) {
+                window.appState.editingPart = window.appState.parts.find(p => p.id === partId);
+                if (window.appState.editingPart) {
+                    window.switchTab('form');
+                }
+            };
+
+            window.deletePart = function(partId) {
+                if (confirm("この部品を削除しますか？")) {
+                    const deletedPart = window.appState.parts.find(part => part.id === partId);
+                    window.appState.parts = window.appState.parts.filter(part => part.id !== partId);
+                    window.appState.transactions = window.appState.transactions.filter(trans => trans.partId !== partId);
+                    
+                    window.saveDataToStorage();
+                    window.renderCurrentTab();
+                    alert('部品を削除しました。');
+                }
+            };
+
+            // タブ切り替え・サイドバー操作
+            window.switchTab = function(tabName) {
+                window.appState.currentTab = tabName;
+                
+                document.querySelectorAll('.nav-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                const activeButton = document.getElementById(`tab-${tabName}`);
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                }
+                
+                window.renderCurrentTab();
+                window.closeSidebar();
+            };
+
+            window.toggleSidebar = function() {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('overlay');
+                
+                window.appState.sidebarOpen = !window.appState.sidebarOpen;
+                
+                if (window.appState.sidebarOpen) {
+                    sidebar.classList.add('mobile-open');
+                    overlay.classList.add('show');
+                } else {
+                    sidebar.classList.remove('mobile-open');
+                    overlay.classList.remove('show');
+                }
+            };
+
+            window.closeSidebar = function() {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('overlay');
+                
+                window.appState.sidebarOpen = false;
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('show');
+            };
+
+            window.renderCurrentTab = function() {
+                switch(window.appState.currentTab) {
+                    case 'dashboard': window.renderDashboard(); break;
+                    case 'list': window.renderPartsList(); break;
+                    case 'history': window.renderHistory(); break;
+                    case 'form': window.renderForm(); break;
+                    default: 
+                        document.getElementById('main-content').innerHTML = `
+                            <div class="text-center p-8">
+                                <p class="text-gray-500">未知のタブです: ${window.appState.currentTab}</p>
+                            </div>
+                        `;
+                }
+            };
+
+            window.resetData = function() {
+                if (confirm('すべてのデータを初期状態にリセットしますか？')) {
+                    window.initializeDefaultData();
+                    window.saveDataToStorage();
+                    window.renderCurrentTab();
+                    alert('データをリセットしました。');
+                }
+            };
+
+            // 初期化関数
+            window.initialize = function() {
+                try {
+                    console.log('アプリケーション初期化開始');
+                    
+                    if (!window.loadDataFromStorage()) {
+                        console.log('保存データなし - デフォルトデータで初期化');
+                        window.initializeDefaultData();
+                        window.saveDataToStorage();
                     }
                     
                     // イベントリスナー設定
-                    setupEventListeners();
+                    const exportBtn = document.getElementById('export-csv');
+                    const resetBtn = document.getElementById('reset-data');
+                    const fileImportBtn = document.getElementById('file-import');
+                    const mobileMenuBtn = document.getElementById('mobile-menu');
+                    const overlayElement = document.getElementById('overlay');
                     
-                    // 初期表示
-                    renderCurrentTab();
+                    if (exportBtn) {
+                        exportBtn.addEventListener('click', window.exportToCSV);
+                    }
                     
-                    debugLog('🎉 アプリケーション初期化完了');
-                });
-            });
+                    if (fileImportBtn) {
+                        fileImportBtn.addEventListener('change', window.handleFileImport);
+                    }
+                    
+                    if (resetBtn) {
+                        resetBtn.addEventListener('click', window.resetData);
+                    }
+                    
+                    if (mobileMenuBtn) {
+                        mobileMenuBtn.addEventListener('click', window.toggleSidebar);
+                    }
+                    
+                    if (overlayElement) {
+                        overlayElement.addEventListener('click', window.closeSidebar);
+                    }
+                    
+                    // タブボタンのイベントリスナー設定
+                    const buttons = [
+                        { id: 'tab-dashboard', tab: 'dashboard' },
+                        { id: 'tab-list', tab: 'list' },
+                        { id: 'tab-history', tab: 'history' },
+                        { id: 'tab-form', tab: 'form' }
+                    ];
+                    
+                    buttons.forEach(function(btnInfo) {
+                        const btn = document.getElementById(btnInfo.id);
+                        if (btn) {
+                            btn.addEventListener('click', function() {
+                                if (btnInfo.tab === 'form') {
+                                    window.appState.editingPart = null;
+                                }
+                                window.switchTab(btnInfo.tab);
+                            });
+                        }
+                    });
+                    
+                    // 入出庫モーダル関連のイベントリスナー
+                    const closeBtn = document.getElementById('close-modal');
+                    const cancelBtn = document.getElementById('cancel-transaction');
+                    const transactionForm = document.getElementById('transaction-form');
+                    const typeSelect = document.getElementById('transaction-type');
+                    
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            window.closeTransactionModal();
+                        });
+                    }
+                    
+                    if (cancelBtn) {
+                        cancelBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            window.closeTransactionModal();
+                        });
+                    }
+                    
+                    if (transactionForm) {
+                        transactionForm.addEventListener('submit', function(e) {
+                            e.preventDefault();
+                            window.executeTransaction();
+                        });
+                    }
+                    
+                    if (typeSelect) {
+                        typeSelect.addEventListener('change', window.updateCurrentStockDisplay);
+                    }
+                    
+                    // 初期タブを表示
+                    window.renderCurrentTab();
+                    
+                    console.log('アプリケーション初期化完了');
+                    
+                } catch (error) {
+                    console.error('初期化エラー:', error);
+                    document.getElementById('main-content').innerHTML = `
+                        <div class="p-8 text-center">
+                            <h2 class="text-xl font-bold text-red-600 mb-4">初期化エラー</h2>
+                            <p class="text-gray-600 mb-4">${error.message}</p>
+                            <button onclick="location.reload()" class="btn btn-primary">ページを再読み込み</button>
+                        </div>
+                    `;
+                }
+            };
+
+            // DOMContentLoadedイベントで初期化を実行
+            document.addEventListener('DOMContentLoaded', window.initialize);
+      // ==== 追加部分: モバイルメニューの動作設定 ====
+      window.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu');
+        if (mobileMenuButton) {
+          mobileMenuButton.addEventListener('click', window.toggleSidebar);
         }
 
-        // window.onloadで確実に初期化
-        if (document.readyState === 'loading') {
-            window.addEventListener('load', initialize);
-        } else {
-            initialize();
+        const overlay = document.getElementById('overlay');
+        if (overlay) {
+          overlay.addEventListener('click', window.closeSidebar);
         }
+      });
+      // ==============================================
+
+        })();
     </script>
 </body>
 </html>
