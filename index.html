@@ -513,7 +513,10 @@
         <div class="main-area">
             <!-- モバイルヘッダー -->
             <div class="mobile-header">
-                <button id="mobile-menu" class="p-2 hover:bg-gray-100 rounded-lg">☰</button>
+            <button id="mobile-menu" class="p-2 hover:bg-gray-100 rounded-lg"
+            　style="font-size: 1.8rem; padding: 12px 18px; line-height: 1;">
+              ☰
+            </button>
                 <h1 class="text-xl font-bold text-gray-900">部品在庫管理</h1>
                 <div class="w-8"></div>
             </div>
@@ -2339,19 +2342,23 @@
         } else {
             initialize();
         }
-        // ==== 追加部分: モバイルメニューの動作設定 ====
+        // ==== モバイルメニューの動作設定 ====
 window.addEventListener('DOMContentLoaded', function() {
   const mobileMenuButton = document.getElementById('mobile-menu');
   if (mobileMenuButton) {
-    mobileMenuButton.addEventListener('click', window.toggleSidebar);
+    mobileMenuButton.addEventListener('click', function() {
+      window.toggleSidebar();  // サイドバー開閉
+    });
   }
 
   const overlay = document.getElementById('overlay');
   if (overlay) {
-    overlay.addEventListener('click', window.closeSidebar);
+    overlay.addEventListener('click', function() {
+      window.closeSidebar();  // サイドバーを閉じる
+    });
   }
 });
-// ==============================================
+// =====================================
 
     </script>
 </body>
