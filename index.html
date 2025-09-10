@@ -2382,6 +2382,16 @@ window.closeSidebar = function () {
   sidebar.classList.remove('mobile-open');
   if (overlay) overlay.style.display = 'none';
 };
+// サイドバー以外をクリックしたら閉じる
+document.addEventListener('click', function(event) {
+  const sidebar = document.getElementById('sidebar');
+  const mobileMenuButton = document.getElementById('mobile-menu');
+
+  // サイドバーの中やハンバーガーボタンをクリックした場合は除外
+  if (!sidebar.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+    window.closeSidebar();
+  }
+});
 
     </script>
 </body>
