@@ -2360,6 +2360,28 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 // =====================================
+// サイドバーを開閉する関数
+window.toggleSidebar = function () {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+
+  if (sidebar.classList.contains('mobile-open')) {
+    sidebar.classList.remove('mobile-open');
+    if (overlay) overlay.style.display = 'none';
+  } else {
+    sidebar.classList.add('mobile-open');
+    if (overlay) overlay.style.display = 'block';
+  }
+};
+
+// サイドバーを閉じる関数
+window.closeSidebar = function () {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+
+  sidebar.classList.remove('mobile-open');
+  if (overlay) overlay.style.display = 'none';
+};
 
     </script>
 </body>
