@@ -2394,36 +2394,51 @@ document.addEventListener('click', function(event) {
   }
 });
 
+// ===== 部品一覧テーブルに通し番号をつける（ヘッダーずれ対策） =====
 (function () {
-  function numberCards() {
-    const cards = document.querySelectorAll('.parts-card, [data-role="part-card"], .card.part');
-    if (!cards.length) return;
-    cards.forEach((el, i) => {
-      let badge = el.querySelector('.no-badge');
-      if (!badge) {
-        badge = document.createElement('div');
-        badge.className = 'no-badge';
-        Object.assign(badge.style, {
-          position: 'absolute',
-          top: '6px',
-          left: '6px',
-          background: '#111',
-          color: '#fff',
-          padding: '2px 6px',
-          borderRadius: '6px',
-          fontSize: '12px',
-          fontWeight: '700',
-          zIndex: '2',
-        });
-        el.style.position = 'relative';
-        el.appendChild(badge);
+  function addRowNumbers() {
+    const table =
+      document.querySelector('#partsTable') ||
+      document.querySelector('table.parts') ||
+      document.querySelector('table');
+    if (!table) return;
+
+    const tbody = table.tBodies[0];
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    if (rows.length === 0) return;
+
+    // ヘッダーがずれている場合を防止
+    const thead = table.tHead;
+    if (thead && thead.rows.length > 0) {
+      const headerRow = thead.rows[0];
+      const firstTh = headerRow.cells[0];
+      if (!firstTh || firstTh.textContent.trim() !== 'No.') {
+        const th = document.createElement('th');
+        th.textContent = 'No.';
+        headerRow.insertBefore(th, headerRow.firstChild);
       }
-      badge.textContent = i + 1;
+    }
+
+    // 通し番号を部品行だけに振る
+    rows.forEach((tr, i) => {
+      const firstCell = tr.cells[0];
+      if (firstCell && firstCell.dataset.noCell === '1') {
+        firstCell.textContent = String(i + 1);
+      } else {
+        const td = document.createElement('td');
+        td.textContent = String(i + 1);
+        td.dataset.noCell = '1';
+        tr.insertBefore(td, tr.firstChild);
+      }
     });
   }
-  window.addEventListener('DOMContentLoaded', numberCards);
-  window.numberPartsCards = numberCards;
+
+  // ページ読み込み後に1回実行
+  window.addEventListener('DOMContentLoaded', addRowNumbers);
 })();
+
 
     </script>
 </body>
