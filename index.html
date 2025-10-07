@@ -1122,7 +1122,6 @@
                                         <th style="width: 50px;">
                                             <input type="checkbox" id="select-all-parts" onchange="toggleAllParts()" class="rounded">
                                         </th>
-                                        <th>No.</th>
                                         <th>部品番号</th>
                                         <th>部品名</th>
                                         <th>カテゴリ</th>
@@ -2393,53 +2392,6 @@ document.addEventListener('click', function(event) {
     window.closeSidebar();
   }
 });
-
-// ====== 安全版：通し番号を1回だけ追加 ======
-(function () {
-  function addRowNumbers() {
-    const table =
-      document.querySelector('#partsTable') ||
-      document.querySelector('#parts-table') ||
-      document.querySelector('table.parts, .parts-table') ||
-      document.querySelector('table');
-    if (!table) return;
-
-    const thead = table.tHead;
-    if (thead && thead.rows.length > 0) {
-      const headerRow = thead.rows[0];
-      const firstTh = headerRow.cells[0];
-      if (!firstTh || firstTh.textContent.trim() !== 'No.') {
-        const th = document.createElement('th');
-        th.textContent = 'No.';
-        headerRow.insertBefore(th, headerRow.firstChild);
-      }
-    }
-
-    const tbody = table.tBodies && table.tBodies[0];
-    if (!tbody) return;
-
-    const rows = Array.from(tbody.rows);
-    rows.forEach((tr, i) => {
-      const firstCell = tr.cells[0];
-      if (firstCell && firstCell.dataset.noCell === '1') {
-        firstCell.textContent = String(i + 1);
-      } else {
-        const td = document.createElement('td');
-        td.textContent = String(i + 1);
-        td.dataset.noCell = '1';
-        tr.insertBefore(td, tr.firstChild);
-      }
-    });
-  }
-
-  // 初回ロード後に1回だけ実行
-  window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(addRowNumbers, 1000);
-  });
-
-  // 手動でも呼び出せるように公開
-  window.addRowNumbers = addRowNumbers;
-})();
 
     </script>
 </body>
