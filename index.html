@@ -1122,6 +1122,7 @@
                                         <th style="width: 50px;">
                                             <input type="checkbox" id="select-all-parts" onchange="toggleAllParts()" class="rounded">
                                         </th>
+                                        <th>No.</th>
                                         <th>部品番号</th>
                                         <th>部品名</th>
                                         <th>カテゴリ</th>
@@ -1334,9 +1335,9 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">カテゴリ *</label>
                                     <select id="category" class="form-input" required>
                                         <option value="">選択してください</option>
-                                        <option value="P">汎用部品</option>
-                                        <option value="EP">電気部品</option>
-                                        <option value="HL">油圧部品</option>
+                                        <option value="P">P</option>
+                                        <option value="EP">EP</option>
+                                        <option value="HL">HL</option>
                                     </select>
                                 </div>
                                 <div>
@@ -1393,9 +1394,9 @@
 
         function getCategoryName(category) {
             const names = {
-                'P': '汎用部品',
-                'EP': '電気部品',
-                'HL': '油圧部品'
+                'P': 'P',
+                'EP': 'EP',
+                'HL': 'HL'
             };
             return names[category] || category;
         }
@@ -2392,6 +2393,37 @@ document.addEventListener('click', function(event) {
     window.closeSidebar();
   }
 });
+
+(function () {
+  function numberCards() {
+    const cards = document.querySelectorAll('.parts-card, [data-role="part-card"], .card.part');
+    if (!cards.length) return;
+    cards.forEach((el, i) => {
+      let badge = el.querySelector('.no-badge');
+      if (!badge) {
+        badge = document.createElement('div');
+        badge.className = 'no-badge';
+        Object.assign(badge.style, {
+          position: 'absolute',
+          top: '6px',
+          left: '6px',
+          background: '#111',
+          color: '#fff',
+          padding: '2px 6px',
+          borderRadius: '6px',
+          fontSize: '12px',
+          fontWeight: '700',
+          zIndex: '2',
+        });
+        el.style.position = 'relative';
+        el.appendChild(badge);
+      }
+      badge.textContent = i + 1;
+    });
+  }
+  window.addEventListener('DOMContentLoaded', numberCards);
+  window.numberPartsCards = numberCards;
+})();
 
     </script>
 </body>
