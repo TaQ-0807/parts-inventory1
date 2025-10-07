@@ -2394,10 +2394,9 @@ document.addEventListener('click', function(event) {
   }
 });
 
-// ====== 通し番号を安定付与（遅延描画＆再描画にも対応） ======
+// ====== 安全版：通し番号を1回だけ追加 ======
 (function () {
   function addRowNumbers() {
-    // テーブルを特定（IDが違っても拾えるよう候補を広めに）
     const table =
       document.querySelector('#partsTable') ||
       document.querySelector('#parts-table') ||
@@ -2405,7 +2404,6 @@ document.addEventListener('click', function(event) {
       document.querySelector('table');
     if (!table) return;
 
-    // ヘッダーに「No.」を1回だけ挿入
     const thead = table.tHead;
     if (thead && thead.rows.length > 0) {
       const headerRow = thead.rows[0];
@@ -2417,24 +2415,14 @@ document.addEventListener('click', function(event) {
       }
     }
 
-    // tbody が未生成ならまだ何もしない
     const tbody = table.tBodies && table.tBodies[0];
     if (!tbody) return;
 
-    // データ行のみ対象（thだけの行=見出し行っぽいのはスキップ）
-    const rows = Array.from(tbody.rows).filter(tr => {
-      const cells = tr.cells;
-      if (!cells || !cells.length) return false;
-      // 行頭がTH（見出し行）の場合は番号付け対象外
-      return !(cells[0] && cells[0].tagName === 'TH');
-    });
-    if (!rows.length) return;
-
-    // 各明細行の先頭に番号セル（再実行時は上書き）
+    const rows = Array.from(tbody.rows);
     rows.forEach((tr, i) => {
-      const c0 = tr.cells[0];
-      if (c0 && c0.dataset && c0.dataset.noCell === '1') {
-        c0.textContent = String(i + 1);
+      const firstCell = tr.cells[0];
+      if (firstCell && firstCell.dataset.noCell === '1') {
+        firstCell.textContent = String(i + 1);
       } else {
         const td = document.createElement('td');
         td.textContent = String(i + 1);
@@ -2444,26 +2432,13 @@ document.addEventListener('click', function(event) {
     });
   }
 
-  function scheduleRuns() {
-    // 1回で終わらないUIのために何度か叩いて“完成後”を拾う
-    addRowNumbers();
-    setTimeout(addRowNumbers, 120);
-    setTimeout(addRowNumbers, 500);
-    setTimeout(addRowNumbers, 1200);
-  }
-
+  // 初回ロード後に1回だけ実行
   window.addEventListener('DOMContentLoaded', () => {
-    scheduleRuns();
-
-    // 一覧が再描画されても自動で振り直す
-    const target =
-      document.querySelector('#main-content, #list, [data-tab="list"]') || document.body;
-    const mo = new MutationObserver(() => scheduleRuns());
-    mo.observe(target, { childList: true, subtree: true });
-
-    // 念のため手動でも叩けるよう公開
-    window.addRowNumbers = addRowNumbers;
+    setTimeout(addRowNumbers, 1000);
   });
+
+  // 手動でも呼び出せるように公開
+  window.addRowNumbers = addRowNumbers;
 })();
 
     </script>
