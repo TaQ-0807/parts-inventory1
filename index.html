@@ -2437,32 +2437,20 @@ document.addEventListener('click', function(event) {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    console.log("Firebase認証成功:", user.uid);
-    initializeAppFunctions();
-  } else {
-    firebase.auth().signInAnonymously().catch(err => console.error("認証エラー:", err));
-  }
-});
-
-
-  // 二重初期化防止
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-
-  // 匿名認証＋初期化
-  firebase.auth().onAuthStateChanged(user => {
+ // 匿名ログイン処理と接続完了後の処理
+  firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-      console.log("Firebase認証成功:", user.uid);
-      initializeAppFunctions(); // ← あなたの既存の初期化関数名に置き換え
+      console.log("ログイン成功（UID）:", user.uid);
+      startApp(); // ← ここに、Firebase操作を開始する関数を指定
     } else {
-      firebase.auth().signInAnonymously().catch(err => console.error("認証エラー:", err));
+      firebase.auth().signInAnonymously()
+        .catch((error) => {
+          console.error("匿名ログインエラー:", error);
+        });
     }
   });
-    </script>
+</script>
+
     <!-- Login Modal -->
 <div id="loginModal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;">
   <div style="background:#fff;padding:16px 20px;border-radius:8px;width:320px;">
