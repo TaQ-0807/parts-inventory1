@@ -538,8 +538,9 @@
 
     <!-- Firebase SDKs -->
     <script defer src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-
+    
     <script>
         // デバッグ情報表示（切り替え機能付き）
         let debugVisible = false;
@@ -2392,7 +2393,36 @@ document.addEventListener('click', function(event) {
     window.closeSidebar();
   }
 });
+// Firebase設定
+// firebaseConfig はすでに定義済み
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    console.log("Firebase認証成功:", user.uid);
+    initializeAppFunctions();
+  } else {
+    firebase.auth().signInAnonymously().catch(err => console.error("認証エラー:", err));
+  }
+});
+
+
+  // 二重初期化防止
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  // 匿名認証＋初期化
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      console.log("Firebase認証成功:", user.uid);
+      initializeAppFunctions(); // ← あなたの既存の初期化関数名に置き換え
+    } else {
+      firebase.auth().signInAnonymously().catch(err => console.error("認証エラー:", err));
+    }
+  });
     </script>
 </body>
 </html>
