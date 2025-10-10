@@ -618,7 +618,46 @@
             appId: "1:76731926862:web:414c08c875beae3ea0f61f",
             measurementId: "G-KVRJZWDT3K"
         };
+        // UI参照
+  const $loginModal = () => document.getElementById('loginModal');
+  const $email = () => document.getElementById('auth-email');
+  const $pass  = () => document.getElementById('auth-pass');
 
+  // ログイン / 新規作成 / ログアウト
+  async function login() {
+    await firebase.auth().signInWithEmailAndPassword($email().value, $pass().value);
+  }
+  async function signup() {
+    await firebase.auth().createUserWithEmailAndPassword($email().value, $pass().value);
+  }
+  function logout() {
+    return firebase.auth().signOut();
+  }
+
+  // 認証状態が変わったら呼ばれる
+  firebase.auth().onAuthStateChanged(async (user) => {
+    if (user) {
+      // 認証OK → アプリ初期化（ここに既存の初期化関数名を入れる）
+      try {
+        if (typeof initializeAppFunctions === 'function') {
+          await initializeAppFunctions(); // 例：データ読込やイベント紐付け
+        }
+      } finally {
+        if ($loginModal()) $loginModal().style.display = 'none';
+      }
+    } else {
+      // 未ログイン → モーダル表示
+      if ($loginModal()) $loginModal().style.display = 'flex';
+    }
+  });
+
+  // ボタン紐付け
+  window.addEventListener('DOMContentLoaded', () => {
+    const bLogin  = document.getElementById('btn-login');
+    const bSignup = document.getElementById('btn-signup');
+    if (bLogin)  bLogin.onclick  = () => login().catch(err => alert(err.message));
+    if (bSignup) bSignup.onclick = () => signup().catch(err => alert(err.message));
+  });
         // Firebase初期化状態
         let firebaseApp = null;
         let database = null;
@@ -2424,5 +2463,18 @@ firebase.auth().onAuthStateChanged(user => {
     }
   });
     </script>
+    <!-- Login Modal -->
+<div id="loginModal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#fff;padding:16px 20px;border-radius:8px;width:320px;">
+    <h3 style="margin:0 0 12px;">ログイン</h3>
+    <input id="auth-email" type="email" placeholder="メールアドレス" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ccc;border-radius:6px;">
+    <input id="auth-pass" type="password" placeholder="パスワード" style="width:100%;padding:8px;margin-bottom:12px;border:1px solid #ccc;border-radius:6px;">
+    <div style="display:flex;gap:8px;">
+      <button id="btn-login"  style="flex:1;padding:8px;border:none;border-radius:6px;background:#2563eb;color:#fff;">ログイン</button>
+      <button id="btn-signup" style="flex:1;padding:8px;border:1px solid #ccc;border-radius:6px;background:#fff;">新規登録</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
